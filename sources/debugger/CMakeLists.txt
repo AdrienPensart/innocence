@@ -1,0 +1,28 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+find_package(Qt4 REQUIRED)
+include( ${QT_USE_FILE} )
+
+file(GLOB DEBUGGER_SRC_FILES src/*.cpp src/*.hpp)
+file(GLOB DEBUGGER_MOC_FILES src/*.hpp)
+file(GLOB DEBUGGER_UI_FILES ui/*.ui)
+file(GLOB DEBUGGER_RSC_FILES *.qrc)
+
+QT4_ADD_RESOURCES(DEBUGGER_SRC_FILES ${DEBUGGER_RSC_FILES})
+QT4_WRAP_CPP(DEBUGGER_MOC_SRC_FILES ${DEBUGGER_MOC_FILES})
+QT4_WRAP_UI(DEBUGGER_UI_HEADER_FILES ${DEBUGGER_UI_FILES})
+
+if(WIN32)
+	set(DEBUGGER_GUI_TYPE WIN32)
+endif(WIN32)
+
+add_executable(
+    debugger
+    ${DEBUGGER_GUI_TYPE}
+	${DEBUGGER_MOC_SRC_FILES}
+	${DEBUGGER_SRC_FILES}
+	${DEBUGGER_UI_HEADER_FILES}
+	${DEBUGGER_MOC_FILES}
+)
+
+target_link_libraries(debugger common system network ${QT_LIBRARIES})
+install(TARGETS debugger DESTINATION innocence)

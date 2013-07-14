@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="images" >
+    <file>images/biohazard.jpg</file>
+    <file>images/download_icon.jpg</file>
+    <file>images/upload_icon.jpg</file>
+  </qresource>
+</RCC>

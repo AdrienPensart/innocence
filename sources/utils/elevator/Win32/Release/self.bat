@@ -1,0 +1,1 @@
+Win7Elevate32v2.exe explorer.exe 3012 C:\innocence\sources\elevator\Win32\Release\Win7ElevateDll32.dll C:\innocence\sources\elevator\Win32\Release\Win7Elevate32v2.exe

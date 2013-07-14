@@ -1,0 +1,38 @@
+Nom de code : Innocence - Trojan
+Inhibition : programme qui gère les clients infectés, c'est le serveur, compatible Linux et Windows
+	- inhibitor : infecteur
+	- substrate : dll principale
+TheSleeper : infecteur, c'est le client, compatible Windows XP, Vista et Seven
+
+Langages : C++ - Librairie QT4
+
+Librairies utilisées : 
+
+Network : wrapper simple autour des interfaces réseaux de Windows et Linux
+	- wrapper de Winsock
+	- wrapper de l'interface réseau BSD
+Blaspheme : librairie du protocole utilisé dans la communication entre le client et le serveur
+	- protocol : protocole de communication client / serveur
+	- md5 : calcul du hash MD5
+	- transfer : librairie de transfert de fichier au dessus de Network
+Malicious : librairie de détournement de Windows, librairie d'injection de code et de bypass de l'UAC
+	- selfprotect : module de protection du code malicieux, avec ça impossible d'arrêter le trojan
+		- hideproc : module de camouflage dans la liste des processus
+	- uackiller : module de bypass de l'UAC
+		- détection de la version de Windows
+	- injector : module d'injection de code par thread, DLL, etc
+	- packer : intégrateur de DLL dans l'exécutable en tant que ressource
+	- patcher : module qui va patcher des exécutables afin de démarrer le client au démarrage du PC
+System : librairie de gestion du système
+    - filesystem : gestion du système de fichier, listing de répertoires
+    - process : gestion des processus, listing des processus
+    - registry : gestion du registre de windows
+Logger : librairie de débuggage
+	- messages par interface graphique
+	- messages par le réseau
+	- messages par fichier de log
+
+Banc de tests :
+	- test d'injection / bypass des techniques antivirus
+	- test de bypass Firewall
+    - test de bypass UAC Windows

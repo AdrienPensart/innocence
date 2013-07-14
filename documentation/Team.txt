@@ -1,0 +1,8 @@
+Developpeur principal Crunch
+
+Beta Testeur : BadKev
+
+Dans l'ideal, il faudrait avoir deux à trois développeurs :
+-Developpement des fonctionnalitees
+-Developpement des modules d'auto-securite
+-Correction des bugs

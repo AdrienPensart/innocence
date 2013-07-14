@@ -1,0 +1,33 @@
+[ToDo Innocence]
+
+* Evolution : 
+
+- Mise à jour du driver systeme pour permettre de cacher plusieurs processus, clé de registre, fichiers
+- Patch d'un executable au démarrage pour éviter l'utilisation d'un clé de registre
+- Mise en pause / reprise des downloads / uploads / plusieurs chargements simultanées / récursifs
+- Gestion des différents langages utilisateurs (Qt)
+- Messages d'erreur en anglais
+- Remplacement de l'adresse IP par un nom de domaine pour la connexion client / serveur
+- Réécriture du module de mot de passe Firefox
+- Réécriture d'un keylogger plus modulaire et fiable
+- Envoi des tailles de fichiers lors du listing des dossiers
+
+* Ecriture de test unitaires : 
+
+
+* Tests en condition réelles : 
+
+- Antispyware : AdAware, Spybot
+- Antivirus : Kaspersky, Norton, Avast, BitDefender
+- Firewall : ZoneAlarm, Seagate
+- Windows : XP, Vista, Seven (32 et 64 bit)
+- Local, Réseau Local, Internet
+
+* Bugs : 
+
+- Mise à jour correcte des barres de progression lors du chargement de gros fichiers
+- Choix du processus a injecter en fonction du navigateur par défaut
+- Détection par Spybot de la clé de registre de démarrage
+- Détection par les antivirus d'envoi de courrier (hide process driver)
+- Kill / désinstallation du client, le processus injecté ne meurre pas avec la DLL
+ 

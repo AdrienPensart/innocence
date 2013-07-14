@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditClient</class>
+ <widget class="QDialog" name="EditClient">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>525</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Editeur de Client</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="selectClientGroupBox">
+     <property name="title">
+      <string>Selectionner Client à modifier : </string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLineEdit" name="clientSelectedBox">
+        <property name="text">
+         <string>Cliquez sur Parcourir afin de choisir un exécutable client à éditer.</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="selectClientButton">
+        <property name="text">
+         <string>Parcourir...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="infosOriginalesGroupBox">
+     <property name="title">
+      <string>Informations originales : </string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="ipOriginaleLabel">
+        <property name="text">
+         <string>Ancienne IP/Nom d'hôte du serveur : </string>
+        </property>
+        <property name="buddy">
+         <cstring>ipOriginaleEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="ipOriginaleEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="portOriginalLabel">
+        <property name="text">
+         <string>Ancien port TCP : </string>
+        </property>
+        <property name="buddy">
+         <cstring>portOriginalEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="portOriginalEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="clientOriginalNameEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="clientOriginalNameLabel">
+        <property name="text">
+         <string>Nom du client :</string>
+        </property>
+        <property name="buddy">
+         <cstring>clientOriginalNameEdit</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="modifyClientGroupBox">
+     <property name="title">
+      <string>Modifier l'exécutable : </string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="newServerIpLabel">
+        <property name="text">
+         <string>&amp;IP/Nom d'hôte du serveur : </string>
+        </property>
+        <property name="buddy">
+         <cstring>newServerIpEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="newServerIpEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="newServerPortLabel">
+        <property name="text">
+         <string>&amp;Port TCP : </string>
+        </property>
+        <property name="buddy">
+         <cstring>newServerPortEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="newClientNameEdit"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="newClientNameLabel">
+        <property name="text">
+         <string>&amp;Nom du client : </string>
+        </property>
+        <property name="buddy">
+         <cstring>newClientNameEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="clientPasswordEdit">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="clientPasswordLabel">
+        <property name="text">
+         <string>&amp;Mot de passe : </string>
+        </property>
+        <property name="buddy">
+         <cstring>clientPasswordEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="newServerPortEdit">
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>65535.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="modifyExeButton">
+       <property name="text">
+        <string>Modifier</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelEditorButton">
+       <property name="text">
+        <string>Fermer</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>selectClientButton</tabstop>
+  <tabstop>newClientNameEdit</tabstop>
+  <tabstop>newServerIpEdit</tabstop>
+  <tabstop>newServerPortEdit</tabstop>
+  <tabstop>clientPasswordEdit</tabstop>
+  <tabstop>modifyExeButton</tabstop>
+  <tabstop>cancelEditorButton</tabstop>
+  <tabstop>ipOriginaleEdit</tabstop>
+  <tabstop>portOriginalEdit</tabstop>
+  <tabstop>clientSelectedBox</tabstop>
+  <tabstop>clientOriginalNameEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

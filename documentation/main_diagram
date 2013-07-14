@@ -1,0 +1,37 @@
+digraph GG {
+node [
+  fontsize = "11"
+];
+
+	"qt" [ label="QtCore & QtGui" shape="ellipse"];
+	"winsock"  [ label="WinSock" shape="ellipse"];
+      "jpeg" [ label="Jpeg" shape="ellipse"];
+
+    	"client_dll"  [ label="DLL Client(Inhibition)" shape="polygon"];
+
+    	"client"  [ label="Client Injector(Inhibiter)" shape="house"];
+    	"server"  [ label="Server (TheSleeper)" shape="house"];
+
+    	"blaspheme"  [ label="Blaspheme Protocol Library" shape="diamond"];
+    	"network"  [ label="Network Library" shape="diamond"];
+    	"utility"  [ label="Utility Library" shape="diamond"];
+
+	"blaspheme" -> "network"
+	"blaspheme" -> "utility"
+
+    	"client" -> "utility"
+	"client" -> "client_dll"
+
+	"network" -> "winsock"
+
+	"client_dll" -> "network"
+	"client_dll" -> "blaspheme"
+	"client_dll" -> "jpeg"
+	"client_dll" -> "utility"
+	
+	"server" -> "qt"
+	"server" -> "network"
+	"server" -> "blaspheme"
+	"server" -> "utility"
+
+}

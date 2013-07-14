@@ -1,0 +1,9 @@
+Verification version windows
+    ->Windows XP
+        ->Creation Internet Explorer
+        ->Injection DLL...
+    ->Windows Vista
+        ->Elevation non supportée
+    ->Windows Seven
+        ->Injection DLL Bypass UAC
+            ->Relancer programme en mode administrateur
