@@ -33,6 +33,6 @@ namespace Network
 			timeval time;
 	};
 
-} /* Network */
+}
 
-#endif // TIMEOUT_H
+#endif

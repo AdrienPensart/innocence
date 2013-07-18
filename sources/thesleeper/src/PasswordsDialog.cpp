@@ -1,6 +1,7 @@
 #include "PasswordsDialog.hpp"                                                                                                                            
 
 #include <fstream>
+#include <QFileDialog>
 
 namespace TheSleeper
 {

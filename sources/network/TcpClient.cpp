@@ -169,6 +169,5 @@ namespace Network
             return returnChar;
         }
         return 0;
-    }
-    
-} /* Network */
+    }   
+}

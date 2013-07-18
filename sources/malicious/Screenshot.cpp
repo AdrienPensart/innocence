@@ -9,7 +9,7 @@
 #include <common/Logger.hpp>
 #include <common/Convert.hpp>
 
-namespace Inhibition
+namespace Malicious
 {
     bool FillJpegBuffer(LPBYTE pBits, LPBITMAPINFOHEADER pbmih, int nSampsPerRow, JSAMPARRAY jsmpPixels)
     {
@@ -97,7 +97,7 @@ namespace Inhibition
         jpeg_destroy_compress(&cinfo); // Free resources
         return true;
     }
-
+	
     bool Screenshot::take(const std::string& fileJpg, int quality)
     {
         HDC hdcscreen = GetDC(0);
@@ -146,8 +146,7 @@ namespace Inhibition
         DeleteObject(hbmscreen);
         DeleteDC(hdcMem);
         ReleaseDC(0, hdcscreen);
-
         return true;
     }
-
-} /* Inhibition */
+	
+} /* Malicious */

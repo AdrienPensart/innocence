@@ -148,7 +148,6 @@ namespace Network
 				return blocking_status;
 			}
 	};
+}
 
-} /* Network */
-
-#endif // _SOCKET_
+#endif

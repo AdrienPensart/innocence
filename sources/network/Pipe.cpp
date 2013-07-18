@@ -149,6 +149,6 @@ namespace Network
 		return DEFAULT_MAX_CHAR;
     }
 	
-} // Network
+}
 
-#endif // WIN32
+#endif

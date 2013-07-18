@@ -5,7 +5,7 @@
 #include <vector>
 #include <string.h>
 
-namespace Inhibition
+namespace Malicious
 {
 
     const int DEFAULT_PROTOCOL = 0;
@@ -109,6 +109,6 @@ namespace Inhibition
             bool   _formatMessage();
     };
 
-} /* Inhibition */
+} // Malicious
 
 #endif // FAST_SMTP_H

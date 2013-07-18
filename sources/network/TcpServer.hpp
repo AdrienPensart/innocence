@@ -6,7 +6,6 @@
 
 namespace Network
 {
-
     /**
      * Représente un serveur Tcp
      */
@@ -30,7 +29,6 @@ namespace Network
         
 			bool listening;
     };
+}
 
-} /* Network */
-
-#endif // TCPSERVER_HPP
+#endif

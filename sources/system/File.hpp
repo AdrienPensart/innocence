@@ -24,9 +24,9 @@ namespace System
 	std::string ReadAll(std::fstream& handle);
 	bool isReadable( const std::string & file);
     
-	long Size(std::ifstream& handle);
-	long Size(std::fstream& handle);
-	long Size(const std::string& file);
+	std::streamsize Size(std::ifstream& handle);
+	std::streamsize Size(std::fstream& handle);
+	std::streamsize Size(const std::string& file);
 
 } /* System */
 

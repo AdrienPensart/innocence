@@ -174,7 +174,7 @@ namespace Blaspheme
         // pour optimiser le transfert, on va tout de suite réserver 
         // la capacité mémoire adéquate, attention au chargement de fichiers
         // trop gros...
-        memory_buffer.reserve(td.totalsize);
+        memory_buffer.reserve((unsigned int)td.totalsize);
     }
 
     void InMemoryDownload::transfer()
@@ -262,11 +262,11 @@ namespace Blaspheme
         static std::vector<char> buffer(40000);
         file.read(&buffer[0], buffer.size());
         std::streamsize to_send = file.gcount();
-        int sent = 0;
+        std::streamsize sent = 0;
         
         while(sent != to_send)
         {
-            int temp_sent = stream.send(&buffer[0]+sent, to_send-sent);
+            std::streamsize temp_sent = (int)stream.send(&buffer[0]+sent, (int)(to_send-sent));
             if(temp_sent <= 0)
             {
 				LOG << "Probleme RawSend a retourne : " + to_string(temp_sent) + " <=> " + Network::SocketException::getLastError();

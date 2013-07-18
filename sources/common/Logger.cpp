@@ -113,15 +113,19 @@ namespace Common
     }
 } // Common
 
-void SHOW_LAST_ERROR()
+void LOG_LAST_ERROR()
+{
+	LOG << GET_LAST_ERROR();
+}
+
+std::string GET_LAST_ERROR()
 {
 	#ifdef WIN32
 		DWORD dw = GetLastError();
-		LOG << "Last error = " + to_string(dw);
+		return "Last error = " + to_string(dw);
 	#else
-		LOG << "Last error = " + to_string(errno);
+		return "Last error = " + to_string(errno);
 	#endif
-    
 }
 
 void FATAL_ERROR(const std::string& msg)

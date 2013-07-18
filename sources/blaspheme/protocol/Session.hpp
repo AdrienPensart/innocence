@@ -2,7 +2,7 @@
 #define SESSION_H
 
 #include <network/TcpClient.hpp>
-#include "Authentification.hpp"
+#include "Authentication.hpp"
 #include "ConnectionInfo.hpp"
 #include <stack>
 #include <exception>
@@ -31,8 +31,10 @@ namespace Blaspheme
     {
         public:
 
-			Session(AuthentificationMethod * authPlugin = new NoAuthentification(), Network::TcpClient mainStream=Network::TcpClient());
+			Session(Network::TcpClient mainStream=Network::TcpClient());
+			//Session(const Session&);
 			virtual ~Session();
+
 			// Fonctions d'envoi et de reception de commandes (par le flux principal)
             Session& operator<<(const std::string& object);
             Session& operator>>(std::string& object);
@@ -40,14 +42,14 @@ namespace Blaspheme
             Session& recv(std::string& command);
 			bool connect(Blaspheme::ConnectionInfo&);
 			bool wait_connect(Blaspheme::ConnectionInfo&);
-			const SessionId& getId(){return sessionId;}
-            void setId(const SessionId& newId){sessionId = newId;}
-            static SessionId getNextId(){return (++maxIdAttributed);}
-            Network::TcpClient& stream(){return mainStream;}
+			const SessionId& getId();
+            void setId(const SessionId& newId);
+            static SessionId getNextId();
+            Network::TcpClient& stream();
             void reset();
             void pushStream(Network::TcpClient& stream);
             Network::TcpClient popStream();
-            void setAuthenfication();
+            //void setAuthentication(AuthenticationMethod * _authPlugin);
 
         private:
         
@@ -60,7 +62,7 @@ namespace Blaspheme
             // flux auxiliaires
             AuxTcpClient auxStreams;
 			// plugin d'authentification
-			AuthentificationMethod * authPlugin;
+			StringBasedAuth authPlugin;
     };
 }
 

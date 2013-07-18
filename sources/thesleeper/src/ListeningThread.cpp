@@ -17,6 +17,19 @@ using namespace Blaspheme;
 
 namespace TheSleeper
 {
+	ListeningThread::ListeningThread(int port_value, const QString& pass_value, QObject * parent)
+		:QThread(parent), continue_listen(false), session(0)
+	{
+		changeListeningPort(port_value);
+		changePassword(pass_value);
+		info.deadline.set(0, 200);
+	}
+
+    ListeningThread::~ListeningThread()
+	{
+		stopListen();
+	}
+
     void ListeningThread::run()
     {
         LOG << "Debut Thread.";
@@ -40,10 +53,12 @@ namespace TheSleeper
 		}
         catch(Network::Exception& e)
         {
+			LOG << "network exception";
             LOG << e.what();
         }
         catch(std::exception& e)
         {
+			LOG << "standard exception";
             LOG << e.what();
         }
         catch(...)
@@ -52,6 +67,7 @@ namespace TheSleeper
         }
         LOG << "Fin thread.";
     }
+
     bool ListeningThread::isListening()
     {
         return continue_listen;
@@ -68,14 +84,17 @@ namespace TheSleeper
 		info.password = password.toStdString();
 		LOG << "Mise a jour du mot de passe de connexion : " + info.password;
     }
+
     void ListeningThread::setListening(bool enabled)
     {
         enabled ? listen() : stopListen();
-    } 
+    }
+
     void ListeningThread::setNotListening(bool enabled)
     {
         enabled ? stopListen() : listen();
     }
+
     void ListeningThread::listen()
     {
 		if(!continue_listen)
@@ -84,6 +103,7 @@ namespace TheSleeper
 			start();
 		}
     }
+
     void ListeningThread::stopListen()
     {
 		if(continue_listen)

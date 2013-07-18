@@ -20,7 +20,7 @@ namespace TheSleeper
                 currentClients.insert(currentClients.begin(), clients.begin(), clients.end());
 
                 // mise à jour de la vue
-                reset();
+                //reset();
             }
 
             int rowCount(const QModelIndex& parent) const;

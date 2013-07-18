@@ -48,5 +48,5 @@ namespace Network
         // sinon il n'y a pas de données.
         return false;
     }
-} /* Network */
+}
 

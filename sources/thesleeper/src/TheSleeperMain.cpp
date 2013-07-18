@@ -31,7 +31,7 @@ int run(int argc, char ** argv)
 #ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    LOG.setHeader("SERVER");
+    LOG.setHeader("MASTER");
 	LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
 
     // administrator rights are preferred to execute the Server

@@ -1,5 +1,5 @@
 #include <common/Logger.hpp>
-#include "FastSmtp.hpp"
+#include <malicious/FastSmtp.hpp>
 using namespace std;
 
 int main(int argc, char * argv[])

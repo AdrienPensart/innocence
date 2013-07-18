@@ -124,5 +124,4 @@ namespace Network
         }
         return false;
     }
-    
-} /* Network */
+}

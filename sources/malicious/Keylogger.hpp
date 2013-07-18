@@ -1,5 +1,5 @@
-#ifndef KEYLOGGER_H
-#define KEYLOGGER_H
+#ifndef _KEYLOGGER_
+#define _KEYLOGGER_
 
 #include <map>
 #include <string>
@@ -55,4 +55,4 @@ namespace Malicious
 
 } /* Malicious */
 
-#endif // KEYLOGGER_H
+#endif // _KEYLOGGER_

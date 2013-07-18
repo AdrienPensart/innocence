@@ -89,7 +89,7 @@ namespace Blaspheme
         std::string filepath;
         std::fstream filehandle;
         // taille du fichier a la fin du transfert
-        size_t filesize;
+        std::streamsize filesize;
         // offset a laquel lire / ecrire le fichier
         size_t offset;
 
@@ -111,7 +111,7 @@ namespace Blaspheme
             {
             }
             
-            size_t size()
+            std::streamsize size()
             {
                 return filesize;
             }

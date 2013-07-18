@@ -32,9 +32,9 @@ namespace Blaspheme
 
             TransferDescriptor();
             bool update();
-            unsigned int percentage;
-            unsigned int transferred;
-            unsigned int totalsize;
+            std::streamsize percentage;
+            std::streamsize transferred;
+            std::streamsize totalsize;
     };
 
     class TransferObserver : public Common::Observable<TransferObserver, TransferDescriptor>

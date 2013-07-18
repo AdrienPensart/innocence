@@ -52,7 +52,7 @@ namespace Malicious
 								   SE_DEBUG_NAME, // define the name of the privilege 
                                    &Debug_Privileges.Privileges[0].Luid)) // will get the LUID value into this variable
         {	
-            SHOW_LAST_ERROR();
+            LOG_LAST_ERROR();
 		    return false;
         }
 
@@ -62,7 +62,7 @@ namespace Malicious
                                TOKEN_ADJUST_PRIVILEGES, //set the desired access
                                &hToken)) // handle to the token will be held here 
         {
-            SHOW_LAST_ERROR();
+            LOG_LAST_ERROR();
 		    if (hToken)
             {
         	    CloseHandle (hToken);
@@ -79,7 +79,7 @@ namespace Malicious
 								    NULL,
 								    NULL))
         {
-            SHOW_LAST_ERROR();
+            LOG_LAST_ERROR();
 		    if (hToken)
             {
                 CloseHandle (hToken);

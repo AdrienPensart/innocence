@@ -52,8 +52,8 @@ namespace Network
 
     };
 
-} // Network
+}
 
 #endif // WIN32
 
-#endif // _PIPE_HPP_
+#endif

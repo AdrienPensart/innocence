@@ -210,7 +210,7 @@ namespace Malicious
             {
                 log << iter->first << " <=> " << iter->second << "\n";
             }
-			long filesize = System::Size(log);
+			std::streamoff filesize = System::Size(log);
             log.close();
             log_buffer.clear();
 			buffered_char = 0;

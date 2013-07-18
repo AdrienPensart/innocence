@@ -6,7 +6,6 @@ using std::string;
 
 namespace Network
 {
-    
     UdpSocket::UdpSocket(const Port& argPort)
     {
         listen(argPort);
@@ -111,5 +110,4 @@ namespace Network
         }
         return returnChar;
     }
-
 }

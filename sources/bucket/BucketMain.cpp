@@ -4,11 +4,9 @@ using namespace std;
 
 #include <network/TcpServer.hpp>
 #include <common/Logger.hpp>
-#include <common/Convert.hpp>
 #include <common/Menu.hpp>
 #include <system/File.hpp>
 #include <system/Process.hpp>
-#include <blaspheme/protocol/Authentification.hpp>
 #include <blaspheme/protocol/Session.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
@@ -306,9 +304,10 @@ class Bucket
 		
 		void catchClient(Network::Port port, std::string password)
 		{
-			session.setAuthenfication(new StringBasedAuth(password));
+			//session.setAuthentication(new StringBasedAuth(password));
 			info.port = port;
 			info.deadline.set(5);
+			info.password = password;
 			if(session.wait_connect(info))
 			{
 				cout << "Client connecte.\n";

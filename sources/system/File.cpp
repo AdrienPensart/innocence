@@ -102,43 +102,43 @@ namespace System
 	}
 	#endif
 	
-	long Size(std::ifstream& handle)
+	std::streamsize Size(std::ifstream& handle)
 	{
 		// sauvegarder la position courante
-		long pos = handle.tellg();
+		std::streamoff pos = handle.tellg();
 		// se placer en fin de fichier
 		handle.seekg( 0 , std::ios_base::end );
 		// récupérer la nouvelle position = la taille du fichier
-		long size = handle.tellg();
+		std::streamoff size = handle.tellg();
 		// restaurer la position initiale du fichier
 		handle.seekg( pos,  std::ios_base::beg ) ;
 		return size ;
 	}
     
-	long Size(std::fstream& handle)
+	std::streamsize Size(std::fstream& handle)
 	{
 		// sauvegarder la position courante
-		long pos = handle.tellg();
+		std::streamoff pos = handle.tellg();
 		// se placer en fin de fichier
 		handle.seekg( 0 , std::ios_base::end );
 		// récupérer la nouvelle position = la taille du fichier
-		long size = handle.tellg();
+		std::streamoff size = handle.tellg();
 		// restaurer la position initiale du fichier
 		handle.seekg( pos,  std::ios_base::beg ) ;
 		return size ;
 	}
 
-	long Size(const std::string& file)
+	std::streamsize Size(const std::string& file)
     {
         std::ifstream fichier(file.c_str());
         if(!fichier.fail())
         {
             // sauvegarder la position courante
-            long pos = fichier.tellg();
+            std::streamoff pos = fichier.tellg();
             // se placer en fin de fichier
             fichier.seekg( 0 , std::ios_base::end );
             // récupérer la nouvelle position = la taille du fichier
-            long size = fichier.tellg() ;
+            std::streamoff size = fichier.tellg() ;
             // restaurer la position initiale du fichier
             fichier.seekg( pos,  std::ios_base::beg ) ;
             return size;

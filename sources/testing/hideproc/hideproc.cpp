@@ -9,8 +9,10 @@ int main()
 {
     try
 	{
+		LOG_THIS_FUNCTION
         LOG.setHeader("TEST HIDEPROC");
 	    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+		LOG.addObserver(new Common::LoggingMessage());
         LOG.trace();
 
         ThisProcess thisProcess;
@@ -24,6 +26,8 @@ int main()
         LOG << "Camouflage du processus injecte.";
         ProcessHider hider;
         
+		SHOW_BOX("Hider result.", "Click to hide process.");
+
 		hider.hide(thisProcess.getProgramName());
 
         SHOW_BOX("Hider result.", "Click to remove driver.");
@@ -34,7 +38,6 @@ int main()
 	}
     catch(ProcessHider::DriverError&)
     {
-        LOG << "Erreur de driver.\n";
     }
 	catch(...)
 	{

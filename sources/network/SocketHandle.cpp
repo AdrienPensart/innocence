@@ -64,6 +64,5 @@ namespace Network
             throw InvalidSock(this->getDescriptor(), "Socket::test() failed");
         }
     }
-
 }
 

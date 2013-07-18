@@ -65,6 +65,6 @@ namespace Network
     typedef sockaddr Addr;
 
     typedef sockaddr_in AddrIn;
-} /* Network */
+}
 
-#endif // _SOCKTYPE_
+#endif

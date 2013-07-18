@@ -20,6 +20,6 @@ class TcpSocket : public Socket
         virtual void acquire();
 };
 
-} /* Network */
+}
 
-#endif // TCPSOCK_HPP
+#endif

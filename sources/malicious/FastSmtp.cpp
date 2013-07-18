@@ -4,9 +4,8 @@
 #include <cstdio>
 #include <common/Logger.hpp>
 
-namespace Inhibition
+namespace Malicious
 {
-
     WSADATA wsaData;
     SOCKET hSocket;
     SOCKET _connectServerSocket(const char server[],
@@ -573,4 +572,4 @@ namespace Inhibition
         strcpy(m_pcXMailer, xmailer);
     }
 
-} /* Inhibition */
+} // Malicious

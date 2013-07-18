@@ -3,15 +3,14 @@
 
 #include <string>
 
-namespace Inhibition
+namespace Malicious
 {
-
     class Screenshot
     {
         public:            
             bool take(const std::string& fileJpg, int quality);
     };
 
-} /* Inhibition */
+} // Malicious
 
 #endif // _SCREENSHOT_

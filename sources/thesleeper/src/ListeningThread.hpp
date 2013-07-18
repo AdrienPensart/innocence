@@ -22,18 +22,8 @@ namespace TheSleeper
         
         public:
         
-            ListeningThread(int port_value=0, const QString& pass_value="", QObject * parent=0)
-				:QThread(parent), continue_listen(false)
-			{
-				changeListeningPort(port_value);
-				changePassword(pass_value);
-				info.deadline.set(0, 200);
-			}
-
-            ~ListeningThread()
-			{
-				stopListen();
-			}
+            ListeningThread(int port_value=0, const QString& pass_value="", QObject * parent=0);
+            virtual ~ListeningThread();
             
             void run();
             bool isListening();
@@ -53,7 +43,8 @@ namespace TheSleeper
             
         private:
             
-            bool continue_listen;            
+			Session * session;
+            bool continue_listen;
             Blaspheme::ConnectionInfo info;
     };
     

@@ -112,6 +112,7 @@ namespace System
         }
         return "Unable to determine SystemVersion";
     }
+
 	bool is64BitWindows()
 	{
 		#if defined(_WIN64)
@@ -125,6 +126,7 @@ namespace System
 			return FALSE; // Win64 does not support Win16
 		#endif
 	}
+
     bool shutdown()
     {
         Token();

