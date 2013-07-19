@@ -1,7 +1,3 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #ifndef _INHIBITER_
 #define _INHIBITER_
 

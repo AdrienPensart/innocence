@@ -14,7 +14,7 @@ namespace System
 			Process(const std::string& executable, const std::string& args="", bool show=false);
 			DWORD getPid();
 			bool isRunning();
-			void wait();
+			DWORD wait();
             void kill();
 
 		protected:

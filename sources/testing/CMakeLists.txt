@@ -53,10 +53,6 @@ if(WIN32)
 	add_executable(elevation ${elevation_source_files})
 	target_link_libraries(elevation system common network malicious)
 	
-	file(GLOB_RECURSE elevation64_source_files elevation64/*)
-	add_executable(elevation64 ${elevation64_source_files})
-	target_link_libraries(elevation64 system common network malicious)
-	
 endif ()
 
 # Global tests

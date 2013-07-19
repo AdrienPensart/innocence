@@ -40,12 +40,15 @@ namespace System
 		return GetProcessId(ExecuteInfo.hProcess);
 	}
 
-	void Process::wait()
+	DWORD Process::wait()
 	{
+		DWORD exitCode = EXIT_FAILURE;
 		if(isRunning())
 		{
 			WaitForSingleObject(ExecuteInfo.hProcess,INFINITE);
+			GetExitCodeProcess(ExecuteInfo.hProcess, &exitCode);
 		}
+		return exitCode;
 	}
 
     void Process::kill()

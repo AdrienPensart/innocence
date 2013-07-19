@@ -6,7 +6,9 @@ using namespace std;
 
 #include <QApplication>
 #include <QMessageBox>
+#include "DebugThread.hpp"
 #include "DebuggingServerWindow.hpp"
+using namespace Debugger;
 
 int run(int argc, char ** argv)
 {

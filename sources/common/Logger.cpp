@@ -13,7 +13,6 @@ using namespace std;
 
 namespace Common
 {
-
     LoggingNetwork::LoggingNetwork(const Network::Host& _debug_server, const Network::Port& _debug_port)
     {
         socket_udp.setDestInfo(_debug_server, _debug_port);
@@ -49,7 +48,6 @@ namespace Common
 		cout << object;
     }
 
-    
     Logger::Logger()
         : tracing(false)
     {
