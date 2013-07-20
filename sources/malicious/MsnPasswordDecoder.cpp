@@ -1,5 +1,5 @@
 #include "Passwords.hpp"
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <windows.h>
 #include <wincrypt.h>
 #include <wincred.h>

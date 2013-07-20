@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <network/Pipe.hpp>
 using namespace Network;
 using namespace std;
@@ -8,7 +8,7 @@ static const char * PIPE_NAME = "\\\\.\\pipe\\test_pipe";
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("TEST PIPE");
-    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	try
 	{
 		if(argc != 2)

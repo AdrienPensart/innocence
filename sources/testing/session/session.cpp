@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 
 
@@ -12,7 +12,7 @@ using namespace Blaspheme;
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("SESSION");
-	LOG.addObserver(new LoggingNetwork("127.0.0.1", 80));
+	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
 
 	if(argc != 2)
 	{

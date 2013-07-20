@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/Uac.hpp>
 using namespace System;
 
@@ -10,7 +10,7 @@ DWORD WINAPI Run(void)
     try
 	{
         LOG.setHeader("TEST DLL Injection + Elevation");
-        LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
         LOG << "Injection DLL : OK\n";
         LOG << "Elevation : " + GetElevationType();
     }

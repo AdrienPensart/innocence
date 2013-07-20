@@ -3,7 +3,7 @@
 
 #include <cstdio>
 #include <string>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 
 namespace Malicious
 {

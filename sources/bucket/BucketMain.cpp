@@ -3,7 +3,7 @@
 using namespace std;
 
 #include <network/TcpServer.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <common/Menu.hpp>
 #include <system/File.hpp>
 #include <system/Process.hpp>
@@ -345,7 +345,7 @@ int main(int argc, char * argv[])
 	}
 
 	LOG.setHeader("BUCKET");
-	LOG.addObserver(new LoggingNetwork("127.0.0.1", 80));
+	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
 	
 	Network::Port port = 0;
 	if(!from_string(argv[1], port))

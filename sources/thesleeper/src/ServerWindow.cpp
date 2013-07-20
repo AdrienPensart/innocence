@@ -10,8 +10,7 @@ using namespace std;
 #include <QtWidgets/QMessageBox>
 #include <QFileDialog>
 
-#include <common/Convert.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/Blaspheme.hpp>
 using namespace Network;
 

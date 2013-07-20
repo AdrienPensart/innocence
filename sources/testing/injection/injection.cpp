@@ -1,4 +1,5 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
+#include <malicious/InternetExplorer.hpp>
 #include <malicious/Injector.hpp>
 #include <system/Process.hpp>
 
@@ -7,22 +8,23 @@ int main(int argc, char * argv[])
 	try
 	{
         LOG.setHeader("TEST INJECTION");
-        LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.addObserver(new Common::LogToConsole);
 
-        System::Process injected_process("iexplore.exe", "about:blank");
-        if(!injected_process.isRunning())
+        Malicious::InternetExplorer ie;
+		int exitCode = EXIT_FAILURE;
+        if(Malicious::inject(ie.getPid(), "dll.dll"))
         {
-            FATAL_ERROR("Impossible de demarrer le processus a injecter.");
-        }
-
-        if(Malicious::inject(injected_process.getPid(), "dll.dll"))
-        {
-		    LOG << "DLL Injected";
+		    LOG << "Injection succeeded";
+			exitCode = EXIT_SUCCESS;
         }
         else
         {
-            LOG << "Injection failed.";
+            LOG << "Injection failed";
+			exitCode = EXIT_FAILURE;
         }
+		ie.kill();
+		return exitCode;
     }
     catch(std::exception& e)
     {
@@ -30,7 +32,7 @@ int main(int argc, char * argv[])
     }
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Erreur d'origine inconnue";
 	}
-	return EXIT_SUCCESS;
+	return EXIT_FAILURE;
 }

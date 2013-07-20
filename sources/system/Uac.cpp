@@ -1,5 +1,5 @@
 #include "Uac.hpp"
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 
 #include <windows.h>
 

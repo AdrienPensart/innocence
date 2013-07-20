@@ -10,7 +10,7 @@
 #include "Inhibiter.hpp"
 #include "ClientConfig.hpp"
 #include <blaspheme/Blaspheme.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <malicious/Injector.hpp>
 #include <malicious/ProcessHider.hpp>
 #include <malicious/BinaryRessource.hpp>
@@ -51,9 +51,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     Port port = 0;
     from_string(port_str, port);
     
-    LOG.addObserver(new Common::LoggingNetwork(ip_str, port));
+    LOG.addObserver(new Common::LogToNetwork(ip_str, port));
 	*/
-	LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Programme : " + thisProcess.getProgramPath();
     LOG << "Nombre d'arguments : " + to_string(thisProcess.getArgCount());

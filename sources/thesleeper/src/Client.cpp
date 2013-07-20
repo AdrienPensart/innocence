@@ -7,7 +7,7 @@ using namespace std;
 #include <QTextStream>
 #include <QMessageBox>
 #include "Client.hpp"
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/File.hpp>
 #include <blaspheme/Blaspheme.hpp>
 using namespace Blaspheme;

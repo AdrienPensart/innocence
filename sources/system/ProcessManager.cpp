@@ -1,7 +1,7 @@
 #include "ProcessManager.hpp"
 #include "Registry.hpp"
 
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <tchar.h>
 #include <tlhelp32.h>
 #include <cstdlib>

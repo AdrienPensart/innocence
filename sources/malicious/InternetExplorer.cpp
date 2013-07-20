@@ -2,8 +2,7 @@
 #include "Exception.hpp"
 
 #include <system/ProcessManager.hpp>
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 
 #include <objbase.h>
 

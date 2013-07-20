@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/protocol/Authentication.hpp>
 using namespace Network;

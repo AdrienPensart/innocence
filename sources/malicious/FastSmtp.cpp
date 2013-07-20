@@ -2,7 +2,7 @@
 
 #include <winsock2.h>
 #include <cstdio>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 
 namespace Malicious
 {

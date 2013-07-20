@@ -1,6 +1,6 @@
 #include "Injector.hpp"
 
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 using namespace System;
 
 namespace Malicious

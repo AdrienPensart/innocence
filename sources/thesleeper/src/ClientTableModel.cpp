@@ -1,6 +1,6 @@
 #include "ClientTableModel.hpp"
 #include "Client.hpp"
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 
 namespace TheSleeper
 {

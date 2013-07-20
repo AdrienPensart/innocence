@@ -1,5 +1,5 @@
 #include <winsock2.h>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 using namespace std;
 
 void RemoteShell()
@@ -50,7 +50,7 @@ void RemoteShell()
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("TEST RSHELL");
-    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	try
 	{
 		RemoteShell();

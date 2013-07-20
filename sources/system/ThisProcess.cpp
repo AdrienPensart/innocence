@@ -1,6 +1,6 @@
 #include "ThisProcess.hpp"
 #include <windows.h>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/File.hpp>
 
 namespace System

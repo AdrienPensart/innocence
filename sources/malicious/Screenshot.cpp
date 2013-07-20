@@ -6,8 +6,7 @@
 #define HAVE_BOOLEAN
 #include <utils/jpeg/jpeglib.h>
 
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 
 namespace Malicious
 {

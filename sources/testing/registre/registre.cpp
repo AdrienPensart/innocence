@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/Registry.hpp>
 using namespace System;
 using namespace System::Registry;
@@ -9,7 +9,7 @@ int main(int argc, char * argv[])
 {
     static const char * RUN_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
 	LOG.setHeader("TEST REGISTRE");
-    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
+    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	try
 	{
         LOG << "Chemin du programme : " + to_string(argv[0]);

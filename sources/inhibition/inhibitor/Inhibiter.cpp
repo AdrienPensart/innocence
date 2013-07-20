@@ -5,8 +5,7 @@
 #include <malicious/InternetExplorer.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
-#include <common/Convert.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <network/Pipe.hpp>
 #include "Inhibiter.hpp"
 #include "ClientConfig.hpp"

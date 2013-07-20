@@ -1,5 +1,4 @@
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 #include <network/TcpServer.hpp>
 #include <blaspheme/transfer/GenericTransfer.hpp>
 #include <blaspheme/hash/Hash.hpp>
@@ -23,8 +22,8 @@ class TransferShow : public TransferObserver
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("TEST TRANSFER");
-    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
-	LOG.addObserver(new Common::LoggingMessage);
+    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToConsole);
 	try
 	{
 		if(argc != 3)

@@ -1,5 +1,5 @@
 #include <system/Registry.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <string>
 using namespace System::Registry;

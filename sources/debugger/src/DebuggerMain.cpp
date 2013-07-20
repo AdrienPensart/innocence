@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/ThisProcess.hpp>
 #include <iostream>
 #include <cstdlib>

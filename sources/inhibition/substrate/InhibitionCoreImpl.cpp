@@ -1,5 +1,4 @@
-#include <common/Convert.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/System.hpp>
 #include <system/Registry.hpp>
 #include <system/Process.hpp>

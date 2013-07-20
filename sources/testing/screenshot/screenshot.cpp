@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <malicious/Screenshot.hpp>
 
 #include <iostream>
@@ -9,7 +9,7 @@ using namespace Malicious;
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("SESSION");
-	LOG.addObserver(new LoggingNetwork("127.0.0.1", 80));
+	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
 
 	Screenshot sc;
 	sc.take("test.jpg", 100);

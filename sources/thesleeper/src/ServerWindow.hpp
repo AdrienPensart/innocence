@@ -16,7 +16,7 @@
 #include "PasswordsDialog.hpp"
 #include "EditClientDialog.hpp"
 
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpClient.hpp>
 

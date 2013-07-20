@@ -9,8 +9,7 @@ using namespace std;
 #include "ListeningThread.hpp"
 
 #include <blaspheme/protocol/Session.hpp>
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 #include <network/TcpClient.hpp>
 using namespace Network;
 using namespace Blaspheme;

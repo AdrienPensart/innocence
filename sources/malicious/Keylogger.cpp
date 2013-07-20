@@ -1,5 +1,5 @@
 #include "Keylogger.hpp"
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <system/File.hpp>
 
 #define MAX_TITLE_SIZE 255

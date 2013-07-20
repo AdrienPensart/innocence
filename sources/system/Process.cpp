@@ -2,8 +2,7 @@
 #include "ProcessManager.hpp"
 
 #include <cstdio>
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 using namespace std;
 
 namespace System

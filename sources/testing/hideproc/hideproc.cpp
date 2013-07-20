@@ -1,7 +1,7 @@
 #include <malicious/ProcessHider.hpp>
 #include <system/Uac.hpp>
 #include <system/ThisProcess.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 using namespace Malicious;
 using namespace System;
 
@@ -11,8 +11,8 @@ int main()
 	{
 		LOG_THIS_FUNCTION
         LOG.setHeader("TEST HIDEPROC");
-	    LOG.addObserver(new Common::LoggingNetwork("127.0.0.1", 80));
-		LOG.addObserver(new Common::LoggingMessage());
+	    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.addObserver(new Common::LogToConsole());
         LOG.trace();
 
         ThisProcess thisProcess;

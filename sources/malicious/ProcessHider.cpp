@@ -2,7 +2,7 @@
 #include "StealthDriver.hpp"
 #include "BinaryRessource.hpp"
 #include <system/System.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 
 #ifdef  _WIN32_IE
 #undef _WIN32_IE

@@ -1,7 +1,7 @@
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpServer.hpp>
 #include <blaspheme/Blaspheme.hpp>
-#include <common/Logger.hpp>
+#include <common/Log.hpp>
 #include <string>
 using std::string;
 

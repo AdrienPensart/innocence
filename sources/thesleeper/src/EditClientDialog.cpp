@@ -3,8 +3,7 @@
 #include <inhibition/inhibitor/ClientConfig.hpp>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 #include <system/File.hpp>
 using namespace std;
 

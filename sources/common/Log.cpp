@@ -1,81 +1,39 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-
 #ifdef WIN32
 	#include <windows.h>
 #endif
 
-using namespace std;
-
-#include <common/Logger.hpp>
-#include <common/Convert.hpp>
+#include <common/Log.hpp>
 
 namespace Common
 {
-    LoggingNetwork::LoggingNetwork(const Network::Host& _debug_server, const Network::Port& _debug_port)
-    {
-        socket_udp.setDestInfo(_debug_server, _debug_port);
-    }
-
-    void LoggingNetwork::update(const std::string& object)
-    {
-        socket_udp << object;
-    }
-    
-    LoggingFile::LoggingFile(const std::string& _filepath)
-    :filepath(_filepath)
-    {
-        file.open(filepath.c_str());
-        if(!file.is_open())
-        {
-            FATAL_ERROR("Can't open log file.");
-        }
-    }
-
-    void LoggingFile::update(const std::string& object)
-    {
-        file << object;
-    }
-    
-    LoggingMessage::LoggingMessage(const std::string& _title)
-    :title(_title)
-    {
-    }
-
-    void LoggingMessage::update(const std::string& object)
-    {
-		cout << object;
-    }
-
-    Logger::Logger()
+    Log::Log()
         : tracing(false)
     {
     }
     
-    void Logger::trace()
+    void Log::trace()
     {
         tracing = true;
     }
 
-    void Logger::enterFunction(const std::string& func)
+    void Log::enterFunction(const std::string& func)
     {
         functions.push_back(func);
     }
 
-    void Logger::leaveFunction()
+    void Log::leaveFunction()
     {
         functions.pop_back();
     }
 
-    void Logger::setHeader(const std::string& _header)
+    void Log::setHeader(const std::string& _header)
     {
         header = _header;
     }
     
-    Logger& Logger::operator << (const std::string& object)
+    Log& Log::operator << (const std::string& object)
     {
-        string graph;
+        std::string graph;
         // parcourt des appels de function
         for(unsigned int indexFunctions = 0; indexFunctions != functions.size(); indexFunctions++)
         {
@@ -89,6 +47,11 @@ namespace Common
         return *this;
     }
     
+	void Log::sendRaw(const std::string& object)
+	{
+		notify(object);
+	}
+
     ScopedLog::ScopedLog(const std::string& log):
     msg(log)
     {
