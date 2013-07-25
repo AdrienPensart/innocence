@@ -10,14 +10,17 @@ namespace Malicious
 	{
 		public:
 		
-			InternetExplorer();
-			DWORD getPid(){return pid;}
+			InternetExplorer(bool killOnDestroy=false);
+			~InternetExplorer();
+
+			DWORD getPid();
 			void kill();
 
 		private:
 
 			IWebBrowser2 * browser;
 			DWORD pid;
+			bool killOnDestroy;
 	};
 
 	// too dangerous, high risk of crash

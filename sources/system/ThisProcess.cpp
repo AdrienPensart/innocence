@@ -5,6 +5,14 @@
 
 namespace System
 {
+	std::string ThisProcess::getPath()
+	{
+		HMODULE hModule = GetModuleHandle(NULL);
+		CHAR path[MAX_PATH];
+		GetModuleFileName(hModule, path, MAX_PATH);
+		return path;
+	}
+
 	ThisProcess::ThisProcess()
 		:argc(0), argvw(0), argv(0)
 	{
@@ -24,7 +32,7 @@ namespace System
 			wcstombs(argv[index], argvw[index], stringSize+1);
 		}
 
-		programPath = argv[0];
+		programPath = getPath();
 		programName = programPath;
 		programDir = programPath;
 		System::GetFileName(programName);

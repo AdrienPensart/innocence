@@ -11,8 +11,17 @@ namespace Malicious
 		// donc la fonction pourra correctement s'exécuter dans l'espace 
 		// du processus injecté
 		HMODULE hLocKernel32 = GetModuleHandle("Kernel32");
+		if(hLocKernel32 == NULL)
+		{
+			FATAL_ERROR("Error GetModuleHandle : " + to_string(GetLastError()));
+		}
+
 		FARPROC hLocLoadLibrary = GetProcAddress(hLocKernel32, "LoadLibraryA");
-		
+		if(hLocLoadLibrary == NULL)
+		{
+			FATAL_ERROR("Error GetProcAddress : " + to_string(GetLastError()));
+		}
+
         if (!SetDebugPrivileges())
         {
             FATAL_ERROR("Error SetDebugPrivileges : " + to_string(GetLastError()));

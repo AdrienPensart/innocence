@@ -2,7 +2,7 @@
 if(WIN32)
 	file(GLOB_RECURSE dll_source_files dll/*)
 	add_library(dll SHARED ${dll_source_files})
-	target_link_libraries(dll system network blaspheme common gdi32 userenv)
+	target_link_libraries(dll system network common)
 
 	file(GLOB_RECURSE injection_source_files injection/*)
 	add_executable(injection ${injection_source_files})

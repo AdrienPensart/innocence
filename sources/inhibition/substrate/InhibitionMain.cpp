@@ -68,7 +68,7 @@ DWORD WINAPI Run(void)
     }
 	else
 	{
-		SHOW_FATAL_ERROR("Impossible de se connecter au PIPE.");
+		FATAL_ERROR("Impossible de se connecter au PIPE.");
 	}
 
     LOG.addObserver(new Common::LogToNetwork(infos.ip, infos.port));

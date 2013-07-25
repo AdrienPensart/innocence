@@ -15,7 +15,10 @@ namespace Debugger
 
 	void DebuggingServerWindow::addDebugMsg(QString msg)
 	{
-		msg[msg.size()-1] = ' ';
+		if(msg[msg.size()-1] == '\n')
+		{
+			msg.chop(1);
+		}
 		debugOutputEdit->append(msg);
 	}
 

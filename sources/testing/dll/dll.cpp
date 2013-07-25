@@ -9,18 +9,19 @@ DWORD WINAPI Run(void)
 {
     try
 	{
-        LOG.setHeader("TEST DLL Injection + Elevation");
-        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
-        LOG << "Injection DLL : OK\n";
-        LOG << "Elevation : " + GetElevationType();
+        LOG.setHeader("FROM TEST DLL");
+		LOG.trace();
+        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 8000));
+		LOG.addObserver(new Common::LogToConsole);
+		LOG.sendRaw("INJECTED");
     }
     catch(std::exception& e)
     {
-        LOG << std::string("Exception standard : ") + e.what();
+        LOG << e.what();
     }
     catch(...)
     {
-        LOG << "Erreur d'origine inconnue.";
+        LOG << "Unknow exception";
     }
     // si une erreur devait survenir, il faut s'assurer que le processus injecté meurre avec la DLL
     exit(0);

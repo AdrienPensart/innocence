@@ -5,7 +5,6 @@
 
 namespace System
 {
-
 	// Cette classe prend en charge les arguments du processus, le nom et 
 	// le chemin de l'exécutable, et les infos sur le processus (PID)
 	class ThisProcess
@@ -15,6 +14,7 @@ namespace System
 			ThisProcess();
 			~ThisProcess();
 
+			static std::string getPath();
 			const std::string& getProgramPath();
 			const std::string& getProgramName();
 			const std::string& getProgramDir();

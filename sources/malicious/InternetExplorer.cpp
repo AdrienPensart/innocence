@@ -81,8 +81,8 @@ namespace Malicious
 		}
 	}
 
-	InternetExplorer::InternetExplorer()
-		: pid(0)
+	InternetExplorer::InternetExplorer(bool killOnDestroyArg)
+		: pid(0), killOnDestroy(killOnDestroyArg)
 	{
 		HRESULT CoInitializeResult = CoInitialize(NULL);
 		if(CoInitializeResult != S_OK)
@@ -103,6 +103,20 @@ namespace Malicious
 		}
 
 		CoGetServerPID(browser, &pid);
+	}
+
+	InternetExplorer::~InternetExplorer()
+	{
+		if(killOnDestroy)
+		{
+			LOG << "Killing InternetExplorer with PID : "+to_string(pid);
+			kill();
+		}
+	}
+
+	DWORD InternetExplorer::getPid()
+	{
+		return pid;
 	}
 
 	void InternetExplorer::kill()
