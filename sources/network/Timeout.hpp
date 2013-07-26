@@ -1,5 +1,5 @@
-#ifndef TIMEOUT_H
-#define TIMEOUT_H
+#ifndef _TIMEOUT_
+#define _TIMEOUT_
 
 #include "Types.hpp"
 
@@ -33,6 +33,6 @@ namespace Network
 			timeval time;
 	};
 
-}
+} // Network
 
-#endif
+#endif // _TIMEOUT_

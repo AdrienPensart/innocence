@@ -12,14 +12,14 @@ class Exception : public std::exception
 	public:
 
 		explicit Exception(const std::string& argMsgError);
-		virtual ~Exception()throw();
-		const char * what();
+		virtual ~Exception() throw();
+		virtual const char * what() const throw ();
 
 	private:
 
 		std::string msgError;
 };
 
-}
+} // Malicious
 
 #endif // _MALICIOUS_EXCEPTION_

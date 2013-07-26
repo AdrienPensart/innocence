@@ -22,7 +22,7 @@ namespace Blaspheme
 	
 	bool Session::connect(Blaspheme::ConnectionInfo& cinfo)
 	{
-		//LOG << "Try connect to "+to_string(cinfo.ip)+" on port "+to_string(cinfo.port);
+		//LOG << Connecting to "+to_string(cinfo.ip)+" on port "+to_string(cinfo.port);
 		if(mainStream.connect(cinfo.ip, cinfo.port))
         {
 			authPlugin.setPassword(cinfo.password);
@@ -35,13 +35,12 @@ namespace Blaspheme
                 from_string(str_id, id);
                 sessionId = id;
                 
-                LOG << "ID attribue : " + str_id;
-                LOG << "Connexion principale acquise.";
+                LOG << "Main connection acquired, my ID : " + str_id;
                 return true;
             }
             else
             {
-				LOG << "Echec de l'authentification.";
+				LOG << "Authentication failed";
                 reset();
             }
         }
@@ -62,21 +61,21 @@ namespace Blaspheme
 				string stringId;
 				recv(stringId);
 				from_string(stringId, sessionId);
-				LOG << "Stream ID recu : " + stringId;
+				LOG << "Stream ID received : " + stringId;
                 if(sessionId == 0)
                 {
-					LOG << "Nouveau client connecte.";
+					LOG << "New client connected";
 					send("0");
                 }
                 else
                 {
-					LOG << "Nouvelle connexion auxiliaire.";
+					LOG << "New secondary connection";
                 }
 				return true;
 			}
 			else
 			{
-				LOG << "Echec de l'authentification.";
+				LOG << "Authentication failed";
 			}
 		}
 		return false;
@@ -114,7 +113,7 @@ namespace Blaspheme
 
     void Session::reset()
     {
-        LOG << "Reset de toutes les connexions...";
+        LOG << "Session is resetting";
         // reset des connexions auxiliaires
         while(auxStreams.size())
         {
@@ -122,7 +121,7 @@ namespace Blaspheme
             front.reset();
         }
         
-        LOG << "Deconnection : OK.";
+        LOG << "Deconnection done.";
         // reset de la connexion principale
         mainStream.reset();
     }
@@ -131,7 +130,7 @@ namespace Blaspheme
     {
         if(!auxStreams.size())
         {
-            LOG << "Pas d'objet dans la stack.";
+            LOG << "No secondary connection left";
             return Network::TcpClient();
         }
         Network::TcpClient front = auxStreams.top();

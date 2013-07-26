@@ -11,7 +11,7 @@ namespace Malicious
 	{
 	}
 
-	const char * Exception::what()
+	const char * Exception::what() const throw ()
 	{
 		return msgError.c_str();
 	}

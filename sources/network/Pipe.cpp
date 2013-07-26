@@ -4,24 +4,6 @@
 
 namespace Network
 {
-	PipeError::PipeError(const std::string& argMsgError)
-    {
-		#ifdef _WINDOWS_
-			msgError = argMsgError + " " + intToString(GetLastError()) + '\n';
-        #else
-            msgError = argMsgError + " " + strerror(errno) + '\n';
-        #endif
-    }
-
-	PipeError::~PipeError()throw()
-	{
-	}
-
-	const char * PipeError::what()
-    {
-		return msgError.c_str();
-    }
-
 	Pipe::Pipe():hPipe(0)
     {
     }
@@ -41,11 +23,10 @@ namespace Network
 		{
 			return false;
 		}
-		//Connect to the server pipe using CreateFile()
         hPipe = CreateFile(pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
         if (hPipe == INVALID_HANDLE_VALUE)
         {
-             throw PipeError();
+             throw PipeException("Pipe connection failed : "+Exception::toString(GetLastError()));
         }
         return true;
     }
@@ -66,7 +47,7 @@ namespace Network
 
 		if (hPipe == INVALID_HANDLE_VALUE)
         {
-            throw PipeError("Pipe::Listen :");
+            throw PipeException("Pipe listen failed : "+Exception::toString(GetLastError()));
         }
         return true;
     }
@@ -76,7 +57,7 @@ namespace Network
 		bool bClientConnected = ConnectNamedPipe(hPipe, 0) != 0;
         if (!bClientConnected)
         {
-			throw PipeError("Pipe::Accept :");
+			throw PipeException("Pipe accept failed (ConnectNamedPipe) : "+Exception::toString(GetLastError()));
         }
         return true;
     }
@@ -97,7 +78,7 @@ namespace Network
         bool bResult = WriteFile(hPipe,object,size,(DWORD *)&bytesRead,0) != 0; // évite le warning C4800
         if ( (!bResult) || (size) != bytesRead)
         {
-			throw PipeError();
+			throw PipeException("Pipe send failed (WriteFile) : "+Exception::toString(GetLastError()));
         }
         FlushFileBuffers(hPipe);
         return bytesRead;
@@ -124,7 +105,7 @@ namespace Network
         bool bResult = ReadFile(hPipe, object,size,(DWORD *)&bytesRead,0) != 0;// évite le warning C4800
         if ( (!bResult) || (bytesRead==0))
         {
-	        throw PipeError();
+	        throw PipeException("Pipe recv failed (ReadFile) : "+Exception::toString(GetLastError()));
         }
 	    return bytesRead;
     }

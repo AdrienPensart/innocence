@@ -1,5 +1,5 @@
-#ifndef TCPCLIENT_HPP
-#define TCPCLIENT_HPP
+#ifndef _TCP_CLIENT_
+#define _TCP_CLIENT_
 
 #include "TcpSocket.hpp"
 #include "Stream.hpp"
@@ -41,6 +41,6 @@ namespace Network
 		    bool setKeepAlive(int aliveToggle);
 		    virtual int getBufferDataSize();
     };
-}
+} // Network
 
-#endif
+#endif // _TCP_CLIENT_

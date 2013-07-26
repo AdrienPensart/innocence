@@ -2,15 +2,11 @@
 #define _SOCKET_
 
 #include "SocketHandle.hpp"
+#include "SocketException.hpp"
 
 namespace Network
 {
-	class Deconnection : public UnexpectedEvent
-	{
-		public:
-
-			Deconnection(SocketHandleImpl argSock, const std::string& msgError):UnexpectedEvent(argSock, msgError){}
-	};
+	typedef UnexpectedEvent Deconnection;
 
     /**
      * Représente un socket basique, sans protocole particulier associé, cette
@@ -148,6 +144,6 @@ namespace Network
 				return blocking_status;
 			}
 	};
-}
+} // Network
 
-#endif
+#endif // _SOCKET_

@@ -108,6 +108,6 @@ void SHOW_BOX(const std::string& title, const std::string& msg)
 #ifdef WIN32
     MessageBoxA(NULL, msg.c_str() , title.c_str(), 0);
 #else
-    LOG << "Boite de message " + title + " : " + msg;
+    LOG << "Message Box " + title + " : " + msg;
 #endif
 }

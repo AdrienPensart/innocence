@@ -10,14 +10,14 @@ namespace Blaspheme
 	bool NoAuthentication::sendAuth(Session&)
 	{
 		FUNC_LOG(__FUNCTION__);
-		LOG << "No authentication plugin.";
+		LOG << "No authentication plugin";
 		return true;
 	}
 
 	bool NoAuthentication::recvAuth(Session&)
 	{
 		FUNC_LOG(__FUNCTION__);
-		LOG << "No authentication plugin.";
+		LOG << "No authentication plugin";
 		return true;
 	}
 
@@ -34,7 +34,7 @@ namespace Blaspheme
     bool StringBasedAuth::sendAuth(Session& session)
     {
 		FUNC_LOG(__FUNCTION__);
-        LOG << "Envoi du mot de passe...";
+        LOG << "Sending password";
         session << password;
         std::string buffer;
         session >> buffer;
@@ -44,11 +44,11 @@ namespace Blaspheme
         }
         else if(buffer == FAILURE)
         {
-            LOG << "Echec de l'authentification.";
+            LOG << "Authentication failed";
         }
         else
         {
-            LOG << "Probleme : reponse d'authentification.";           
+            LOG << "Authentication bad response";
         }
         return false;
     }
@@ -56,10 +56,10 @@ namespace Blaspheme
     bool StringBasedAuth::recvAuth(Session& session)
     {
 		FUNC_LOG(__FUNCTION__);
-		LOG << "Reception du mot de passe...";
+		LOG << "Waiting password";
         std::string received_password;
         session >> received_password;
-        LOG << "Mot de passe recu : " + received_password;
+        LOG << "Password received : " + received_password;
         if(received_password == password)
         {
             session << SUCCESS;

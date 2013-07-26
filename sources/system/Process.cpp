@@ -9,7 +9,7 @@ namespace System
 {
 	Process::Process(const std::string& executable, const std::string& args, bool show)
 	{
-		LOG << "Creation Process " + executable + " " + args;
+		LOG << "Creating process " + executable + " " + args;
 		memset(&ExecuteInfo, 0, sizeof(ExecuteInfo));
 		ExecuteInfo.cbSize       = sizeof(ExecuteInfo);
 		ExecuteInfo.fMask        = SEE_MASK_NOCLOSEPROCESS;
@@ -25,12 +25,12 @@ namespace System
 		if(!ShellExecuteEx(&ExecuteInfo))
 		{
 			running = false;
-			LOG << "ShellExecuteEx failed : GetLastError = " + to_string(GetLastError()) + " and hInstApp = " + to_string(ExecuteInfo.hInstApp);
+			LOG << "ShellExecuteEx failed : " + to_string(GetLastError());
 		}
 		else
 		{
 			running = true;
-			LOG << "ShellExecuteEx succeded : GetLastError = " + to_string(GetLastError()) + " and hInstApp = " + to_string(ExecuteInfo.hInstApp);
+			LOG << "ShellExecuteEx succeded : " + to_string(GetLastError());
 		}
 	}
 
@@ -67,7 +67,7 @@ namespace System
 
 		if ( !LookupPrivilegeValue(NULL, lpszPrivilege, &luid) )
 		{
-			LOG << "LookupPrivilegeValue error : " + to_string(GetLastError());
+			LOG << "LookupPrivilegeValue failed : " + to_string(GetLastError());
 			return false;
 		}
 
@@ -84,12 +84,12 @@ namespace System
 
 		if ( !AdjustTokenPrivileges(hToken,FALSE,&tp,sizeof(TOKEN_PRIVILEGES),(PTOKEN_PRIVILEGES) NULL,(PDWORD) NULL) )
 		{
-			LOG << "AdjustTokenPrivileges error : " + to_string(GetLastError());
+			LOG << "AdjustTokenPrivileges failed : " + to_string(GetLastError());
 			return false;
 		}
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
 		{
-			LOG << "The token does not have the specified privilege.";
+			LOG << "The token does not have the specified privilege";
 			return false;
 		}
 		return true;

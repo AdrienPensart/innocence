@@ -12,33 +12,33 @@ int main(int argc, char * argv[])
     LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	try
 	{
-        LOG << "Chemin du programme : " + to_string(argv[0]);
+        LOG << "Program dir : " + to_string(argv[0]);
         Key startKey(localMachine, RUN_KEY);
         startKey.createValue("test", argv[0]);
 
-        SHOW_BOX("REGISTRE", "effacement de la valeur...");
+        SHOW_BOX("REGISTRE", "Deleting value");
 
         startKey.removeValue("test");
 	}
 	catch(RegistryBaseError&)
 	{
-		LOG << "Mauvais choix de base de registre.";
+		LOG << "Bad registry base";
 	}
 	catch(KeyDoesntExist&)
 	{
-		LOG << "Erreur la cle n'existe pas.";
+		LOG << "Key does not exist";
 	}
 	catch(KeyErrorCreate&)
 	{
-		LOG << "Erreur lors de la creation de la cle.";
+		LOG << "Error while creating key";
 	}
 	catch(RegistryError&)
 	{
-		LOG << "Erreur de registre.";
+		LOG << "Registry error";
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }

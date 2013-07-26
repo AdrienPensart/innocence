@@ -4,6 +4,7 @@ using namespace Common;
 
 #include <malicious/InternetExplorer.hpp>
 #include <malicious/Injector.hpp>
+#include <malicious/Exception.hpp>
 
 #include <system/ThisProcess.hpp>
 using namespace System;

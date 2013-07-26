@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 	{
 		if(argc != 3)
 		{
-			LOG << "Nombre d'argument incorrect.";
+			LOG << "Bad argument number";
 			return EXIT_SUCCESS;
 		}
 
@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
 			TcpClient client;
 			if(client.connect("127.0.0.1", 80))
 			{
-				LOG << "Connecte au serveur.";
+				LOG << "Connected to server";
 				
 				//Upload upload(argv[2], client);
 				//upload.addObserver(new TransferShow);
@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
 			}
 			else
 			{
-				LOG << "Non Connecte au serveur.";
+				LOG << "Connected to server";
 			}
 		}
 		else if(strcmp(argv[1], "-d") == 0)
@@ -61,7 +61,7 @@ int main(int argc, char * argv[])
 			TcpClient client;
 			if(server.accept(client))
 			{
-				LOG << "Client connecte.";
+				LOG << "Client connected";
                 
 				//Download download(argv[2], client);
 				//download.addObserver(new TransferShow);
@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 			}
 			else
 			{
-				LOG << "Pas de client.";
+				LOG << "No client";
 			}
 		}
 		else
@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }

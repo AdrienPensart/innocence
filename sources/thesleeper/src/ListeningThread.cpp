@@ -31,20 +31,18 @@ namespace TheSleeper
 
     void ListeningThread::run()
     {
-        LOG << "Debut Thread.";
+        LOG << "Starting listening thread, connections activated";
         try
         {
-            LOG << "Boucle de connexion active.";
             while(continue_listen)
             {
 				Session session;
 				if(session.wait_connect(info))
 				{
-					LOG << "ListeningThread::run() : nouveau client.";
+					LOG << "New slave connected";
 					emit newClientConnected(session);
 				}
             }
-			LOG << "Fin boucle de connexion.";
         }
 		catch(Network::Deconnection&)
 		{
@@ -52,19 +50,17 @@ namespace TheSleeper
 		}
         catch(Network::Exception& e)
         {
-			LOG << "network exception";
             LOG << e.what();
         }
         catch(std::exception& e)
         {
-			LOG << "standard exception";
             LOG << e.what();
         }
         catch(...)
         {
-            LOG << "Erreur dans le thread de boucle des connexions.";
+            LOG << "Unknown exception";
         }
-        LOG << "Fin thread.";
+        LOG << "Ending listening thread";
     }
 
     bool ListeningThread::isListening()
@@ -74,14 +70,14 @@ namespace TheSleeper
 
     void ListeningThread::changeListeningPort(int port)
     {
-        LOG << "Mise a jour du port d'ecoute : " + to_string(port);
+        LOG << "Updating listening port : " + to_string(port);
         info.port = port;
     }
 
     void ListeningThread::changePassword(const QString& password)
     {
+		LOG << "Updating password : " + info.password;
 		info.password = password.toStdString();
-		LOG << "Mise a jour du mot de passe de connexion : " + info.password;
     }
 
     void ListeningThread::setListening(bool enabled)

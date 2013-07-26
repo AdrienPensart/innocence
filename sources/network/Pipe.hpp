@@ -1,5 +1,5 @@
-#ifndef _PIPE_HPP_
-#define _PIPE_HPP_
+#ifndef _PIPE_
+#define _PIPE_
 
 #include "Types.hpp"
 #include "Stream.hpp"
@@ -13,18 +13,7 @@
 
 namespace Network
 {
-    class PipeError : public Exception
-    {
-        public:
-
-            PipeError(const std::string& argMsgError="");
-            ~PipeError()throw();
-            const char * what();
-
-        private:
-
-            std::string msgError;
-    };
+    typedef Exception PipeException;
 
     class Pipe : public Stream
     {
@@ -52,8 +41,8 @@ namespace Network
 
     };
 
-}
+} // Network
 
 #endif // WIN32
 
-#endif
+#endif // _PIPE_

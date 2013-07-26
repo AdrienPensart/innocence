@@ -109,7 +109,7 @@ namespace Malicious
 	{
 		if(killOnDestroy)
 		{
-			LOG << "Killing InternetExplorer with PID : "+to_string(pid);
+			LOG << "Killing IE with PID : "+to_string(pid);
 			kill();
 		}
 	}

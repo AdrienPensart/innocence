@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
     binary_file.close();
     array_file.close();
     
-    cout << "GENERATION DONE\n";
+    cout << argv[2] << " generated.\n";
         
     return EXIT_SUCCESS;
 }

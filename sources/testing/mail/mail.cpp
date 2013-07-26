@@ -17,15 +17,15 @@ int main(int argc, char * argv[])
         // reception des parametres de l'email
         session() >> server >> victim >> subject >> body;
 
-        LOG << "Le serveur est : " << server;
-        LOG << "La victime est : " << victim;
-        LOG << "Le sujet est : " << subject;
-        LOG << "Le corps du message est : " << body;
+        LOG << Server : " << server;
+        LOG << "Victim : " << victim;
+        LOG << "Subject : " << subject;
+        LOG << "Body : " << body;
 
         CFastSmtp mail;
         if (mail.ConnectServer(server.c_str()))
         {
-            LOG << "Connecte au serveur SMTP : " + server;
+            LOG << "Connected to SMTP server : " + server;
             mail.SetSenderName("anonyme");
             mail.SetSenderEmail("anonym@free.fr");
             mail.SetSubject(subject.c_str());
@@ -39,32 +39,32 @@ int main(int argc, char * argv[])
                 if(mail.Send())
                 {
                     session() << SUCCESS;
-                    LOG << "Email correctement envoye.";
+                    LOG << "Mail sent";
                 }
                 else
                 {
                     session() << FAILURE;
-                    LOG << "Echec de l'envoi de l'email.";
+                    LOG << "Unable to send mail";
                 }
-                LOG << "Deconnexion du serveur SMTP.";
+                LOG << "Disconnecting from SMTP server";
                 mail.Disconnect();
             }
             else
             {
                 session() << FAILURE;
-                LOG << "Echec de l'envoi de l'email : impossible de recuperer le statut de la connexion.";
+                LOG << "Unable to send mail : unknown status";
             }
         }
         else
         {
-            LOG << "Impossible de se connecter au serveur SMTP : " + server;
+            LOG << "Connecting to SMTP server failed : " + server;
             session() << FAILURE;
         }
         */
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 #include "SocketHandle.hpp"
-#include "Exception.hpp"
+#include "SocketException.hpp"
 
 namespace Network
 {
@@ -10,9 +10,10 @@ namespace Network
 
     SocketHandle::WSAInitializer::WSAInitializer()
     {
-        if (WSAStartup(MAKEWORD (2, 2),&m_wsadata))
+		int wsaReturn = WSAStartup(MAKEWORD (2, 2),&m_wsadata);
+        if (wsaReturn)
         {
-            throw WinsockInitExcept();
+            throw WinsockInitExcept("Unable to initialize Winsock : "+Exception::toString(wsaReturn));
         }
     }
     

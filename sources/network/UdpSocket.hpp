@@ -1,5 +1,5 @@
-#ifndef UDPSOCK_HPP
-#define UDPSOCK_HPP
+#ifndef _UDP_SOCKET_
+#define _UDP_SOCKET_
 
 #include "Socket.hpp"
 #include "Stream.hpp"
@@ -46,6 +46,6 @@ namespace Network
             // demande un nouvel handle socket au système
             void acquire();
     };
-}
+} // Network
 
-#endif
+#endif // _UDP_SOCKET_

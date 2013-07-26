@@ -1,5 +1,5 @@
-#ifndef _SOCKTYPE_
-#define _SOCKTYPE_
+#ifndef _SOCKET_TYPES_
+#define _SOCKET_TYPES_
 
 #include <string>
 
@@ -65,6 +65,6 @@ namespace Network
     typedef sockaddr Addr;
 
     typedef sockaddr_in AddrIn;
-}
+} // Network
 
-#endif
+#endif // _SOCKET_TYPES_

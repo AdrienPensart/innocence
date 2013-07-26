@@ -1,5 +1,5 @@
-#ifndef SELECT_HPP
-#define SELECT_HPP
+#ifndef _SELECT_
+#define _SELECT_
 
 #include "Socket.hpp"
 #include "Exception.hpp"
@@ -37,6 +37,6 @@ namespace Network
             
 		    static bool LowLevelSelect(Socket& socket,SelectType type,Timeout & to);
     };
-}
+} // Network
 
-#endif
+#endif // _SELECT_

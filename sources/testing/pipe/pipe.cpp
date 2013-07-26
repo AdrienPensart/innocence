@@ -9,42 +9,44 @@ int main(int argc, char * argv[])
 {
 	LOG.setHeader("TEST PIPE");
     LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToConsole);
+
 	try
 	{
 		if(argc != 2)
 		{
-			LOG << "Nombre d'arguments incorrect.";
+			LOG << "Incorrect number of arguments.";
 			return EXIT_SUCCESS;
 		}
 		string type = argv[1];
 		if(type == "server")
 		{
-			LOG << "Mode serveur.";
+			LOG << "Server mode";
 			string buffer = "un message !";
 			Network::Pipe pipe_server;
 			pipe_server.listen(PIPE_NAME);
 			if(pipe_server.accept())
 			{
-				LOG << "Test d'envoi : ";
+				LOG << "Sending test : "+buffer;
 				pipe_server.send(buffer);
 			}
 			pipe_server.disconnect();
 		}
 		else if(type == "client")
 		{
-			LOG << "Mode client.";
+			LOG << "Client mode";
 			Network::Pipe pipe_client;
 			if(pipe_client.connect(PIPE_NAME))
 			{
 				string buffer;
 				pipe_client.recv(buffer);
-				LOG << "Message recu : " + buffer;
+				LOG << "Received message : " + buffer;
 				pipe_client.disconnect();
 			}
 		}
 		else
 		{
-			LOG << "Parametre incorrect.";
+			LOG << "Incorrect parameter";
 		}
 	}
 	catch(exception& e)
@@ -53,7 +55,7 @@ int main(int argc, char * argv[])
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }

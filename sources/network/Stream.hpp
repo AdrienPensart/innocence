@@ -1,5 +1,5 @@
-#ifndef STREAM_H
-#define STREAM_H
+#ifndef _STREAM_
+#define _STREAM_
 
 #include <string>
 #include <vector>
@@ -83,6 +83,6 @@ namespace Network
 		    enum { DEFAULT_MAX_CHAR=8192 };
 
     };
-}
+} // Network
 
-#endif
+#endif // _STREAM_

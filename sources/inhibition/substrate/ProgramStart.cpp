@@ -14,7 +14,7 @@ namespace Inhibition
     {
         if(!installed())
         {
-            LOG << "Installation de la cle de demarrage automatique.";
+            LOG << "Installing automatic starting registry key";
             install();
         }
     }

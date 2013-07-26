@@ -34,7 +34,7 @@ namespace Common
 		hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, this, 0, &dwThread);
 		if(!hThread)
 		{
-			LOG << "Echec CreateThread : " + to_string(GetLastError());
+			LOG << "CreateThread failed : " + to_string(GetLastError());
 			interrupted = true;
 		}
 	}

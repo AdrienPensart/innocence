@@ -1,89 +1,13 @@
-#ifndef SOCKETHANDLE_H
-#define SOCKETHANDLE_H
+#ifndef _SOCKET_HANDLE_
+#define _SOCKET_HANDLE_
 
 #include "Types.hpp"
+/*
 #include "Exception.hpp"
 #include <string.h>
-
+*/
 namespace Network
-{
-    #ifdef WIN32
-        /**
-         *  Exception lancée si l'initialisation de Winsock sur les plateformes
-         *  Windows échoue
-         */
-        class WinsockInitExcept : public Exception{};
-    #endif
-    
-	class SocketHandle;
-
-	class SocketException : public Exception
-	{
-		public:
-	        
-			SocketException(SocketHandleImpl sock, const std::string& argMsgError)
-			{
-				#ifdef WIN32
-					msgError = argMsgError + " " + intToString(WSAGetLastError()) + '\n';
-				#else
-					msgError = argMsgError + " " + strerror(errno) + '\n';
-				#endif
-			}
-			
-			virtual ~SocketException()throw(){}
-			
-			const SocketHandleImpl& getValue()
-			{
-				return socketValue;
-			}
-			
-			const char * what()
-			{
-				return msgError.c_str();
-			}
-			
-			static std::string getLastError()
-			{
-				#ifdef WIN32
-					return intToString(WSAGetLastError());
-				#else
-					return intToString(errno);
-				#endif
-			}
-			
-			static int getCodeError()
-			{
-				#ifdef WIN32
-					return WSAGetLastError();
-				#else
-					return errno;
-				#endif
-			}
-
-		protected:
-	        
-			SocketHandleImpl socketValue;
-			std::string msgError;
-	};
-
-	class UnexpectedEvent : public SocketException
-	{
-		public:
-			UnexpectedEvent(SocketHandleImpl argSock, const std::string& msgError):SocketException(argSock, msgError){}
-	};
-
-	class InvalidBlocking : public UnexpectedEvent
-	{
-		public:
-			InvalidBlocking(SocketHandleImpl argSock, const std::string& msgError):UnexpectedEvent(argSock, msgError){}
-	};
-
-	class InvalidSock : public UnexpectedEvent
-	{
-		public:
-			InvalidSock(SocketHandleImpl argSock, const std::string& msgError):UnexpectedEvent(argSock, msgError){}
-	};
-
+{	
     /**
      *  Represente le descripteur de fichier d'une socket
      */
@@ -153,6 +77,6 @@ namespace Network
                 static WSAInitializer wsai;
         #endif
     };
-}
+} // Network
 
-#endif
+#endif // _SOCKET_HANDLE_

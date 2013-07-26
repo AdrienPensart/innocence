@@ -1,5 +1,5 @@
-#ifndef _NETWORK_CPP_LIB
-#define _NETWORK_CPP_LIB
+#ifndef _NETWORK_
+#define _NETWORK_
 
 #include "Pipe.hpp"
 #include "TcpSocket.hpp"
@@ -10,4 +10,4 @@
     #pragma comment(lib,"WS2_32.LIB")
 #endif
 
-#endif
+#endif // _NETWORK_

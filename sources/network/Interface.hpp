@@ -1,3 +1,6 @@
+#ifndef _INTERFACE_
+#define _INTERFACE_
+
 #include "Types.hpp"
 
 namespace Network
@@ -34,4 +37,6 @@ namespace Network
             return recv(s, buf, len, flags);
         }
     }
-}
+} // Network
+
+#endif // _INTERFACE_

@@ -94,6 +94,6 @@ namespace Network
             
             
     };
-}
+} // Network
 
-#endif
+#endif // _GENERIC_SOCKET_

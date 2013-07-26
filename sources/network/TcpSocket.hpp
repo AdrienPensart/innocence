@@ -1,5 +1,5 @@
-#ifndef TCPSOCK_HPP
-#define TCPSOCK_HPP
+#ifndef _TCP_SOCKET_
+#define _TCP_SOCKET_
 
 #include "Socket.hpp"
 
@@ -20,6 +20,6 @@ class TcpSocket : public Socket
         virtual void acquire();
 };
 
-}
+} // Network
 
-#endif
+#endif // _TCP_SOCKET_

