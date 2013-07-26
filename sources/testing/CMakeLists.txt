@@ -1,4 +1,4 @@
-# Windows specific tests
+# Windows audit unit tests
 if(WIN32)
 	file(GLOB_RECURSE dll_source_files dll/*)
 	add_library(dll SHARED ${dll_source_files})
@@ -37,14 +37,6 @@ if(WIN32)
 	add_executable(hidewin ${hidewin_source_files})
 	target_link_libraries(hidewin system malicious common network)
 	
-	file(GLOB_RECURSE session_source_files session/*)
-	add_executable(session ${session_source_files})
-	target_link_libraries(session system blaspheme common network)
-	
-	file(GLOB_RECURSE mail_source_files mail/*)
-	add_executable(mail ${mail_source_files})
-	target_link_libraries(mail system malicious common network)
-	
 	file(GLOB_RECURSE screenshot_source_files screenshot/*)
 	add_executable(screenshot ${screenshot_source_files})
 	target_link_libraries(screenshot system malicious common network)
@@ -52,10 +44,17 @@ if(WIN32)
 	file(GLOB_RECURSE elevation_source_files elevation/*)
 	add_executable(elevation ${elevation_source_files})
 	target_link_libraries(elevation system common network malicious)
-	
 endif ()
 
-# Global tests
+# Portable tests
+file(GLOB_RECURSE session_source_files session/*)
+add_executable(session ${session_source_files})
+target_link_libraries(session system blaspheme common network)
+
+file(GLOB_RECURSE mail_source_files mail/*)
+add_executable(mail ${mail_source_files})
+target_link_libraries(mail system malicious common network)
+
 file(GLOB_RECURSE transfer_source_files transfer/*)
 add_executable(transfer ${transfer_source_files})
 target_link_libraries(transfer system network common blaspheme)
