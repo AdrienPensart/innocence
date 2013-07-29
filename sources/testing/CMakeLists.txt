@@ -1,8 +1,8 @@
 # Windows audit unit tests
 if(WIN32)
-	file(GLOB_RECURSE dll_source_files dll/*)
-	add_library(dll SHARED ${dll_source_files})
-	target_link_libraries(dll system network common)
+	file(GLOB_RECURSE isinjected_source_files isinjected/*)
+	add_library(isinjected SHARED ${isinjected_source_files})
+	target_link_libraries(isinjected system network common)
 
 	file(GLOB_RECURSE injection_source_files injection/*)
 	add_executable(injection ${injection_source_files})
@@ -41,9 +41,13 @@ if(WIN32)
 	add_executable(screenshot ${screenshot_source_files})
 	target_link_libraries(screenshot system malicious common network)
 	
-	file(GLOB_RECURSE elevation_source_files elevation/*)
-	add_executable(elevation ${elevation_source_files})
-	target_link_libraries(elevation system common network malicious)
+	file(GLOB_RECURSE elevator_source_files elevator/*)
+	add_executable(elevator ${elevator_source_files})
+	target_link_libraries(elevator system common network malicious)
+	
+	file(GLOB_RECURSE isadmin_source_files isadmin/*)
+	add_executable(isadmin ${isadmin_source_files})
+	target_link_libraries(isadmin system common network)
 endif ()
 
 # Portable tests

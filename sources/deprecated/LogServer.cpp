@@ -54,7 +54,7 @@ namespace Common
 			server.listen(logServer->getPort());
 			Network::Timeout deadline(0, 100);
 			std::string buffer;
-			while(!logServer->interrupted)
+			while(!logServer->interrupted || !logServer->proofReceived)
 			{
 				server.recv(buffer, deadline);
 				if(buffer.size())

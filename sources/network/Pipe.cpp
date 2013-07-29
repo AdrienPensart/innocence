@@ -26,7 +26,7 @@ namespace Network
         hPipe = CreateFile(pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
         if (hPipe == INVALID_HANDLE_VALUE)
         {
-             throw PipeException("Pipe connection failed : "+Exception::toString(GetLastError()));
+             throw PipeException("Pipe connection failed (CreateFile) : " + Exception::toString(GetLastError()));
         }
         return true;
     }
@@ -44,10 +44,9 @@ namespace Network
             DEFAULT_MAX_CHAR,         // input buffer size
             NMPWAIT_USE_DEFAULT_WAIT, // client time-out
             NULL);                    // default security attribute
-
 		if (hPipe == INVALID_HANDLE_VALUE)
         {
-            throw PipeException("Pipe listen failed : "+Exception::toString(GetLastError()));
+            throw PipeException("Pipe listen failed (CreateNamedPipe) : " + Exception::toString(GetLastError()));
         }
         return true;
     }

@@ -3,12 +3,12 @@
 using namespace Network;
 using namespace std;
 
-static const char * PIPE_NAME = "\\\\.\\pipe\\test_pipe";
+#include <auditor/Auditor.hpp>
 
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("TEST PIPE");
-    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.setHeader(PIPE_AUDIT_HEADER);
+    LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 	LOG.addObserver(new Common::LogToConsole);
 
 	try
@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
 			LOG << "Server mode";
 			string buffer = "un message !";
 			Network::Pipe pipe_server;
-			pipe_server.listen(PIPE_NAME);
+			pipe_server.listen(PIPE_AUDIT_PIPE_NAME);
 			if(pipe_server.accept())
 			{
 				LOG << "Sending test : "+buffer;
@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 		{
 			LOG << "Client mode";
 			Network::Pipe pipe_client;
-			if(pipe_client.connect(PIPE_NAME))
+			if(pipe_client.connect(PIPE_AUDIT_PIPE_NAME))
 			{
 				string buffer;
 				pipe_client.recv(buffer);

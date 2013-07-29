@@ -30,7 +30,6 @@ namespace System
 		else
 		{
 			running = true;
-			LOG << "ShellExecuteEx succeded : " + to_string(GetLastError());
 		}
 	}
 

@@ -2,7 +2,8 @@
 
 namespace Network
 {
-	Exception::Exception(const std::string msg)
+	Exception::Exception(const std::string msgArg)
+		: msg(msgArg)
 	{
 	}
 

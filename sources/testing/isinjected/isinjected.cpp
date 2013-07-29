@@ -1,7 +1,13 @@
-#include <windows.h>
 #include <common/Log.hpp>
 #include <system/Uac.hpp>
 using namespace System;
+
+#include <network/Pipe.hpp>
+using namespace Network;
+
+#include <auditor/Auditor.hpp>
+
+#include <windows.h>
 
 HANDLE threadHandle;
 
@@ -9,11 +15,18 @@ DWORD WINAPI Run(void)
 {
     try
 	{
-        LOG.setHeader("FROM TEST DLL");
-		LOG.trace();
-        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 8000));
-		LOG.addObserver(new Common::LogToConsole);
-		LOG.sendRaw("INJECTED");
+        LOG.setHeader(ISINJECTED_AUDIT_HEADER);
+        LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
+		
+		Sleep(1000);
+		Network::Pipe pipe;
+		pipe.listen(PIPE_AUDIT_PIPE_NAME);
+		if(pipe.accept())
+		{
+			pipe.send(ISINJECTED_PROOF);
+			LOG << "Proof sent : " + std::string(ISINJECTED_PROOF);
+		}
+		pipe.disconnect();
     }
     catch(std::exception& e)
     {
@@ -21,7 +34,7 @@ DWORD WINAPI Run(void)
     }
     catch(...)
     {
-        LOG << "Unknow exception from dll";
+        LOG << "Unknow exception from DLL";
     }
 	return EXIT_SUCCESS;
 }
