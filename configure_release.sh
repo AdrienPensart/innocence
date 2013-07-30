@@ -1,5 +1,5 @@
 #!/bin/sh
 
 cd build
-cmake ../sources -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake ../src -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
 cd ..
