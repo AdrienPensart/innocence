@@ -3,7 +3,7 @@
 #include <iostream>
 #include <system/ThisProcess.hpp>
 #include <system/Uac.hpp>
-#include "ServerWindow.hpp"
+#include "MasterWindow.hpp"
 
 int run(int argc, char ** argv)
 {
@@ -11,8 +11,8 @@ int run(int argc, char ** argv)
     try
     {
         QApplication app(argc, argv);
-        TheSleeper::ServerWindow server;
-        server.show();
+        Master::MasterWindow master;
+        master.show();
         returnValue = app.exec();
     }
     catch(...)

@@ -1,14 +1,17 @@
-#include <ui_EditClient.h>
+#ifndef _EDIT_SLAVE_DIALOG_
+#define _EDIT_SLAVE_DIALOG_
 
-namespace TheSleeper
+#include <ui_EditSlave.h>
+
+namespace Master
 {
-    class EditClientDialog : public QDialog, public Ui::EditClient
+    class EditSlaveDialog : public QDialog, public Ui::EditSlave
     {
         Q_OBJECT
         
         public:
         
-            EditClientDialog(QWidget * parent = 0);
+            EditSlaveDialog(QWidget * parent = 0);
     
         private slots:
         
@@ -30,4 +33,7 @@ namespace TheSleeper
             std::string original_password;
     };
     
-} /* TheSleeper */
+} // Master
+
+#endif // _EDIT_SLAVE_DIALOG_
+

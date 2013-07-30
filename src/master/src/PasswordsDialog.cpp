@@ -3,7 +3,7 @@
 #include <fstream>
 #include <QFileDialog>
 
-namespace TheSleeper
+namespace Master
 {
     PasswordsDialog::PasswordsDialog(QWidget * parent)
     :QDialog(parent)
@@ -32,5 +32,4 @@ namespace TheSleeper
     {
         passwordsModel.setStringList(passwords_list);
     }
-
-}
+} // Master

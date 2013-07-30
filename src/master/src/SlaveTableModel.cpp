@@ -1,28 +1,28 @@
-#include "ClientTableModel.hpp"
-#include "Client.hpp"
+#include "SlaveTableModel.hpp"
+#include "Slave.hpp"
 #include <common/Log.hpp>
 
-namespace TheSleeper
+namespace Master
 {
     enum { COLUMN_NAME, COLUMN_STATUS, COLUMN_IP, COLUMN_PORT, COLUMN_SYSTEM_VERSION, COLUMN_COUNT, COLUMN_MAX=COLUMN_COUNT-1};
     
-    ClientTableModel::ClientTableModel(QObject * parent)
+    SlaveTableModel::SlaveTableModel(QObject * parent)
     :QAbstractTableModel(parent)
     {
     }
     
-    int ClientTableModel::rowCount(const QModelIndex& /* parent */) const
+    int SlaveTableModel::rowCount(const QModelIndex& /* parent */) const
     {
         // le nombre de lignes est egale au nombre de clients connectes
-        return currentClients.size();
+        return currentSlaves.size();
     }
     
-    int ClientTableModel::columnCount(const QModelIndex& /* parent */) const
+    int SlaveTableModel::columnCount(const QModelIndex& /* parent */) const
     {
         return COLUMN_COUNT;
     }
     
-    QVariant ClientTableModel::data(const QModelIndex& index, int role) const
+    QVariant SlaveTableModel::data(const QModelIndex& index, int role) const
     {
         if(!index.isValid())
         {
@@ -34,16 +34,16 @@ namespace TheSleeper
         }
         else if(role == Qt::DisplayRole)
         {
-            Client * rowSleeper = sleeperAt(index.row());
-            if(rowSleeper != 0)
+            Slave * rowSlave = slaveAt(index.row());
+            if(rowSlave != 0)
             {
-                return infoAtColumn(rowSleeper, index.column());
+                return infoAtColumn(rowSlave, index.column());
             }
         }
         return QVariant();
     }
     
-    QVariant ClientTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant SlaveTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         if(role == Qt::DisplayRole && orientation == Qt::Horizontal)
         {
@@ -69,16 +69,16 @@ namespace TheSleeper
         return QVariant();
     }
     
-    Client * ClientTableModel::sleeperAt(int offset) const
+    Slave * SlaveTableModel::slaveAt(int offset) const
     {
-        if(offset >= 0 && offset < (int)currentClients.size())
+        if(offset >= 0 && offset < (int)currentSlaves.size())
 		{
-			return currentClients[offset];
+			return currentSlaves[offset];
 		}
         return 0;
     }
     
-    QString ClientTableModel::infoAtColumn(Client * ptr, int offset) const
+    QString SlaveTableModel::infoAtColumn(Slave * ptr, int offset) const
     {      
         if(!ptr)
         {
@@ -108,10 +108,10 @@ namespace TheSleeper
         return "Undefined";
     }
     
-    Client * ClientTableModel::get_client(const QModelIndex& index)
+    Slave * SlaveTableModel::getSlave(const QModelIndex& index)
     {
-        return sleeperAt(index.row());
+        return slaveAt(index.row());
     }
     
-} /* TheSleeper */
+} // Master
 

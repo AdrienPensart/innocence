@@ -1,11 +1,7 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
 #include <string>
 using namespace std;
 
-#include "ServerWindow.hpp"
+#include "MasterWindow.hpp"
 #include "ListeningThread.hpp"
 
 #include <blaspheme/protocol/Session.hpp>
@@ -14,7 +10,7 @@ using namespace std;
 using namespace Network;
 using namespace Blaspheme;
 
-namespace TheSleeper
+namespace Master
 {
 	ListeningThread::ListeningThread(int port_value, const QString& pass_value, QObject * parent)
 		:QThread(parent), continue_listen(false), session(0)
@@ -40,7 +36,7 @@ namespace TheSleeper
 				if(session.wait_connect(info))
 				{
 					LOG << "New slave connected";
-					emit newClientConnected(session);
+					emit newSlaveConnected(session);
 				}
             }
         }
@@ -108,5 +104,5 @@ namespace TheSleeper
 		}
 	}
     
-} // TheSleeper
+} // Master
 

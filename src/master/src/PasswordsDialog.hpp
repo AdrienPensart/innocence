@@ -1,7 +1,10 @@
+#ifndef _PASSWORDS_DIALOG_
+#define _PASSWORDS_DIALOG_
+
 #include <QtGui>
 #include <ui_Passwords.h>
 
-namespace TheSleeper
+namespace Master
 {
     class PasswordsDialog : public QDialog, public Ui::PasswordsDialog
     {
@@ -20,4 +23,6 @@ namespace TheSleeper
             
             QStringListModel passwordsModel;
     };
-}
+} // Master
+
+#endif // _PASSWORDS_DIALOG_

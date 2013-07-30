@@ -1,4 +1,4 @@
-#include "EditClientDialog.hpp"
+#include "EditSlaveDialog.hpp"
 
 #include <slave/inhibiter/ClientConfig.hpp>
 #include <QFileDialog>
@@ -7,14 +7,14 @@
 #include <system/File.hpp>
 using namespace std;
 
-namespace TheSleeper
+namespace Master
 {
-    EditClientDialog::EditClientDialog(QWidget * parent)
+    EditSlaveDialog::EditSlaveDialog(QWidget * parent)
     :QDialog(parent)
     {
         setupUi(this);
         
-        connect(selectClientButton, SIGNAL(clicked()), this, SLOT(choose_exe()));
+        connect(selectSlaveButton, SIGNAL(clicked()), this, SLOT(choose_exe()));
         connect(modifyExeButton, SIGNAL(clicked()), this, SLOT(modify_exe()));
         connect(cancelEditorButton, SIGNAL(clicked()), this, SLOT(close()));
         
@@ -23,13 +23,13 @@ namespace TheSleeper
         end_info = 0;
     }
     
-    void EditClientDialog::choose_exe()
+    void EditSlaveDialog::choose_exe()
     {
         // on trouve le chemin du client a editer
         fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"C:\\",tr("Executable (*.exe)"));
         if(fileName.size())
         {
-            clientSelectedBox->setText(fileName);
+            slaveSelectedBox->setText(fileName);
             
             // on a trouvé le fichier, on va maintenant essayé d'extraire les informations que 
             // contient l'exécutable
@@ -57,13 +57,13 @@ namespace TheSleeper
             LOG << original_server;
             LOG << original_password;
             
-            clientOriginalNameEdit->setText(original_client_name.c_str());
-            ipOriginaleEdit->setText(original_server.c_str());
-            portOriginalEdit->setText(original_port.c_str());
+            sourceSlaveNameEdit->setText(original_client_name.c_str());
+            sourceMasterIpEdit->setText(original_server.c_str());
+            sourceMasterPortEdit->setText(original_port.c_str());
         }
     }
     
-    void EditClientDialog::modify_exe()
+    void EditSlaveDialog::modify_exe()
     {
         if(!System::isReadable(fileName.toStdString()))
         {
@@ -71,16 +71,16 @@ namespace TheSleeper
             return;
         }
         
-        if(!newClientNameEdit->text().size() || !newServerIpEdit->text().size() || !clientPasswordEdit->text().size())
+        if(!destinationSlaveNameEdit->text().size() || !destinationMasterIpEdit->text().size() || !destinationMasterPortEdit->text().size() || !destinationSlavePasswordEdit->text().size())
         {
             QMessageBox::critical(this, windowTitle(),tr("Veuillez entrer toutes les informations de connexion."));
             return;
         }
         
-        std::string new_client_name = newClientNameEdit->text().toStdString();
-        std::string new_port = to_string(newServerPortEdit->value());
-        std::string new_server = newServerIpEdit->text().toStdString();
-        std::string new_password = clientPasswordEdit->text().toStdString();
+        std::string new_client_name = destinationSlaveNameEdit->text().toStdString();
+        std::string new_port = to_string(destinationMasterPortEdit->value());
+        std::string new_server = destinationMasterIpEdit->text().toStdString();
+        std::string new_password = destinationSlavePasswordEdit->text().toStdString();
 
         string buffer = new_server + SEPERATOR + new_port + SEPERATOR + new_client_name + SEPERATOR + new_password + MARKER;
         
@@ -101,4 +101,4 @@ namespace TheSleeper
         output_exe.write(content_exe.c_str(), content_exe.size());
     }
     
-} /* TheSleeper */
+} // Master
