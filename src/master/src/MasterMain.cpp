@@ -1,9 +1,10 @@
 #include <QApplication>
 #include <QMessageBox>
-#include <iostream>
-#include <system/ThisProcess.hpp>
-#include <system/Uac.hpp>
+
 #include "MasterWindow.hpp"
+
+#include <system/Process.hpp>
+#include <system/Uac.hpp>
 
 int run(int argc, char ** argv)
 {
@@ -17,7 +18,7 @@ int run(int argc, char ** argv)
     }
     catch(...)
     {
-        std::cout << "Erreur d'origine inconnue.\n";
+        LOG << "Unkown exception";
         return EXIT_FAILURE;
     }
     return returnValue;
@@ -31,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 
     // administrator rights are preferred to execute the Server
-    System::ThisProcess thisProcess;
+    System::Process::This thisProcess;
     if(!System::isAdministrator())
 	{
         LOG << "Try to run as administrator.";

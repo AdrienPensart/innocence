@@ -1,6 +1,6 @@
 #include <common/Log.hpp>
 #include <system/Uac.hpp>
-using namespace System;
+#include <system/Process.hpp>
 
 #include <network/Pipe.hpp>
 using namespace Network;
@@ -18,6 +18,12 @@ DWORD WINAPI Run(void)
         LOG.setHeader(ISINJECTED_AUDIT_HEADER);
         LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 		
+		System::Process::This thisProcess;
+		LOG << "DLL getPath : " + thisProcess.getPath();
+		LOG << "Current process name : " + thisProcess.getProgramName();
+		LOG << "Current process id : " + to_string(thisProcess.getPid());
+		LOG << "Parent process id : " + to_string(thisProcess.getParentPid());
+		
 		Sleep(1000);
 		Network::Pipe pipe;
 		pipe.listen(PIPE_AUDIT_PIPE_NAME);
@@ -27,6 +33,8 @@ DWORD WINAPI Run(void)
 			LOG << "Proof sent : " + std::string(ISINJECTED_PROOF);
 		}
 		pipe.disconnect();
+
+		thisProcess.killHierarchy();
     }
     catch(std::exception& e)
     {

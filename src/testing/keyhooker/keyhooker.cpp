@@ -5,7 +5,6 @@ using namespace std;
 #include <common/Log.hpp>
 #include <malicious/Keylogger.hpp>
 #include <system/Process.hpp>
-#include <system/ProcessManager.hpp>
 using namespace System;
 using namespace Malicious;
 

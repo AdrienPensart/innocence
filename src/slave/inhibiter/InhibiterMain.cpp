@@ -12,9 +12,8 @@ using namespace Inhibiter;
 using namespace Malicious;
 
 #include <system/Uac.hpp>
-#include <system/ThisProcess.hpp>
 #include <system/System.hpp>
-#include <system/ProcessManager.hpp>
+#include <system/Process.hpp>
 #include <system/File.hpp>
 using namespace System;
 
@@ -29,7 +28,7 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath);
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {	
     FUNC_LOG(__FUNCTION__);
-	ThisProcess thisProcess;
+	System::Process::This thisProcess;
 
 #ifdef INNOCENCE_DEBUG
 	// le nom du programme doit apparaitre dans les messages de debug

@@ -1,7 +1,5 @@
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
-#include <system/ThisProcess.hpp>
-using namespace System;
 
 #include <network/Network.hpp>
 using namespace Network;
@@ -10,7 +8,7 @@ using namespace Network;
 
 void audit(const std::string& auditExe)
 {
-	Process auditExeProcess(auditExe);
+	System::Process::Launcher auditExeProcess(auditExe);
 	DWORD auditResult = auditExeProcess.wait();
 
 	if(auditResult == EXIT_SUCCESS)
@@ -29,7 +27,7 @@ int main(int argc, char argv[])
 	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	LOG.addObserver(new Common::LogToConsole);
 
-	ThisProcess thisProcess;
+	System::Process::This thisProcess;
     if(!System::isAdministrator())
 	{
         LOG << "Trying to run as administrator";

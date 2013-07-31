@@ -43,6 +43,7 @@ namespace Master
         localFilesView->header()->setSectionResizeMode(QHeaderView::Stretch);
         
         // construction de l'arbre des fichiers locaux
+		localFilesModel.setRootPath(localFilesModel.myComputer().toString());
         localFilesView->setModel(&localFilesModel);
         localFilesView->hideColumn(2);
         localFilesView->hideColumn(3);

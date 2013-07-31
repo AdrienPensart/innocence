@@ -5,9 +5,7 @@ using namespace Common;
 #include <malicious/Injector.hpp>
 #include <malicious/Exception.hpp>
 
-#include <system/ThisProcess.hpp>
-using namespace System;
-
+#include <system/Process.hpp>
 #include <auditor/Auditor.hpp>
 
 #include <network/Pipe.hpp>
@@ -24,7 +22,7 @@ int main(int argc, char * argv[])
         LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 		LOG.addObserver(new Common::LogToConsole);
 
-		ThisProcess thisProcess;
+		System::Process::This thisProcess;
 
 		
 		// Chargement normal de la DLL
@@ -32,9 +30,11 @@ int main(int argc, char * argv[])
 		//Sleep(INFINITE);
 		
 		
-        Malicious::InternetExplorer ie(true);
+        Malicious::InternetExplorer ie(false);
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";
-		LOG << "Injecting " + dllPath;
+
+		// We can't inject in parent iexplore.exe
+		LOG << "COM IE Child Instance Pid : " + to_string(ie.getPid());
         if(!Malicious::inject(ie.getPid(), dllPath))
         {
 			LOG << "Injection failed";
@@ -56,6 +56,21 @@ int main(int argc, char * argv[])
 				exitCode = EXIT_SUCCESS;
 			}
 			pipe.disconnect();
+		}
+		
+		Sleep(1000);
+
+		System::Process::Map pm;
+		System::Process::GetProcessList(pm);
+		System::Process::Map::iterator iter = pm.find(ie.getPid());
+		if(iter != pm.end())
+		{
+			LOG << "IE was not well killed";
+			return exitCode = EXIT_FAILURE;
+		}
+		else
+		{
+			LOG << "IE well killed from DLL";
 		}
     }
     catch(std::exception& e)

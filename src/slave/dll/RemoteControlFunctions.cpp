@@ -6,7 +6,7 @@
 #include <sstream>
 using namespace std;
 
-#include "system/ProcessManager.hpp"
+#include "system/Process.hpp"
 #include "system/File.hpp"
 using namespace System;
 
@@ -306,7 +306,7 @@ namespace Inhibition
     void SendProcessList::operator()()
     {
         LOG << "SendProcessList : Started";
-        session() << System::ProcessManager::GetAllRunningProcess()+FINISHED;
+        session() << System::Process::GetAllRunningProcess()+FINISHED;
         LOG << "SendProcessList : Ended";
     }
 
@@ -316,7 +316,7 @@ namespace Inhibition
         string buffer;
         session() >> buffer;
 		LOG << "Process to kill : " + buffer;
-        if(System::ProcessManager::KillProcess(buffer))
+        if(System::Process::KillProcess(buffer))
         {
 			LOG << "Inhibition killed process";
             session() << SUCCESS;

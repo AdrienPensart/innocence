@@ -4,7 +4,8 @@
 #include <list>
 
 #include <QStringListModel>
-#include <QDirModel>
+//#include <QDirModel>
+#include <QFileSystemModel>
 #include <QMainWindow>
 #include <ui_Master.h>
 
@@ -123,7 +124,8 @@ namespace Master
             SlaveTableModel slavesModel;
             QModelIndex currentIndex;
             QStringListModel processModel;
-            QDirModel localFilesModel;
+            //QDirModel localFilesModel;
+			QFileSystemModel localFilesModel;
     };
 
 } // Slave

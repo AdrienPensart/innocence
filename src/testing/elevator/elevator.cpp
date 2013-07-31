@@ -1,8 +1,7 @@
 #include <common/Log.hpp>
 using namespace Common;
 
-#include <system/ThisProcess.hpp>
-using namespace System;
+#include <system/Process.hpp>
 
 #include <malicious/Elevator.hpp>
 using namespace Malicious;
@@ -14,7 +13,7 @@ int main(int argc, char *argv[])
 		LOG.setHeader("ELEVATOR");
 		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 
-		ThisProcess thisProcess;
+		System::Process::This thisProcess;
 
 		return elevate(thisProcess.getProgramDir()+"\\isadmin.exe");
     }

@@ -1,7 +1,7 @@
 #include "InternetExplorer.hpp"
 #include "Exception.hpp"
 
-#include <system/ProcessManager.hpp>
+#include <system/Process.hpp>
 #include <common/Log.hpp>
 
 #include <objbase.h>
@@ -130,13 +130,13 @@ namespace Malicious
 
 	void killEveryIE()
 	{
-		System::ProcessesMap pm;
-		System::GetProcessList(pm);
+		System::Process::Map pm;
+		System::Process::GetProcessList(pm);
 
-		for(System::ProcessesMap::iterator i = pm.begin(); i != pm.end(); i++)
+		for(System::Process::Map::iterator i = pm.begin(); i != pm.end(); i++)
 		{
 			LOG << "Killing IE process : "+to_string(i->first);
-			System::ProcessManager::KillProcess(i->first);
+			System::Process::KillProcess(i->first);
 		}
 	}
 }

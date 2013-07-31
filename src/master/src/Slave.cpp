@@ -534,9 +534,10 @@ namespace Master
             QStandardItem * current_item = remote_files.itemFromIndex(currentIndex);
             QList<QStandardItem *> item_list;
             
-            for(;;)
+            while(true)
             {
                 session >> listing;
+				LOG << "Listing received : " + listing;
                 if(listing == FAILURE)
                 {
                     LOG << "Unable to list the directory";
