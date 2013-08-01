@@ -16,5 +16,6 @@ static const char * ISINJECTED_AUDIT_PIPENAME = "\\\\.\\pipe\\audit_injection";
 static const char * ISINJECTED_PROOF = "INJECTED";
 
 static const char * STEALTH_AUDIT_HEADER = "AUDIT STEALTH";
+static const char * REGISTRE_AUDIT_HEADER = "AUDIT REGISTRE";
 
 #endif // _AUDITOR_

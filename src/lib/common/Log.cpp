@@ -74,34 +74,7 @@ namespace Common
     }
 } // Common
 
-void LOG_LAST_ERROR()
-{
-	LOG << GET_LAST_ERROR();
-}
-
-std::string GET_LAST_ERROR()
-{
-	#ifdef WIN32
-		DWORD dw = GetLastError();
-		return "Last error = " + toString(dw);
-	#else
-		return "Last error = " + toString(errno);
-	#endif
-}
-
-void FATAL_ERROR(const std::string& msg)
-{
-	LOG << msg;
-	exit(EXIT_FAILURE);
-}
-
-void SHOW_FATAL_ERROR(const std::string& msg)
-{
-#ifdef WIN32
-	MessageBoxA(NULL, msg.c_str() , "", 0);
-#endif
-    FATAL_ERROR(msg);
-}
+/*
 
 void SHOW_BOX(const std::string& title, const std::string& msg)
 {
@@ -111,3 +84,5 @@ void SHOW_BOX(const std::string& title, const std::string& msg)
     LOG << "Message Box " + title + " : " + msg;
 #endif
 }
+
+*/

@@ -63,7 +63,7 @@ Blaspheme::ConnectionInfo getConnectionInfo()
     }
 	else
 	{
-		FATAL_ERROR("Unable to connect to pipe");
+		throw Common::Exception("getConnectionInfo() : unable to connect to pipe");
 	}
 	return infos;
 }
@@ -89,6 +89,11 @@ DWORD WINAPI run(void)
 	{
 		LOG << "Unknown exception";
 	}
+	LOG << "Slave exiting violently...";
+	// if we arrived here, something got wrong, we MUST kill IE host
+	InhibitionCore::instance().exit();
+	
+	// never arrive here
 	return EXIT_SUCCESS;
 }
 

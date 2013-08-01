@@ -32,14 +32,13 @@ namespace Inhibiter
         // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
         if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
         {
-            LOG << "CopyFile failed : " + toString(GetLastError());
-            FATAL_ERROR("Unable to install injector");
+			throw Common::Exception("Unable to install injector, CopyFile failed : " + toString(GetLastError()));
         }
 
 		System::Process::Launcher finish_install(executable_path, "\"" + current_executable_path + "\"");
         if(!finish_install.isRunning())
         {
-            FATAL_ERROR("Unable to launch injector");
+			throw Common::Exception("Unable to launch injector");
         }
     }
 
@@ -49,7 +48,7 @@ namespace Inhibiter
         // efface la DLL d'inhibition
         if(!DeleteFile(dll_path.c_str()))
         {
-            FATAL_ERROR("Unable to delete substrate");
+			throw Common::Exception("Unable to delete dll, DeleteFile failed : " + toString(GetLastError()));
         }
 
         // cet executable doit s'auto-effacer pour terminer la désinstallation
@@ -61,8 +60,7 @@ namespace Inhibiter
         LOG << "Temporary exe, deleting injector";
         if(!DeleteFile(executable_path.c_str()))
         {
-            LOG << "DeleteFile failed : " + toString(GetLastError());
-            FATAL_ERROR("Unable to delete injector");
+            throw Common::Exception("Unable to delete injector, DeleteFile failed : " + toString(GetLastError()));
         }
     }
 

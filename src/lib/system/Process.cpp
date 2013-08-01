@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <list>
 #include <common/Log.hpp>
+#include <common/Exception.hpp>
 using namespace std;
 
 namespace System
@@ -79,7 +80,7 @@ namespace System
 			argvw = CommandLineToArgvW(GetCommandLineW(), &argc);
 			if(argvw == NULL)
 			{
-				FATAL_ERROR("Impossible de recuperer les arguments du programme.");
+				throw Common::Exception("CommandLineToArgvW failed : " + GetLastError());
 			}
 
 			// Conversion en chaine multi-octets
@@ -184,11 +185,15 @@ namespace System
 			ExecuteInfo.nShow        = show ? SW_SHOW : SW_HIDE;
 			ExecuteInfo.hInstApp     = 0;
 	
-			CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+			if(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE) != S_OK)
+			{
+				throw Common::Exception("CoInitializeEx failed");
+			}
+
 			if(!ShellExecuteEx(&ExecuteInfo))
 			{
 				running = false;
-				LOG << "ShellExecuteEx failed : " + toString(GetLastError());
+				throw Common::Exception("ShellExecuteEx failed : " + toString(GetLastError()));
 			}
 			else
 			{

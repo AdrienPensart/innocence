@@ -1,9 +1,8 @@
-#ifndef _BINARY_RESSOURCE_HPP
-#define _BINARY_RESSOURCE_HPP
+#ifndef _BINARY_RESSOURCE_
+#define _BINARY_RESSOURCE_
 
 #include <cstdio>
 #include <string>
-#include <common/Log.hpp>
 
 namespace Malicious
 {
@@ -17,11 +16,11 @@ namespace Malicious
 
 	    private:
     		
-		    bool deleteRessource();
+		    void deleteRessource();
 		    std::string ressourceFile;
 		    bool deleteIt;
     };
 
 } // Malicious
 
-#endif // _BINARY_RESSOURCE_HPP
+#endif // _BINARY_RESSOURCE_

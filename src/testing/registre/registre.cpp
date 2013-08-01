@@ -1,5 +1,7 @@
 #include <common/Log.hpp>
 #include <system/Registry.hpp>
+#include <auditor/Auditor.hpp>
+
 using namespace System;
 using namespace System::Registry;
 using namespace std;
@@ -8,15 +10,15 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     static const char * RUN_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
-	LOG.setHeader("TEST REGISTRE");
-    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.setHeader(REGISTRE_AUDIT_HEADER);
+    LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 	try
 	{
         LOG << "Program dir : " + toString(argv[0]);
         Key startKey(localMachine, RUN_KEY);
         startKey.createValue("test", argv[0]);
 
-        SHOW_BOX("REGISTRE", "Deleting value");
+        LOG << "Deleting value";
 
         startKey.removeValue("test");
 	}
