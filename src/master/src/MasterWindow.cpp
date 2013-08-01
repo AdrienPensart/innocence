@@ -542,7 +542,7 @@ namespace Master
         {
             if(!(*currentSlave)->browseFiles(index))
             {
-                QMessageBox::information(0, "Theclient","Can't list directory");
+                QMessageBox::information(0, "Innocence","Can't list directory");
             }
         }
     }

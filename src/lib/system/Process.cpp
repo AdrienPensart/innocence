@@ -124,7 +124,7 @@ namespace System
 				processChain.push_back(nextPid);
 				pe = GetParentProcessEntry(nextPid);
 				std::transform(pe.second.begin(), pe.second.end(), pe.second.begin(), ::tolower);
-				//LOG << "Comparing " + pe.second + "(" + to_string(pe.first) + ") and " + programName + "(" + to_string(nextPid) + ")";
+				//LOG << "Comparing " + pe.second + "(" + toString(pe.first) + ") and " + programName + "(" + toString(nextPid) + ")";
 				if(pe.second != programName)
 				{
 					break;
@@ -135,7 +135,7 @@ namespace System
 			// killing all processes in reverse order
 			for(std::list<DWORD>::reverse_iterator i = processChain.rbegin(); i != processChain.rend(); i++)
 			{
-				LOG << "Killing process with pid " + to_string(*i);
+				LOG << "Killing process with pid " + toString(*i);
 				System::Process::KillProcess(*i);
 			}
 		}
@@ -188,7 +188,7 @@ namespace System
 			if(!ShellExecuteEx(&ExecuteInfo))
 			{
 				running = false;
-				LOG << "ShellExecuteEx failed : " + to_string(GetLastError());
+				LOG << "ShellExecuteEx failed : " + toString(GetLastError());
 			}
 			else
 			{
@@ -229,7 +229,7 @@ namespace System
 
 			if ( !LookupPrivilegeValue(NULL, lpszPrivilege, &luid) )
 			{
-				LOG << "LookupPrivilegeValue failed : " + to_string(GetLastError());
+				LOG << "LookupPrivilegeValue failed : " + toString(GetLastError());
 				return false;
 			}
 
@@ -246,7 +246,7 @@ namespace System
 
 			if ( !AdjustTokenPrivileges(hToken,FALSE,&tp,sizeof(TOKEN_PRIVILEGES),(PTOKEN_PRIVILEGES) NULL,(PDWORD) NULL) )
 			{
-				LOG << "AdjustTokenPrivileges failed : " + to_string(GetLastError());
+				LOG << "AdjustTokenPrivileges failed : " + toString(GetLastError());
 				return false;
 			}
 			if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
@@ -265,7 +265,7 @@ namespace System
 			HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 			if (hSnapshot == INVALID_HANDLE_VALUE)
 			{
-				LOG << "CreateToolhelp32Snapshot failed : " + to_string(GetLastError());
+				LOG << "CreateToolhelp32Snapshot failed : " + toString(GetLastError());
 			}
 			else
 			{
@@ -360,12 +360,12 @@ namespace System
 				}
 				else
 				{
-					LOG << "KillProcess (TerminateProcess) failed : " + to_string(GetLastError());
+					LOG << "KillProcess (TerminateProcess) failed : " + toString(GetLastError());
 				}
 			}
 			else
 			{
-				LOG << "KillProcess (OpenProcess) failed : " + to_string(GetLastError());
+				LOG << "KillProcess (OpenProcess) failed : " + toString(GetLastError());
 			}
 			return false;
 		}

@@ -402,7 +402,7 @@ int main(int argc, char * argv[])
 	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
 	
 	Network::Port port = 0;
-	if(!from_string(argv[1], port))
+	if(!fromString(argv[1], port))
 	{
 		cout << "Port d'ecoute invalide : " << argv[1] << '\n';
 		return EXIT_FAILURE;

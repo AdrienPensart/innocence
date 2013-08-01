@@ -30,5 +30,6 @@ add_executable(
 )
 
 QT5_USE_MODULES(debugger Widgets)
-target_link_libraries(debugger common system network ${QT_LIBRARIES})
+target_link_libraries(debugger common_md system_md network_md ${QT_LIBRARIES})
+set_target_properties(debugger PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
 install(TARGETS debugger DESTINATION innocence)

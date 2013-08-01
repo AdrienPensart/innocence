@@ -21,8 +21,8 @@ DWORD WINAPI Run(void)
 		System::Process::This thisProcess;
 		LOG << "DLL getPath : " + thisProcess.getPath();
 		LOG << "Current process name : " + thisProcess.getProgramName();
-		LOG << "Current process id : " + to_string(thisProcess.getPid());
-		LOG << "Parent process id : " + to_string(thisProcess.getParentPid());
+		LOG << "Current process id : " + toString(thisProcess.getPid());
+		LOG << "Parent process id : " + toString(thisProcess.getParentPid());
 		
 		Sleep(1000);
 		Network::Pipe pipe;

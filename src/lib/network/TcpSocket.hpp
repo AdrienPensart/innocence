@@ -2,9 +2,7 @@
 #define _TCP_SOCKET_
 
 #include "Socket.hpp"
-
 #include "Select.hpp"
-#include "Exception.hpp"
 
 namespace Network
 {

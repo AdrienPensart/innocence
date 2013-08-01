@@ -1,7 +1,7 @@
 #include "Uac.hpp"
 #include <common/Log.hpp>
 
-#include <windows.h>
+#include <winnt.h>
 
 namespace System
 {
@@ -16,7 +16,15 @@ namespace System
 			{
 				bResult = true;
 			}
+			else
+			{
+				LOG << "GetTokenInformation failed : " + toString(GetLastError());
+			}
 			CloseHandle(hToken);
+		}
+		else
+		{
+			LOG << "OpenProcessToken failed : " + toString(GetLastError());
 		}
 		return bResult;
 	}
@@ -26,7 +34,7 @@ namespace System
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
-            LOG << "GetElevationType failed.";
+            LOG << "GetElevationType failed";
             return false;
         }
         return g_tet != TokenElevationTypeDefault;
@@ -37,7 +45,7 @@ namespace System
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
-            LOG << "GetElevationType failed.";
+            LOG << "GetElevationType failed";
             return false;
         }
         return g_tet == TokenElevationTypeFull;
@@ -48,21 +56,21 @@ namespace System
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
-            return "GetElevationType failed.";
+            return "GetElevationType failed";
         }
         switch(g_tet)
         {
 			case TokenElevationTypeDefault:
-				return "Default elevation level.";
+				return "Default elevation level";
 				break;
 			case TokenElevationTypeFull:
-				return "Elevated Level.";
+				return "Elevated Level";
 				break;
 			case TokenElevationTypeLimited:
-				return "Running without elevation.";
+				return "Running without elevation";
 				break;
         }
-        return "Unknow elevation level.";
+        return "Unknow elevation level";
 	}
 
 	bool RunAsAdministrator(const std::string& exe, const std::string& dir, bool show)

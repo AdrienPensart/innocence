@@ -169,5 +169,35 @@ namespace Network
             return returnChar;
         }
         return 0;
-    }   
+    }  
+
+	int TcpClient::send(const std::string& object)
+	{
+		return Stream::send(object);
+	}
+
+    int TcpClient::send(const std::string& object, Timeout to)
+	{
+		return Stream::send(object, to);
+	}
+
+	int TcpClient::recv(std::string& object)
+	{
+		return Stream::recv(object);
+	}
+
+	std::string TcpClient::recv()
+	{
+		return Stream::recv();
+	}
+
+	int TcpClient::recv(std::string& object, Timeout to)
+	{
+		return Stream::recv(object, to);
+	}
+
+	int TcpClient::recv(std::string& object, char delimiter, bool include)
+	{
+		return Stream::recv(object, delimiter, include);
+	}
 }

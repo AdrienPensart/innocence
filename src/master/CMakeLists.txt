@@ -31,7 +31,8 @@ add_executable(
 
 # target_link_libraries(master system common network blaspheme ${QT_LIBRARIES})# ${QT_JPEG_PLUGIN})
 QT5_USE_MODULES(master Widgets)
-target_link_libraries(master system common network blaspheme)
+target_link_libraries(master system_md common_md network_md blaspheme_md)
+set_target_properties(master PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
 
 if(WIN32 AND NOT UNIX)
 	install(PROGRAMS ${CMAKE_SOURCE_DIR}/utils/nc.exe DESTINATION innocence)
@@ -41,5 +42,3 @@ ENDIF(WIN32 AND NOT UNIX)
 install(TARGETS master RUNTIME DESTINATION innocence)
 install(FILES "${QT_BINARY_DIR}/QtCore${QT_VERSION_MAJOR}.dll"
 			  "${QT_BINARY_DIR}/QtGui${QT_VERSION_MAJOR}.dll" DESTINATION innocence)
-
-			  

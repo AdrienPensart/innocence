@@ -22,9 +22,6 @@ namespace Malicious
 			DWORD pid;
 			bool killOnDestroy;
 	};
-
-	// too dangerous, high risk of crash
-	//void killEveryIE();
 }
 
 #endif // _INTERNET_EXPLORER_

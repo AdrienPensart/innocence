@@ -3,7 +3,6 @@ using namespace Common;
 
 #include <malicious/InternetExplorer.hpp>
 #include <malicious/Injector.hpp>
-#include <malicious/Exception.hpp>
 
 #include <system/Process.hpp>
 #include <auditor/Auditor.hpp>
@@ -34,7 +33,7 @@ int main(int argc, char * argv[])
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";
 
 		// We can't inject in parent iexplore.exe
-		LOG << "COM IE Child Instance Pid : " + to_string(ie.getPid());
+		LOG << "COM IE Child Instance Pid : " + toString(ie.getPid());
         if(!Malicious::inject(ie.getPid(), dllPath))
         {
 			LOG << "Injection failed";

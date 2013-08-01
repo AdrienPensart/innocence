@@ -58,7 +58,7 @@ Blaspheme::ConnectionInfo getConnectionInfo()
         std::getline( iss, infos.name, SEPERATOR );
         std::getline( iss, infos.password, SEPERATOR );
 
-        from_string(port_buffer, infos.port);
+        fromString(port_buffer, infos.port);
         pipe.disconnect();
     }
 	else

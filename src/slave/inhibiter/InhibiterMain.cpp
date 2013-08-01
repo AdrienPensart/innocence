@@ -43,7 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Program path : " + thisProcess.getProgramPath();
-    LOG << "Arguments count : " + to_string(thisProcess.getArgCount());
+    LOG << "Arguments count : " + toString(thisProcess.getArgCount());
 	
     // l'injecteur a plusieurs utilités en plus d'injecter bêtement
     // la dll dans un processus, il va servir aussi a exécuter
@@ -89,7 +89,7 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 		LOG << "Deleting old injector : " + command;
         if(!DeleteFile(command.c_str()))
         {
-			LOG << "DeleteFile failed : " + to_string(GetLastError());
+			LOG << "DeleteFile failed : " + toString(GetLastError());
             FATAL_ERROR("Unable to delete old injector");
         }
         else

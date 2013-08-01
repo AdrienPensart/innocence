@@ -1,6 +1,6 @@
 #include "Exception.hpp"
 
-namespace Network
+namespace Common
 {
 	Exception::Exception(const std::string msgArg)
 		: msg(msgArg)
@@ -21,4 +21,4 @@ namespace Network
 		msg = msgArg;
 	}
 
-} // Network
+} // Common

@@ -1,9 +1,10 @@
 #ifndef _PIPE_
 #define _PIPE_
 
+#include <common/Exception.hpp>
+
 #include "Types.hpp"
 #include "Stream.hpp"
-#include "Exception.hpp"
 
 #ifdef WIN32
 
@@ -13,7 +14,7 @@
 
 namespace Network
 {
-    typedef Exception PipeException;
+    typedef Common::Exception PipeException;
 
     class Pipe : public Stream
     {

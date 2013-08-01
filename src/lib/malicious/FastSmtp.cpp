@@ -25,7 +25,7 @@ namespace Malicious
         WORD wVer    = MAKEWORD(2,2);
         if (WSAStartup(wVer,&wsaData) != NO_ERROR)
         {
-            LOG << "WSAStartup failed : " + to_string(WSAGetLastError());
+            LOG << "WSAStartup failed : " + toString(WSAGetLastError());
         }
         else if (LOBYTE( wsaData.wVersion ) != 2 || HIBYTE( wsaData.wVersion ) != 2 )
         {

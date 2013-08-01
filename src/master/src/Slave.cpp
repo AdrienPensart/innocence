@@ -232,13 +232,13 @@ namespace Master
         try
         {
             session << GET_SCREEN;
-            LOG << "Quality : " + to_string(quality);
-            session << to_string(quality);
+            LOG << "Quality : " + toString(quality);
+            session << toString(quality);
             string buffer_photo;
             InMemoryDownload download(buffer_photo, session.stream());
             download.addObserver(new GraphicProgressBar(bar));
 			download.launch();
-			LOG << "Image size : " + to_string(buffer_photo.size());
+			LOG << "Image size : " + toString(buffer_photo.size());
 			if(screen.loadFromData((const unsigned char *)buffer_photo.c_str(), buffer_photo.size()))
 			{
 				LOG << "Loading OK";
@@ -247,7 +247,7 @@ namespace Master
 			{
 				LOG << "Unable to load image";
 			}
-			LOG << "Image format : " + to_string(screen.width()) + "x" + to_string(screen.height());
+			LOG << "Image format : " + toString(screen.width()) + "x" + toString(screen.height());
 		}
         catch(FileNotFound& e)
         {

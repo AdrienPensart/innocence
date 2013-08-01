@@ -3,7 +3,6 @@
 
 #include "Socket.hpp"
 #include "Stream.hpp"
-#include "Exception.hpp"
 
 #include <string>
 

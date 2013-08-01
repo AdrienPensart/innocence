@@ -1,5 +1,4 @@
 #include "Socket.hpp"
-#include "Exception.hpp"
 #include "Interface.hpp"
 
 namespace Network

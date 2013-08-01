@@ -2,9 +2,11 @@
 #define _UAC_
 
 #include <string>
+#include <exception>
 
 namespace System
 {
+	typedef std::exception UACException;
 	bool isUacActivated();
 	bool isAdministrator();
     std::string GetElevationType();

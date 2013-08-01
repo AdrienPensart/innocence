@@ -12,7 +12,7 @@ int main(int argc, char * argv[])
     LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	try
 	{
-        LOG << "Program dir : " + to_string(argv[0]);
+        LOG << "Program dir : " + toString(argv[0]);
         Key startKey(localMachine, RUN_KEY);
         startKey.createValue("test", argv[0]);
 

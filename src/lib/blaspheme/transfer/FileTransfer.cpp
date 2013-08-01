@@ -31,7 +31,7 @@ namespace Blaspheme
 
     void LogTransfer::update(const TransferDescriptor& td)
     {
-		LOG << to_string(td.percentage);
+		LOG << toString(td.percentage);
 	}
 
     Transfer::Transfer(const std::string& _filename, Network::Stream& _stream)
@@ -82,7 +82,7 @@ namespace Blaspheme
                 }
                 
                 stream.recv(buffer_size, '\n', false);
-                from_string(buffer_size, td.totalsize);
+                fromString(buffer_size, td.totalsize);
                 state = INITIALIZED;
                 notify(td);
             }
@@ -108,7 +108,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "Download transfer returned " + to_string(recvd);
+                LOG << "Download transfer returned " + toString(recvd);
                 throw TransferException();
             }
             
@@ -167,7 +167,7 @@ namespace Blaspheme
 
         // reception de la taille
         stream.recv(buffer_size, '\n', false);
-        from_string(buffer_size, td.totalsize);
+        fromString(buffer_size, td.totalsize);
         state = INITIALIZED;
         notify(td);
 
@@ -185,7 +185,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "InMemoryDownload transfer returned " + to_string(recvd);
+                LOG << "InMemoryDownload transfer returned " + toString(recvd);
                 throw TransferException();
             }
             
@@ -235,8 +235,8 @@ namespace Blaspheme
                 Blaspheme::Hash hasher;
                 hash = hasher.getHashFromFile(filename);
                 stream.send(hash+'\n');
-                stream.send(to_string(td.totalsize)+'\n');
-                LOG << "File size : " + to_string(td.totalsize) +", hash = " + hash;
+                stream.send(toString(td.totalsize)+'\n');
+                LOG << "File size : " + toString(td.totalsize) +", hash = " + hash;
                 state = INITIALIZED;
                 LOG << "Transfer initialized";
             }
@@ -268,7 +268,7 @@ namespace Blaspheme
             std::streamsize temp_sent = (int)stream.send(&buffer[0]+sent, (int)(to_send-sent));
             if(temp_sent <= 0)
             {
-				LOG << "Upload transfer returned : " + to_string(temp_sent) + ", network error : " + Network::SocketException::getLastError();
+				LOG << "Upload transfer returned : " + toString(temp_sent) + ", network error : " + Network::SocketException::getLastError();
                 throw TransferException();
             }
             sent += temp_sent;

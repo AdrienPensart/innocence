@@ -22,17 +22,17 @@ namespace Blaspheme
 	
 	bool Session::connect(Blaspheme::ConnectionInfo& cinfo)
 	{
-		//LOG << Connecting to "+to_string(cinfo.ip)+" on port "+to_string(cinfo.port);
+		//LOG << Connecting to "+toString(cinfo.ip)+" on port "+toString(cinfo.port);
 		if(mainStream.connect(cinfo.ip, cinfo.port))
         {
 			authPlugin.setPassword(cinfo.password);
             if(authPlugin.recvAuth(*this))
             {
-                send(to_string(0));
+                send(toString(0));
                 string str_id;
                 SessionId id;
                 recv(str_id);
-                from_string(str_id, id);
+                fromString(str_id, id);
                 sessionId = id;
                 
                 LOG << "Main connection acquired, my ID : " + str_id;
@@ -60,7 +60,7 @@ namespace Blaspheme
             {
 				string stringId;
 				recv(stringId);
-				from_string(stringId, sessionId);
+				fromString(stringId, sessionId);
 				LOG << "Stream ID received : " + stringId;
                 if(sessionId == 0)
                 {

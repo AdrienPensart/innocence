@@ -1,3 +1,3 @@
 cd build
-cmake ../src -Wno-dev -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Debug
+cmake ../src -Wno-dev -G"Visual Studio 11" -T"v110_xp" -DCMAKE_BUILD_TYPE=Debug
 cd ..

@@ -83,9 +83,9 @@ std::string GET_LAST_ERROR()
 {
 	#ifdef WIN32
 		DWORD dw = GetLastError();
-		return "Last error = " + to_string(dw);
+		return "Last error = " + toString(dw);
 	#else
-		return "Last error = " + to_string(errno);
+		return "Last error = " + toString(errno);
 	#endif
 }
 

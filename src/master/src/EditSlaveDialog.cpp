@@ -78,7 +78,7 @@ namespace Master
         }
         
         std::string new_client_name = destinationSlaveNameEdit->text().toStdString();
-        std::string new_port = to_string(destinationMasterPortEdit->value());
+        std::string new_port = toString(destinationMasterPortEdit->value());
         std::string new_server = destinationMasterIpEdit->text().toStdString();
         std::string new_password = destinationSlavePasswordEdit->text().toStdString();
 

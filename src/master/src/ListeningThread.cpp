@@ -42,12 +42,8 @@ namespace Master
         }
 		catch(Network::Deconnection&)
 		{
-			LOG << "ListeningThread::run() : Deconnexion intempestive.";
+			LOG << "ListeningThread::run() : Untimely disconnected";
 		}
-        catch(Network::Exception& e)
-        {
-            LOG << e.what();
-        }
         catch(std::exception& e)
         {
             LOG << e.what();
@@ -66,7 +62,7 @@ namespace Master
 
     void ListeningThread::changeListeningPort(int port)
     {
-        LOG << "Updating listening port : " + to_string(port);
+        LOG << "Updating listening port : " + toString(port);
         info.port = port;
     }
 

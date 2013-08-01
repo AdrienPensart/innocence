@@ -1,5 +1,5 @@
 # Visual Studio 2012 well supported
-cmake_minimum_required(VERSION 2.8.1)
+cmake_minimum_required(VERSION 2.8.11)
 # innocence is entirely in C++ (or almost) !
 project(innocence CXX)
 
@@ -18,6 +18,17 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
 SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
 SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /SAFESEH:NO")
+
+#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+
+if ( CMAKE_BUILD_TYPE MATCHES Debug)
+	set(BUILD_FLAGS_MD "/MDd")
+	set(BUILD_FLAGS_MT "/MTd")
+elseif( CMAKE_BUILD_TYPE MATCHES Release)
+	set(BUILD_FLAGS_MD "/MD")
+	set(BUILD_FLAGS_MT "/MT")
+endif ()
 
 # hack to get around the "Debug" and "Release" directories cmake tries to add on Windows
 if (MSVC_IDE)

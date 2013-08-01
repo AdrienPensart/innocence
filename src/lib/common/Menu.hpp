@@ -59,7 +59,7 @@ class Menu
 			unsigned int choice = 0;
 			cin >> buffer;
 			
-			if(!from_string(buffer, choice))
+			if(!fromString(buffer, choice))
 			{
 				if(next > 1)
 				{

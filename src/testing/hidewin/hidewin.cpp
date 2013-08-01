@@ -13,7 +13,7 @@ int main()
 		
 		Malicious::InternetExplorer ie;
 
-		LOG << "Internet Explorer PID : "+to_string(ie.getPid());
+		LOG << "Internet Explorer PID : "+toString(ie.getPid());
 
 		system("pause");
 

@@ -2,7 +2,6 @@
 #define _SELECT_
 
 #include "Socket.hpp"
-#include "Exception.hpp"
 #include "Timeout.hpp"
 
 namespace Network
