@@ -7,6 +7,7 @@ set_target_properties(myjpeg PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/l
 
 file(GLOB_RECURSE malicious_source_files *.hpp *.cpp)
 add_library(malicious STATIC ${malicious_source_files})
+set_target_properties(malicious PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
 
 # generation of privilege escalation executable 32bit
 add_custom_command(

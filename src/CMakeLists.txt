@@ -1,5 +1,5 @@
 # Visual Studio 2012 well supported
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.1)
 # innocence is entirely in C++ (or almost) !
 project(innocence CXX)
 
@@ -12,12 +12,15 @@ elseif( CMAKE_BUILD_TYPE MATCHES Release)
 	message(STATUS "Release mode enabled")	
 endif ()
 
+# Installation directory of Qt
+set(QT_INSTALL_DIR "C:\\Qt\\Qt5.1.0\\5.1.0\\msvc2012")
+
 # For Visual Studio
 # the jpeg library needs it to be linked with project
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
-SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
-SET (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /SAFESEH:NO")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /SAFESEH:NO")
 
 #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
@@ -63,7 +66,7 @@ message(STATUS "Modules output in : ${MODULE_OUTPUT_DIRECTORY}")
 set(BINGENERATOR "${CMAKE_SOURCE_DIR}/utils/bin2array.exe")
 set(COMPRESSOR "${CMAKE_SOURCE_DIR}/utils/upx.exe")
 
-set(SLAVE_HPP_PATH "${BINARY_OUTPUT}/SlaveDll.hpp")
+set(SLAVE_DLL_HPP_PATH "${BINARY_OUTPUT}/SlaveDll.hpp")
 set(SLAVE_DLL_PATH "${BINARY_OUTPUT}/slave_dll.dll")
 
 set(ELEVATOR32_HPP_PATH "${BINARY_OUTPUT}/Elevator32.hpp")
@@ -80,8 +83,8 @@ set(ELEVATORDLL64_DLL_PATH "${CMAKE_SOURCE_DIR}/utils/elevator/x64/Release/Win7E
 
 message(STATUS "BINGENERATOR = ${BINGENERATOR}")
 
-message(STATUS "SUBSTRATE_HPP_PATH = ${SUBSTRATE_HPP_PATH}")
-message(STATUS "SUBSTRATE_DLL_PATH = ${SUBSTRATE_DLL_PATH}")
+message(STATUS "SLAVE_DLL_HPP_PATH = ${SLAVE_DLL_HPP_PATH}")
+message(STATUS "SLAVE_DLL_PATH = ${SLAVE_DLL_PATH}")
 
 message(STATUS "ELEVATOR32_HPP_PATH = ${ELEVATOR32_HPP_PATH}")
 message(STATUS "ELEVATOR32_EXE_PATH = ${ELEVATOR32_EXE_PATH}")
@@ -105,7 +108,7 @@ endif()
 
 add_subdirectory(auditor)
 add_subdirectory(lib/blaspheme)
-add_subdirectory(utils/debugger)
+add_subdirectory(utils/logger)
 add_subdirectory(master)
 
 # Audit unit
