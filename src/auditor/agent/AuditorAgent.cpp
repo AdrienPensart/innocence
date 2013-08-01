@@ -26,7 +26,7 @@ int main(int argc, char argv[])
 	LOG.setHeader("AUDITOR");
 	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 	LOG.addObserver(new Common::LogToConsole);
-
+	
 	System::Process::This thisProcess;
     if(!System::isAdministrator())
 	{
@@ -34,7 +34,7 @@ int main(int argc, char argv[])
 	    System::RunAsAdministrator(thisProcess.getProgramName(), thisProcess.getProgramDir());
 		return EXIT_SUCCESS;
 	}
-
+	
 	audit("elevator.exe");
 	audit("injection.exe");
 	audit("hideproc.exe");

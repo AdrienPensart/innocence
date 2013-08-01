@@ -1,5 +1,6 @@
 #include "BinaryRessource.hpp"
 
+#include <common/Log.hpp>
 #include <common/Exception.hpp>
 #include <Windows.h>
 
@@ -9,16 +10,26 @@ namespace Malicious
 		:ressourceFile(_ressourceFile), deleteIt(_deleteIt)
 	{
 	    deleteRessource();
+		LOG << "Writing binary ressource " + ressourceFile + " of size " + toString(size);
 	    HANDLE hFile = CreateFile(ressourceFile.c_str(),GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ,NULL,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+		if(hFile == INVALID_HANDLE_VALUE)
+		{
+			throw Common::Exception("CreateFile failed : " + toString(GetLastError()));
+		}
+		
 	    DWORD wmWritten = 0; 
-	    WriteFile(hFile, ressourceName,(DWORD)size, &wmWritten, NULL); 
-	    
+	    if(!WriteFile(hFile, ressourceName,(DWORD)size, &wmWritten, NULL))
+		{
+			throw Common::Exception("WriteFile failed : " + toString(GetLastError()));
+		}
+
 	    if(wmWritten != size)
 	    {
-			Common::Exception writingError("Error during writing of file " + ressourceFile + " : " + toString(GetLastError()));
-			CloseHandle(hFile);
+			Common::Exception writingError("Incomplete writing of file " + ressourceFile + " : " + toString(GetLastError()));
 		    throw writingError;
 	    }
+
+		CloseHandle(hFile);
     }
 
     BinaryRessource::~BinaryRessource()
@@ -38,6 +49,7 @@ namespace Malicious
 			{
 				throw Common::Exception("Unable to delete file : " + ressourceFile + " : " + toString(GetLastError()));
 			}
+			LOG << "Deleting binary ressource " + ressourceFile;
 	    }
     }
 } // Malicious

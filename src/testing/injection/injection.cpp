@@ -1,3 +1,6 @@
+//#define WINVER 0x0500
+//#define _WIN32_WINNT 0x0500
+
 #include <common/Log.hpp>
 using namespace Common;
 
@@ -16,30 +19,25 @@ int main(int argc, char * argv[])
 	int exitCode = EXIT_FAILURE;
 	try
 	{
-		LOG.setHeader("AUDIT INJECTION");
-		LOG.trace();
-        LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.setHeader(INJECTION_AUDIT_HEADER);
+        LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 		LOG.addObserver(new Common::LogToConsole);
 
+		// #define _WIN32_WINNT _WIN32_WINNT_WINXP
+		
 		System::Process::This thisProcess;
 
-		
 		// Chargement normal de la DLL
 		//HMODULE hModule = LoadLibrary("isinjected.dll");
 		//Sleep(INFINITE);
 		
-		
         Malicious::InternetExplorer ie(false);
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";
-
+		
 		// We can't inject in parent iexplore.exe
 		LOG << "COM IE Child Instance Pid : " + toString(ie.getPid());
-        if(!Malicious::inject(ie.getPid(), dllPath))
-        {
-			LOG << "Injection failed";
-			return EXIT_FAILURE;
-		}
-		
+        Malicious::inject(ie.getPid(), dllPath);
+        
 		Sleep(2000);
 
 		LOG << "Waiting for injection proof";
@@ -59,6 +57,7 @@ int main(int argc, char * argv[])
 		
 		Sleep(1000);
 
+		// we verify that IE has well been killed from injected dll
 		System::Process::Map pm;
 		System::Process::GetProcessList(pm);
 		System::Process::Map::iterator iter = pm.find(ie.getPid());

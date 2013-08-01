@@ -3,18 +3,29 @@
 
 int main(int argc, char * argv[])
 {
-	Network::UdpSocket server;
-	server.listen(80);
-	Network::Timeout deadline(0, 100);
-	std::string buffer;
-
-	while(true)
+	try
 	{
-		server.recv(buffer, deadline);
-		if(buffer.size())
+		Network::UdpSocket server;
+		server.listen(80);
+		Network::Timeout deadline(0, 100);
+		std::string buffer;
+
+		while(true)
 		{
-			std::cout << buffer;
+			server.recv(buffer, deadline);
+			if(buffer.size())
+			{
+				std::cout << buffer;
+			}
 		}
+	}
+	catch(std::exception& e)
+	{
+		std::cout << e.what();
+	}
+	catch(...)
+	{
+		std::cout << "Unkown exception";
 	}
 	return EXIT_SUCCESS;
 }

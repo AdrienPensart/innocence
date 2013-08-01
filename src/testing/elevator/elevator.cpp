@@ -2,6 +2,7 @@
 using namespace Common;
 
 #include <system/Process.hpp>
+#include <auditor/Auditor.hpp>
 
 #include <malicious/Elevator.hpp>
 using namespace Malicious;
@@ -10,8 +11,8 @@ int main(int argc, char *argv[])
 {
 	try
 	{
-		LOG.setHeader("ELEVATOR");
-		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.setHeader(ELEVATOR_AUDIT_HEADER);
+		LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
 
 		System::Process::This thisProcess;
 

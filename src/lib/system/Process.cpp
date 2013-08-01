@@ -173,6 +173,26 @@ namespace System
 
 		Launcher::Launcher(const std::string& executable, const std::string& args, bool show)
 		{
+			PROCESS_INFORMATION pInfo;
+			STARTUPINFOA sInfo;
+			sInfo.cb = sizeof(STARTUPINFOA);
+			sInfo.lpReserved = NULL;
+			sInfo.lpReserved2 = NULL;
+			sInfo.cbReserved2 = 0;
+			sInfo.lpDesktop = NULL;
+			sInfo.lpTitle = NULL;
+			sInfo.dwFlags = 0;
+			sInfo.dwX = 0;
+			sInfo.dwY = 0;
+			sInfo.dwFillAttribute = 0;
+			sInfo.wShowWindow = SW_HIDE;
+ 
+			memset (&sInfo, 0, sizeof(sInfo));
+			sInfo.cb = sizeof(sInfo);
+
+			string cmdLine = executable + " " + args;
+			BOOL createProcessResult = CreateProcess(NULL, LPSTR(cmdLine.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &sInfo, &pInfo);
+			/*
 			LOG << "Creating process " + executable + " " + args;
 			memset(&ExecuteInfo, 0, sizeof(ExecuteInfo));
 			ExecuteInfo.cbSize       = sizeof(ExecuteInfo);
@@ -184,26 +204,33 @@ namespace System
 			ExecuteInfo.lpDirectory  = 0;
 			ExecuteInfo.nShow        = show ? SW_SHOW : SW_HIDE;
 			ExecuteInfo.hInstApp     = 0;
-	
+			*/
+			//CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+			/*
 			if(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE) != S_OK)
 			{
 				throw Common::Exception("CoInitializeEx failed");
 			}
+			createProcessResult = ShellExecuteEx(&ExecuteInfo);
+			*/
 
-			if(!ShellExecuteEx(&ExecuteInfo))
+			if(!createProcessResult)
 			{
 				running = false;
-				throw Common::Exception("ShellExecuteEx failed : " + toString(GetLastError()));
+				throw Common::Exception("Creating the process " + executable + " failed : " + toString(GetLastError()));
 			}
 			else
 			{
 				running = true;
+				pid = pInfo.dwProcessId;
+				process = pInfo.hProcess;
 			}
 		}
 
 		DWORD Launcher::getPid()
 		{
-			return GetProcessId(ExecuteInfo.hProcess);
+			//return GetProcessId(ExecuteInfo.hProcess);
+			return pid;
 		}
 
 		DWORD Launcher::wait()
@@ -211,8 +238,8 @@ namespace System
 			DWORD exitCode = EXIT_FAILURE;
 			if(isRunning())
 			{
-				WaitForSingleObject(ExecuteInfo.hProcess,INFINITE);
-				GetExitCodeProcess(ExecuteInfo.hProcess, &exitCode);
+				WaitForSingleObject(process,INFINITE);
+				GetExitCodeProcess(process, &exitCode);
 			}
 			return exitCode;
 		}

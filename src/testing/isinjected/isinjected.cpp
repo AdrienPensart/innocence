@@ -33,7 +33,7 @@ DWORD WINAPI Run(void)
 			LOG << "Proof sent : " + std::string(ISINJECTED_PROOF);
 		}
 		pipe.disconnect();
-
+		
 		thisProcess.killHierarchy();
     }
     catch(std::exception& e)

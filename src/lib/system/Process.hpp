@@ -33,7 +33,9 @@ namespace System
 			protected:
 
 				bool SetPrivilege(HANDLE hToken, LPCTSTR lpszPrivilege, BOOL bEnablePrivilege);
-				SHELLEXECUTEINFO ExecuteInfo;
+				//SHELLEXECUTEINFO ExecuteInfo;
+				HANDLE process;
+				DWORD pid;
 				bool running;
 		};
 

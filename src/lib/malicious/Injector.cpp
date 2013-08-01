@@ -49,7 +49,7 @@ namespace Malicious
         }
     }
 
-	bool inject(DWORD pid, std::string dll)
+	void inject(DWORD pid, std::string dll)
 	{
 		LOG_THIS_FUNCTION
 
@@ -70,7 +70,8 @@ namespace Malicious
 
         SetDebugPrivileges();
 
-		HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+		HANDLE hProc = OpenProcess(PROCESS_CREATE_THREAD|PROCESS_QUERY_INFORMATION|PROCESS_VM_OPERATION|PROCESS_VM_WRITE|PROCESS_VM_READ, FALSE, pid);
+		//HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 		if(hProc == NULL)
 		{
 			throw InjectionError("OpenProcess failed : "+toString(GetLastError()));
