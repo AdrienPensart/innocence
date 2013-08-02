@@ -1,5 +1,4 @@
-#ifndef _KEYLOGGER_
-#define _KEYLOGGER_
+#pragma once
 
 #include <map>
 #include <string>
@@ -53,6 +52,4 @@ namespace Malicious
             static DWORD WINAPI MsgLoop(LPVOID lpParameter);
     };
 
-} /* Malicious */
-
-#endif // _KEYLOGGER_
+} // Malicious

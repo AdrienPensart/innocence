@@ -1,5 +1,4 @@
-#ifndef _PROCESS_
-#define _PROCESS_
+#pragma once
 
 #include <map>
 #include <string>
@@ -68,5 +67,3 @@ namespace System
 	} // Process
 
 } // System
-
-#endif // _PROCESS_

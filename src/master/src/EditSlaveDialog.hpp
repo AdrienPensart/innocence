@@ -1,5 +1,4 @@
-#ifndef _EDIT_SLAVE_DIALOG_
-#define _EDIT_SLAVE_DIALOG_
+#pragma once
 
 #include <ui_EditSlave.h>
 
@@ -34,6 +33,3 @@ namespace Master
     };
     
 } // Master
-
-#endif // _EDIT_SLAVE_DIALOG_
-

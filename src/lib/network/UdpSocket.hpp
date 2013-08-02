@@ -1,5 +1,4 @@
-#ifndef _UDP_SOCKET_
-#define _UDP_SOCKET_
+#pragma once
 
 #include "Socket.hpp"
 #include "Stream.hpp"
@@ -46,5 +45,3 @@ namespace Network
             void acquire();
     };
 } // Network
-
-#endif // _UDP_SOCKET_

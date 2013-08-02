@@ -1,10 +1,9 @@
-#ifndef _SLAVE_CORE_
-#define _SLAVE_CORE_
+#pragma once
 
 #include <common/NonCopyable.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/protocol/Authentication.hpp>
-#include <blaspheme/protocol/ConnectionInfo.hpp>
+#include <Innocence.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Screenshot.hpp>
@@ -17,7 +16,7 @@ namespace Inhibition
     {
         public:
 
-            SlaveCore(Blaspheme::ConnectionInfo info);
+            SlaveCore(Innocence::ConnectionInfo info);
 			~SlaveCore();
 			void exit();
             bool connect();
@@ -29,8 +28,8 @@ namespace Inhibition
             void upgrade();
             const std::string& getInstallPath();
 
-			const Blaspheme::ConnectionInfo& getConnection() const;
-            void setConnection(const Blaspheme::ConnectionInfo& info);
+			const Innocence::ConnectionInfo& getConnection() const;
+            void setConnection(const Innocence::ConnectionInfo& info);
 			Blaspheme::Session& getSession();
 
         private:
@@ -48,5 +47,3 @@ namespace Inhibition
     };
     
 } // Inhibition
-
-#endif // _SLAVE_CORE_

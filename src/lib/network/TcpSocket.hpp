@@ -1,5 +1,4 @@
-#ifndef _TCP_SOCKET_
-#define _TCP_SOCKET_
+#pragma once
 
 #include "Socket.hpp"
 #include "Select.hpp"
@@ -19,5 +18,3 @@ class TcpSocket : public Socket
 };
 
 } // Network
-
-#endif // _TCP_SOCKET_

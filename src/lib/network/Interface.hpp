@@ -1,5 +1,4 @@
-#ifndef _INTERFACE_
-#define _INTERFACE_
+#pragma once
 
 #include "Types.hpp"
 
@@ -38,5 +37,3 @@ namespace Network
         }
     }
 } // Network
-
-#endif // _INTERFACE_

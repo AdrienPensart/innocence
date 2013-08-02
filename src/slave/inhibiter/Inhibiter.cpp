@@ -4,12 +4,11 @@
 #include <malicious/BinaryRessource.hpp>
 #include <malicious/InternetExplorer.hpp>
 #include <Innocence.hpp>
-#include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <common/Log.hpp>
 #include <network/Pipe.hpp>
 #include "Inhibiter.hpp"
 #include <Innocence.hpp>
-// DLL du trojan
+
 #include "SlaveDll.hpp"
 #include <shlwapi.h>
 using namespace std;

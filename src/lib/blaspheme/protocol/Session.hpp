@@ -1,11 +1,10 @@
-#ifndef _SESSION_
-#define _SESSION_
+#pragma once
 
+#include <Innocence.hpp>
 #include <common/Exception.hpp>
 #include <network/TcpClient.hpp>
 
 #include "Authentication.hpp"
-#include "ConnectionInfo.hpp"
 
 #include <stack>
 #include <exception>
@@ -35,7 +34,7 @@ namespace Blaspheme
     {
         public:
 
-			Session(Blaspheme::ConnectionInfo cinfo=Blaspheme::ConnectionInfo(), Network::TcpClient mainStream = Network::TcpClient());
+			Session(Innocence::ConnectionInfo cinfo=Innocence::ConnectionInfo(), Network::TcpClient mainStream = Network::TcpClient());
 			Session(const Session&);
 			virtual ~Session();
 
@@ -50,8 +49,8 @@ namespace Blaspheme
 			const SessionId& getId();
             void setId(const SessionId& newId);
 
-			const Blaspheme::ConnectionInfo& getConnection() const;
-			void setConnection(const Blaspheme::ConnectionInfo& cinfo);
+			const Innocence::ConnectionInfo& getConnection() const;
+			void setConnection(const Innocence::ConnectionInfo& cinfo);
 
             static SessionId getNextId();
             Network::TcpClient& stream();
@@ -62,7 +61,7 @@ namespace Blaspheme
 
         private:
 			
-			Blaspheme::ConnectionInfo info;
+			Innocence::ConnectionInfo info;
             std::string lastCmdStatus;
             static SessionId maxIdAttributed;
             // flux principal de commande
@@ -75,5 +74,3 @@ namespace Blaspheme
 			AuthenticationMethod * authPlugin;
     };
 } // Blaspheme
-
-#endif // _SESSION_

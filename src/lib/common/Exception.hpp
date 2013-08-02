@@ -1,5 +1,4 @@
-#ifndef _COMMON_EXCEPTION_
-#define _COMMON_EXCEPTION_
+#pragma once
 
 #include "Convert.hpp"
 #include <string>
@@ -26,4 +25,4 @@ namespace Common
 
 } // Common
 
-#endif // _COMMON_EXCEPTION_
+#pragma once

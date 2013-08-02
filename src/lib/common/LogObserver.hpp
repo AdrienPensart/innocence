@@ -1,5 +1,4 @@
-#ifndef _LOG_OBSERVER_
-#define _LOG_OBSERVER_
+#pragma once
 
 #include <network/UdpSocket.hpp>
 #include <fstream>
@@ -50,5 +49,3 @@ namespace Common
             const std::string title;
     };
 } // Common
-
-#endif // _LOG_OBSERVER_

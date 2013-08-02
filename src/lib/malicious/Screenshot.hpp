@@ -1,5 +1,4 @@
-#ifndef _SCREENSHOT_
-#define _SCREENSHOT_
+#pragma once
 
 #include <string>
 
@@ -12,5 +11,3 @@ namespace Malicious
     };
 
 } // Malicious
-
-#endif // _SCREENSHOT_

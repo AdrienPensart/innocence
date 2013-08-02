@@ -1,5 +1,4 @@
-#ifndef _PASSWORDS_DIALOG_
-#define _PASSWORDS_DIALOG_
+#pragma once
 
 #include <QtGui>
 #include <ui_Passwords.h>
@@ -24,5 +23,3 @@ namespace Master
             QStringListModel passwordsModel;
     };
 } // Master
-
-#endif // _PASSWORDS_DIALOG_

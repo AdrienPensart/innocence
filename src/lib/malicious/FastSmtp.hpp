@@ -1,5 +1,4 @@
-#ifndef FAST_SMTP_H
-#define FAST_SMTP_H
+#pragma once
 
 #include <assert.h>
 #include <vector>
@@ -99,8 +98,6 @@ namespace Malicious
             char * m_pcReplyTo;
             char * m_pcIPAddr;
 
-
-
             std::vector<CRecipient*> Recipients;
             std::vector<CRecipient*> CCRecipients;
             std::vector<CRecipient*> BCCRecipients;
@@ -110,5 +107,3 @@ namespace Malicious
     };
 
 } // Malicious
-
-#endif // FAST_SMTP_H

@@ -1,5 +1,4 @@
-#ifndef _MASTER_WINDOW_
-#define _MASTER_WINDOW_
+#pragma once
 
 #include <list>
 
@@ -129,5 +128,3 @@ namespace Master
     };
 
 } // Slave
-
-#endif // _MASTER_WINDOW_

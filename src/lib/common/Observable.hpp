@@ -1,5 +1,4 @@
-#ifndef _OBSERVABLE_HPP_
-#define _OBSERVABLE_HPP_
+#pragma once
 
 #include <list>
 
@@ -35,5 +34,3 @@ namespace Common
     };
 	
 } // Common
-
-#endif // _OBSERVABLE_HPP_

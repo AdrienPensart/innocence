@@ -1,6 +1,8 @@
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpServer.hpp>
 #include <Innocence.hpp>
+using namespace Innocence;
+
 #include <common/Log.hpp>
 #include <string>
 using std::string;
@@ -9,7 +11,7 @@ namespace Blaspheme
 {
 	SessionId Session::maxIdAttributed = 0;
 	
-	Session::Session(Blaspheme::ConnectionInfo infoArg, Network::TcpClient mainStreamArg)
+	Session::Session(ConnectionInfo infoArg, Network::TcpClient mainStreamArg)
 		: info(infoArg), mainStream(mainStreamArg), sessionId(0)
 	{
 		LOG << "Session constructor";
@@ -178,12 +180,12 @@ namespace Blaspheme
 		return mainStream;
 	}
 
-	const Blaspheme::ConnectionInfo& Session::getConnection() const
+	const ConnectionInfo& Session::getConnection() const
 	{
 		return info;
 	}
 
-	void Session::setConnection(const Blaspheme::ConnectionInfo& infoArg)
+	void Session::setConnection(const ConnectionInfo& infoArg)
 	{
 		info = infoArg;
 	}

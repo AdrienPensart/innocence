@@ -1,5 +1,4 @@
-#ifndef _GRAPHIC_PROGRESS_BAR_
-#define _GRAPHIC_PROGRESS_BAR_
+#pragma once
 
 #include <QProgressBar>
 #include <blaspheme/transfer/FileTransfer.hpp>
@@ -26,5 +25,3 @@ namespace Master
     };
 
 } // Master 
-
-#endif // _GRAPHIC_PROGRESS_BAR_

@@ -1,8 +1,8 @@
-#ifndef _LISTENING_THREAD_
-#define _LISTENING_THREAD_
+#pragma once
 
 #include <QThread>
 #include <blaspheme/protocol/Session.hpp>
+#include <Innocence.hpp>
 
 namespace Master
 {
@@ -38,9 +38,7 @@ namespace Master
         private:
             
             bool continue_listen;
-            Blaspheme::ConnectionInfo info;
+            Innocence::ConnectionInfo info;
     };
     
 } // Master
-
-#endif // _LISTENING_THREAD_

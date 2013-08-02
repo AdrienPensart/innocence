@@ -1,5 +1,4 @@
-#ifndef _STREAM_
-#define _STREAM_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -84,5 +83,3 @@ namespace Network
 
     };
 } // Network
-
-#endif // _STREAM_

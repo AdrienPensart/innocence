@@ -1,5 +1,4 @@
-#ifndef _STEALTH_DRIVER_HPP_
-#define _STEALTH_DRIVER_HPP_
+#pragma once
 
 namespace Malicious
 {
@@ -201,5 +200,3 @@ static const unsigned char StealthDriver[3072] =
 };
 
 } // Malicious
-
-#endif // _STEALTH_DRIVER_HPP_

@@ -1,5 +1,4 @@
-#ifndef _GENERIC_SOCKET_
-#define _GENERIC_SOCKET_
+#pragma once
 
 #include "Types.hpp"
 #include <string>
@@ -95,5 +94,3 @@ namespace Network
             
     };
 } // Network
-
-#endif // _GENERIC_SOCKET_

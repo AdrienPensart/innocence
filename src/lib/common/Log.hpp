@@ -1,5 +1,4 @@
-#ifndef _LOGGER_
-#define _LOGGER_
+#pragma once
 
 #include "NonCopyable.hpp"
 #include "Convert.hpp"
@@ -58,5 +57,3 @@ namespace Common
 #define SCOPED_LOG(x) Common::ScopedLog scoped_log((x));
 #define FUNC_LOG(x) Common::FunctionLog function_log((x));
 #define LOG_THIS_FUNCTION Common::FunctionLog function_log((__FUNCTION__));
-
-#endif // _LOGGER_

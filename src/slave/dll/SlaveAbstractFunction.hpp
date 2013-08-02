@@ -1,5 +1,4 @@
-#ifndef _SLAVE_ABSTRACT_FUNCTION_
-#define _SLAVE_ABSTRACT_FUNCTION_
+#pragma once
 
 #include <blaspheme/protocol/Session.hpp>
 
@@ -26,5 +25,3 @@ namespace Inhibition
     };
 
 } // Inhibition
-
-#endif // _SLAVE_ABSTRACT_FUNCTION_

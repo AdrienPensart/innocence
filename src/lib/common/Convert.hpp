@@ -1,5 +1,4 @@
-#ifndef _CONVERT_STRING_
-#define _CONVERT_STRING_
+#pragma once
 
 #include <sstream> 
 #include <string>
@@ -23,5 +22,3 @@ bool fromString( const std::string & Str, T & Dest )
     // tenter la conversion vers Dest
     return iss >> Dest != 0;
 }
-
-#endif // _CONVERT_STRING_

@@ -1,5 +1,4 @@
-#ifndef _TIMEOUT_
-#define _TIMEOUT_
+#pragma once
 
 #include "Types.hpp"
 
@@ -34,5 +33,3 @@ namespace Network
 	};
 
 } // Network
-
-#endif // _TIMEOUT_

@@ -1,5 +1,4 @@
-#ifndef _SLAVE_
-#define _SLAVE_
+#pragma once
 
 #include <QApplication>
 #include <QEventLoop>
@@ -96,5 +95,3 @@ namespace Master
     };
 
 } // Master
-
-#endif // _SLAVE_

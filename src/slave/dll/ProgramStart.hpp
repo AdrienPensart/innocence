@@ -1,5 +1,4 @@
-#ifndef _PROGRAMSTART_
-#define _PROGRAMSTART_
+#pragma once
 
 #include <string>
 
@@ -22,6 +21,4 @@ namespace Inhibition
             std::string programPath;
     };
 
-} /* Inhibition */
-
-#endif // _PROGRAMSTART_
+} // Inhibition

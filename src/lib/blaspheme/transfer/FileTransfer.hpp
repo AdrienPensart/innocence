@@ -1,5 +1,4 @@
-#ifndef _FILESERVER_
-#define _FILESERVER_
+#pragma once
 
 #include <fstream>
 #include <exception>
@@ -127,6 +126,4 @@ namespace Blaspheme
             void finish();
     };
 
-} /* Blaspheme */
-
-#endif // _FILESERVER_
+} // Blaspheme

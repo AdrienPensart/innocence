@@ -1,5 +1,4 @@
-#ifndef _SOCKET_TYPES_
-#define _SOCKET_TYPES_
+#pragma once
 
 #include <string>
 
@@ -66,5 +65,3 @@ namespace Network
 
     typedef sockaddr_in AddrIn;
 } // Network
-
-#endif // _SOCKET_TYPES_

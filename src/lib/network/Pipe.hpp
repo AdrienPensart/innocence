@@ -1,5 +1,4 @@
-#ifndef _PIPE_
-#define _PIPE_
+#pragma once
 
 #include <common/Exception.hpp>
 
@@ -45,5 +44,3 @@ namespace Network
 } // Network
 
 #endif // WIN32
-
-#endif // _PIPE_

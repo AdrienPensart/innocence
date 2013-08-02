@@ -1,5 +1,4 @@
-#ifndef _INTERNET_EXPLORER_
-#define _INTERNET_EXPLORER_
+#pragma once
 
 #include <exdisp.h>
 #include <windows.h>
@@ -23,5 +22,3 @@ namespace Malicious
 			bool killOnDestroy;
 	};
 }
-
-#endif // _INTERNET_EXPLORER_

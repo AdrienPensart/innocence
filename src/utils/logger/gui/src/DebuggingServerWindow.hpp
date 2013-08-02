@@ -1,5 +1,4 @@
-#ifndef _DEBUGGING_SERVER_WINDOW_
-#define _DEBUGGING_SERVER_WINDOW_
+#pragma once
 
 #include <QDialog>
 #include <ui_DebuggingConsole.h>
@@ -21,5 +20,3 @@ namespace Debugger
 	};
 
 } // Debugger
-
-#endif // _DEBUGGING_SERVER_WINDOW_

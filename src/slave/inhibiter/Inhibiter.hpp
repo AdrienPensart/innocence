@@ -1,5 +1,4 @@
-#ifndef _INHIBITER_
-#define _INHIBITER_
+#pragma once
 
 #include <string>
 
@@ -31,6 +30,4 @@ namespace Inhibiter
             std::string dll_path;
     };
     
-} /* Inhibiter */
-
-#endif // _INHIBITER_
+} // Inhibiter

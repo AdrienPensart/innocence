@@ -1,13 +1,14 @@
 #include <common/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 
+#include <Innocence.hpp>
+using namespace Innocence;
 
 #include <iostream>
 using namespace std;
 using namespace Common;
 using namespace Network;
 using namespace Blaspheme;
-
 
 int main(int argc, char * argv[])
 {
@@ -29,7 +30,6 @@ int main(int argc, char * argv[])
 		LOG.setHeader("LISTEN");
 	}
 
-	
 	ConnectionInfo info;
 	info.ip = "127.0.0.1";
 	info.port = 80;

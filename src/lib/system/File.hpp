@@ -1,5 +1,4 @@
-#ifndef _FILE_LISTING_
-#define _FILE_LISTING_
+#pragma once
 
 #include <exception>
 #include <string>
@@ -28,7 +27,4 @@ namespace System
 	std::streamsize Size(std::fstream& handle);
 	std::streamsize Size(const std::string& file);
 
-} /* System */
-
-
-#endif // _FILE_LISTING_
+} // System

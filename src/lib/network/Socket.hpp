@@ -1,5 +1,4 @@
-#ifndef _SOCKET_
-#define _SOCKET_
+#pragma once
 
 #include "SocketHandle.hpp"
 #include "SocketException.hpp"
@@ -145,5 +144,3 @@ namespace Network
 			}
 	};
 } // Network
-
-#endif // _SOCKET_

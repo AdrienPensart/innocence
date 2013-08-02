@@ -1,5 +1,4 @@
-#ifndef _NON_COPYABLE_HPP_
-#define _NON_COPYABLE_HPP_
+#pragma once
 
 namespace Common
 {
@@ -14,5 +13,3 @@ namespace Common
 			NonCopyable& operator=( const NonCopyable& that ) { return *this; }
     };
 } // Common 
-
-#endif // _NON_COPYABLE_HPP_

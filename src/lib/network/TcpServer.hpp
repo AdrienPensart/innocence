@@ -1,5 +1,4 @@
-#ifndef _TCP_SERVER_
-#define _TCP_SERVER_
+#pragma once
 
 #include "TcpSocket.hpp"
 #include "TcpClient.hpp"
@@ -30,5 +29,3 @@ namespace Network
 			bool listening;
     };
 } // Network
-
-#endif // _TCP_SERVER_

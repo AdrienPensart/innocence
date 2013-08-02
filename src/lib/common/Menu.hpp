@@ -1,5 +1,4 @@
-#ifndef _MENU_HPP_
-#define _MENU_HPP_
+#pragma once
 
 #include "Convert.hpp"
 
@@ -89,5 +88,3 @@ class Menu
 		unsigned int next;
 		MenuRep menu;
 };
-
-#endif _MENU_HPP_

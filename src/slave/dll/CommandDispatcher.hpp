@@ -1,5 +1,4 @@
-#ifndef COMMANDDISPATCHER_H
-#define COMMANDDISPATCHER_H
+#pragma once
 
 #include <map>
 #include "SlaveAbstractFunction.hpp"
@@ -20,6 +19,4 @@ namespace Inhibition
             Functions functions;
     };
     
-} /* Inhibition */
-
-#endif // COMMANDDISPATCHER_H
+} // Inhibition

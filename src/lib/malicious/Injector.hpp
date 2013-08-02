@@ -1,5 +1,4 @@
-#ifndef _INJECTOR_
-#define _INJECTOR_
+#pragma once
 
 #include <system/Process.hpp>
 #include <common/Exception.hpp>
@@ -14,5 +13,3 @@ namespace Malicious
     //void SetDebugPrivileges();
 
 } // Malicious
-
-#endif // _INJECTOR_

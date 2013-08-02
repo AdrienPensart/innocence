@@ -1,5 +1,4 @@
-#ifndef _DEBUG_THREAD_
-#define _DEBUG_THREAD_
+#pragma once
 
 #include <QThread>
 #include <network/UdpSocket.hpp>
@@ -27,5 +26,3 @@ namespace Debugger
 	};
 
 } // Debugger
-
-#endif // _DEBUG_THREAD_

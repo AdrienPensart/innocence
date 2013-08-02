@@ -1,5 +1,4 @@
-#ifndef _ELEVATOR_
-#define _ELEVATOR_
+#pragma once
 
 #include <string>
 #include <Windows.h>
@@ -11,5 +10,3 @@ namespace Malicious
 	static const char * ELEVATOR_EXE_NAME = "privilege.exe";
 	DWORD elevate(std::string programPath);
 } // Malicious
-
-#endif // _ELEVATOR_

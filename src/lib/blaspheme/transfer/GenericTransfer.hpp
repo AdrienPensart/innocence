@@ -1,5 +1,4 @@
-#ifndef _GENERIC_TRANSFER_HPP_
-#define _GENERIC_TRANSFER_HPP_
+#pragma once
 
 #include <system/File.hpp>
 #include "FileTransfer.hpp"
@@ -171,6 +170,4 @@ namespace Blaspheme
     typedef GenericTransfer<File, Memory> FileLoader;
     typedef GenericTransfer<Memory, File> FileFlush;
 
-}/* Blaspheme */
-
-#endif // _GENERIC_TRANSFER_HPP_
+} // Blaspheme

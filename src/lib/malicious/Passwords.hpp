@@ -1,5 +1,4 @@
-#ifndef _PASSWORDS_HPP_
-#define _PASSWORDS_HPP_
+#pragma once
 
 #include <string>
 #include <exception>
@@ -11,5 +10,3 @@ namespace Malicious
     std::string decodeAllPasswords(char delimiter);
 
 } // Malicious
-
-#endif // _PASSWORDS_HPP_

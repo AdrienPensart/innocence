@@ -1,5 +1,4 @@
-#ifndef _SERVICE_
-#define _SERVICE_
+#pragma once
 
 #include "Types.hpp"
 
@@ -61,5 +60,3 @@ namespace Network
 		    static ServiceInfo::Service ServiceInfo::getServByPort(const Port& port, PROTO proto);
     };
 } // Network
-
-#endif // _SERVICE_

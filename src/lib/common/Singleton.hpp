@@ -1,5 +1,4 @@
-#ifndef _SINGLETON_
-#define _SINGLETON_
+#pragma once
 
 #include "NonCopyable.hpp"
 
@@ -20,5 +19,3 @@ namespace Common
     };
 
 } // Commin
-
-#endif // _SINGLETON_

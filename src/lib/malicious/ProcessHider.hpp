@@ -1,5 +1,4 @@
-#ifndef _PROCESS_HIDER_HPP_
-#define _PROCESS_HIDER_HPP_
+#pragma once
 
 #include <common/Exception.hpp>
 
@@ -39,5 +38,3 @@ namespace Malicious
     };
     
 } // Malicious
-
-#endif // _PROCESS_HIDER_HPP_

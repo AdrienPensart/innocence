@@ -1,8 +1,7 @@
-#ifndef _AUTHENTICATION_
-#define _AUTHENTICATION_
+#pragma once
 
 #include <string>
-#include "ConnectionInfo.hpp"
+#include <Innocence.hpp>
 
 namespace Blaspheme
 {
@@ -12,21 +11,21 @@ namespace Blaspheme
     {
         public:
 
-			AuthenticationMethod(const ConnectionInfo& info);
+			AuthenticationMethod(const Innocence::ConnectionInfo& info);
             virtual bool sendAuth(Session&)=0;
 			virtual bool recvAuth(Session&)=0;
-			const ConnectionInfo& getInfo();
+			const Innocence::ConnectionInfo& getInfo();
 
 		private:
 
-			const ConnectionInfo& info;
+			const Innocence::ConnectionInfo& info;
     };
     
     class NoAuthentication : public AuthenticationMethod
     {
         public:
 
-			NoAuthentication(const ConnectionInfo& info);
+			NoAuthentication(const Innocence::ConnectionInfo& info);
 			virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
     };
@@ -35,7 +34,7 @@ namespace Blaspheme
     {
         public:
 
-            StringBasedAuth(const ConnectionInfo& info);
+            StringBasedAuth(const Innocence::ConnectionInfo& info);
             virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
     };
@@ -44,11 +43,9 @@ namespace Blaspheme
 	{
 		public:
 			
-			ChallengedBasedAuth(const ConnectionInfo& info);
+			ChallengedBasedAuth(const Innocence::ConnectionInfo& info);
             virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
 	};
 
 } // Blaspheme
-
-#endif // _AUTHENTICATION_

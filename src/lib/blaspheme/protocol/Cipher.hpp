@@ -1,5 +1,4 @@
-#ifndef CRYPTEUR_H
-#define CRYPTEUR_H
+#pragma once
 
 #include <string>
 
@@ -38,6 +37,4 @@ namespace Blaspheme
             std::string xor_key;
     };
 
-} /* Blaspheme */
-
-#endif // CRYPTEUR_H
+} // Blaspheme

@@ -1,5 +1,4 @@
-#ifndef _SLAVE_TABLE_MODEL_
-#define _SLAVE_TABLE_MODEL_
+#pragma once
 
 #include <QAbstractTableModel>
 #include <vector>
@@ -42,7 +41,3 @@ namespace Master
     };
     
 } // Master
-
-#endif // _SLAVE_TABLE_MODEL_
-
-

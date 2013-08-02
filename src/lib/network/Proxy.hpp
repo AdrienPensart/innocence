@@ -1,5 +1,4 @@
-#ifndef _PROXY_
-#define _PROXY_
+#pragma once
 
 #include "Stream.hpp"
 
@@ -17,6 +16,3 @@ namespace Network
             Stream * stwo;
     };
 } // Network
-
-#endif // _PROXY_
-

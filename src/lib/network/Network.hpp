@@ -1,5 +1,4 @@
-#ifndef _NETWORK_
-#define _NETWORK_
+#pragma once
 
 #include "Pipe.hpp"
 #include "TcpSocket.hpp"
@@ -9,5 +8,3 @@
 #ifdef _MSC_VER
     #pragma comment(lib,"WS2_32.LIB")
 #endif
-
-#endif // _NETWORK_

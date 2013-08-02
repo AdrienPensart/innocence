@@ -1,5 +1,4 @@
-#ifndef _BINARY_RESSOURCE_
-#define _BINARY_RESSOURCE_
+#pragma once
 
 #include <cstdio>
 #include <string>
@@ -22,5 +21,3 @@ namespace Malicious
     };
 
 } // Malicious
-
-#endif // _BINARY_RESSOURCE_

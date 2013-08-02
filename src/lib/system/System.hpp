@@ -1,5 +1,4 @@
-#ifndef _WINDOWS_SYSTEM_
-#define _WINDOWS_SYSTEM_
+#pragma once
 
 #include <string>
 #include <windows.h>
@@ -33,5 +32,3 @@ namespace System
     bool hibernate();
 	bool is64BitWindows();
 } // System
-
-#endif // _WINDOWS_SYSTEM_

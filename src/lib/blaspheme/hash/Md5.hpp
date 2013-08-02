@@ -1,5 +1,4 @@
-#ifndef _MD5_HPP_
-#define _MD5_HPP_
+#pragma once
 
 #include <string>
 typedef unsigned char *POINTER;
@@ -27,5 +26,3 @@ class MD5
 		void MD5Update (MD5_CTX*, unsigned char*, unsigned int);
 		void MD5Final (unsigned char [16], MD5_CTX*);
 };
-
-#endif // _MD5_HPP_

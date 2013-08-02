@@ -1,5 +1,4 @@
-#ifndef _TCP_CLIENT_
-#define _TCP_CLIENT_
+#pragma once
 
 #include "TcpSocket.hpp"
 #include "Stream.hpp"
@@ -42,5 +41,3 @@ namespace Network
 		    virtual int getBufferDataSize();
     };
 } // Network
-
-#endif // _TCP_CLIENT_

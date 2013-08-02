@@ -1,5 +1,4 @@
-#ifndef _HASH_HPP_
-#define _HASH_HPP_
+#pragma once
 
 #include <string>
 #include "Md5.hpp"
@@ -21,5 +20,3 @@ namespace Blaspheme
             std::string getHash(const char * chunk, size_t size);
     };
 } /* Blaspheme */
-
-#endif // _HASH_HPP_

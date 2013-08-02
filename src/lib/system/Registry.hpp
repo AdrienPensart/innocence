@@ -1,5 +1,4 @@
-#ifndef _REGISTRY_
-#define _REGISTRY_
+#pragma once
 
 #include <string>
 #include <map>
@@ -90,7 +89,4 @@ namespace System
 		};
 
 	} // Registry
-
 } // System
-
-#endif // _REGISTRY_

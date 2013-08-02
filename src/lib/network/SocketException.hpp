@@ -1,5 +1,4 @@
-#ifndef _SOCKET_EXCEPTION_
-#define _SOCKET_EXCEPTION_
+#pragma once
 
 #include <common/Exception.hpp>
 #include "Types.hpp"
@@ -59,5 +58,3 @@ namespace Network
 	typedef UnexpectedEvent InvalidSock;
 
 } // Network
-
-#endif // _SOCKET_EXCEPTION_

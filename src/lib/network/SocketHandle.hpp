@@ -1,5 +1,4 @@
-#ifndef _SOCKET_HANDLE_
-#define _SOCKET_HANDLE_
+#pragma once
 
 #include "Types.hpp"
 /*
@@ -78,5 +77,3 @@ namespace Network
         #endif
     };
 } // Network
-
-#endif // _SOCKET_HANDLE_
