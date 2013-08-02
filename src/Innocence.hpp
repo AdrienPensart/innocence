@@ -1,5 +1,4 @@
-#ifndef _INNOCENCE_
-#define _INNOCENCE_
+#pragma once
 
 #include <network/Types.hpp>
 #include <network/Timeout.hpp>
@@ -89,5 +88,3 @@ namespace Innocence
 	static const bool   INJECT_DEFAULT_BROWSER = false;
 	
 } // Innocence
-
-#endif // _INNOCENCE_

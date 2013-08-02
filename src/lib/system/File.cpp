@@ -145,5 +145,4 @@ namespace System
         }
 		return 0;
     }
-
-} /* System */
+} // System
