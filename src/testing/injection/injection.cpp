@@ -25,12 +25,7 @@ int main(int argc, char * argv[])
 
 		// #define _WIN32_WINNT _WIN32_WINNT_WINXP
 		
-		System::Process::This thisProcess;
-
-		// Chargement normal de la DLL
-		//HMODULE hModule = LoadLibrary("isinjected.dll");
-		//Sleep(INFINITE);
-		
+		System::Process::This thisProcess;		
         Malicious::InternetExplorer ie(false);
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";
 		

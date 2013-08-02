@@ -6,7 +6,6 @@
 #include <vector>
 #include <list>
 #include <string>
-#include <sstream>
 
 #include <network/Stream.hpp>
 #include <common/Convert.hpp>

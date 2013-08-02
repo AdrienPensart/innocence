@@ -25,7 +25,26 @@ int run(int argc, char ** argv)
 }
 
 //! if only Windows was an UNIX system...
+#ifdef INNOCENCE_DEBUG
+int main(int argc, char * argv[])
+{
+	LOG.setHeader("MASTER");
+	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToConsole);
 #ifdef _WIN32
+	System::Process::This thisProcess;
+    if(!System::isAdministrator())
+	{
+        LOG << "Try to run as administrator.";
+		System::RunAsAdministrator(thisProcess.getProgramName(), thisProcess.getProgramDir(), true);
+		return EXIT_SUCCESS;
+	}
+	return run(thisProcess.getArgCount(), thisProcess.getArgs());
+#else
+    return run(argc, argv);
+#endif
+}
+#else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     LOG.setHeader("MASTER");
@@ -41,12 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	return run(thisProcess.getArgCount(), thisProcess.getArgs());
 }
-#else
-int main(int argc, char * argv[])
-{
-    return run(argc, argv);
-}
-#endif // _WIN32
+#endif // INNOCENCE_DEBUG
 
 //! disable Thread Local Storage callbacks, otherwise, UPX won't compress.
 extern "C" void tss_cleanup_implemented(void){}

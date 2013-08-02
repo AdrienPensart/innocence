@@ -1,7 +1,7 @@
 #include <exception>
 #include <string>
-#include <sstream>
 using namespace std;
+
 #include <QThread>
 #include <QWaitCondition>
 #include <QTextStream>

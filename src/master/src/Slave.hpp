@@ -26,7 +26,7 @@ namespace Master
 
         public:
         
-			Slave(Blaspheme::Session _session, QObject * parent=0);
+			Slave(Blaspheme::Session session, QObject * parent=0);
             void addStream(Network::TcpClient new_stream);
 			Blaspheme::SessionId getUniqueId();
             QString getIp();

@@ -22,21 +22,9 @@ int main(int argc, char * argv[])
 
         startKey.removeValue("test");
 	}
-	catch(RegistryBaseError&)
+	catch(std::exception& e)
 	{
-		LOG << "Bad registry base";
-	}
-	catch(KeyDoesntExist&)
-	{
-		LOG << "Key does not exist";
-	}
-	catch(KeyErrorCreate&)
-	{
-		LOG << "Error while creating key";
-	}
-	catch(RegistryError&)
-	{
-		LOG << "Registry error";
+		LOG << e.what();
 	}
 	catch(...)
 	{

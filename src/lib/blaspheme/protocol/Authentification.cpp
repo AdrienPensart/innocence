@@ -7,6 +7,16 @@ using namespace Network;
 
 namespace Blaspheme
 {
+	AuthenticationMethod::AuthenticationMethod(const ConnectionInfo& infoArg) :
+		info(infoArg)
+	{
+	}
+
+	const ConnectionInfo& AuthenticationMethod::getInfo()
+	{
+		return info;
+	}
+
 	bool NoAuthentication::sendAuth(Session&)
 	{
 		FUNC_LOG(__FUNCTION__);
@@ -21,21 +31,16 @@ namespace Blaspheme
 		return true;
 	}
 
-    StringBasedAuth::StringBasedAuth(const std::string& string_password)
-    :password(string_password)
+    StringBasedAuth::StringBasedAuth(const ConnectionInfo& infoArg) : 
+		AuthenticationMethod(infoArg)
     {
-    }
-
-    void StringBasedAuth::setPassword(const std::string& string_password)
-    {
-        password = string_password;
     }
 
     bool StringBasedAuth::sendAuth(Session& session)
     {
 		FUNC_LOG(__FUNCTION__);
         LOG << "Sending password";
-        session << password;
+        session << getInfo().password;
         std::string buffer;
         session >> buffer;
         if(buffer == SUCCESS)
@@ -60,7 +65,7 @@ namespace Blaspheme
         std::string received_password;
         session >> received_password;
         LOG << "Password received : " + received_password;
-        if(received_password == password)
+        if(received_password == getInfo().password)
         {
             session << SUCCESS;
             return true;
@@ -69,4 +74,23 @@ namespace Blaspheme
         return false;
     }
 
-} /* Blaspheme */
+	ChallengedBasedAuth::ChallengedBasedAuth(const ConnectionInfo& infoArg) : 
+		AuthenticationMethod(infoArg)
+	{
+	}
+
+    bool ChallengedBasedAuth::sendAuth(Session&)
+	{
+		FUNC_LOG(__FUNCTION__);
+		LOG << "Not implemented";
+		return false;
+	}
+
+	bool ChallengedBasedAuth::recvAuth(Session&)
+	{
+		FUNC_LOG(__FUNCTION__);
+		LOG << "Not implemented";
+		return false;
+	}
+
+} // Blaspheme

@@ -60,6 +60,11 @@ if(WIN32)
 	add_executable(isadmin ${isadmin_source_files})
 	target_link_libraries(isadmin system common network)
 	set_target_properties(isadmin PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
+	
+	file(GLOB_RECURSE loadslave_source_files loadslave/*)
+	add_executable(loadslave ${loadslave_source_files})
+	# target_link_libraries(loadslave system common network)
+	set_target_properties(loadslave PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
 endif ()
 
 # Portable tests

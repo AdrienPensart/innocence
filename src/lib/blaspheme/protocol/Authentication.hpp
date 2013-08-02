@@ -1,7 +1,8 @@
-#ifndef AUTHENTICATION_HPP
-#define AUTHENTICATION_HPP
+#ifndef _AUTHENTICATION_
+#define _AUTHENTICATION_
 
 #include <string>
+#include "ConnectionInfo.hpp"
 
 namespace Blaspheme
 {
@@ -11,14 +12,21 @@ namespace Blaspheme
     {
         public:
 
+			AuthenticationMethod(const ConnectionInfo& info);
             virtual bool sendAuth(Session&)=0;
 			virtual bool recvAuth(Session&)=0;
+			const ConnectionInfo& getInfo();
+
+		private:
+
+			const ConnectionInfo& info;
     };
     
     class NoAuthentication : public AuthenticationMethod
     {
         public:
 
+			NoAuthentication(const ConnectionInfo& info);
 			virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
     };
@@ -27,23 +35,20 @@ namespace Blaspheme
     {
         public:
 
-            StringBasedAuth(const std::string& password="");
-            void setPassword(const std::string&);
+            StringBasedAuth(const ConnectionInfo& info);
             virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
-
-        protected:
-
-            std::string password;
     };
 
-	class ChallengedBasedAuth
+	class ChallengedBasedAuth : public AuthenticationMethod
 	{
 		public:
 			
-
+			ChallengedBasedAuth(const ConnectionInfo& info);
+            virtual bool sendAuth(Session&);
+			virtual bool recvAuth(Session&);
 	};
 
-} /* Blaspheme */
+} // Blaspheme
 
-#endif // AUTHENTICATION_HPP
+#endif // _AUTHENTICATION_

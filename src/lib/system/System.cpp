@@ -22,6 +22,18 @@ namespace System
 		}
 	}
 
+	std::string getWindowsPath()
+	{
+		std::string path;
+		char winpath [MAX_PATH];
+        unsigned int size_returned = 0;        
+        if(size_returned = GetWindowsDirectory(winpath, MAX_PATH))
+		{
+			path.assign(winpath, size_returned);
+		}
+		return path;
+	}
+
 	void getWindowsPath(std::wstring& path)
 	{
 		wchar_t winpath [MAX_PATH];

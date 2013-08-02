@@ -1,5 +1,6 @@
 #include "Registry.hpp"
 #include <windows.h>
+#include <winerror.h>
 #include <tchar.h>
 #include <strsafe.h>
 
@@ -7,6 +8,20 @@ namespace System
 {
 	namespace Registry
 	{
+		RegistryError::RegistryError(const std::string& msg, long code)
+		{
+			std::string def = msg;
+			if(code != -1)
+			{
+				const int buffSize = 1024;
+				char* buff = new char[buffSize];
+				FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,0,code,0,buff,buffSize,0);
+				def += " : ";
+				def += std::string(buff, buffSize);
+			}
+			setMessage(def);
+		}
+
 		// code extrait de la MSDN
 		// efface récursivement une clé de registre et toutes ses sous-clés
 		bool RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
@@ -96,10 +111,10 @@ namespace System
 					return HKEY_PERFORMANCE_NLSTEXT;
 				case perfText:
 					return HKEY_PERFORMANCE_TEXT;
+				default:
+					// la base donnée en paramètre ne correspond à aucune base de Microsoft
+					throw RegistryError("Bad registry database");
 			}
-			// la base donnée en paramètre ne correspond à aucune base de Microsoft
-			throw RegistryBaseError();
-
 			// n'atteint jamais ce point
 			return HKEY();
 		}
@@ -132,15 +147,15 @@ namespace System
 					else
 					{
 						// la création a échouée
-						throw KeyErrorCreate();
+						throw RegistryError("Can't create key", result);
 					}
 				}
 				else
 				{
-					throw KeyDoesntExist();
+					throw RegistryError("Key does not exist", lResult);
 				}
 			}
-		}	
+		}
 
 		bool Key::exists()
 		{
@@ -153,7 +168,8 @@ namespace System
 				return true;
 			}
 			return false;
-		}	
+		}
+
 		bool Key::create()
 		{
 			HKEY root = translateBase(base);
@@ -189,10 +205,12 @@ namespace System
 			HKEY root = translateBase(base);
 			return RegDelnodeRecurse(root, (LPTSTR)path.c_str());
 		}
+
 		Key Key::createSubkey(const std::string& subkeyName)
 		{
 			return Key(base, path+"\\"+subkeyName, true);
 		}
+
 		bool Key::createValue(const std::string& valueName, const std::string& value)
 		{
 			BOOL bSuccess = TRUE;
@@ -220,6 +238,7 @@ namespace System
 			RegCloseKey(key);
 			return true;
 		}
+
 		bool Key::removeValue(const std::string& valueName)
 		{
 			HKEY key;
@@ -237,6 +256,7 @@ namespace System
 			}
 			return false;
 		}
+
 		bool Key::isValueExists(const std::string& valueName)
 		{
 			HKEY key;
@@ -256,6 +276,7 @@ namespace System
 			}
 			return false;
 		}
+
 		bool Key::setValue(const std::string& valueName, const std::string& value)
 		{
 			HKEY key;
@@ -273,6 +294,7 @@ namespace System
 			RegCloseKey(key);
 			return success;
 		}
+
 		bool Key::getValue(const std::string& valueName, std::string& value)
 		{
 			HKEY key;
@@ -322,7 +344,7 @@ namespace System
 			LONG result = RegOpenKeyEx(root, path.c_str(), 0, KEY_QUERY_VALUE, &key);
 			if (result != ERROR_SUCCESS)
 			{
-				throw KeyDoesntExist();
+				throw RegistryError("Key does not exist", result);
 			}
 
 			DWORD dwType = 1;
@@ -390,7 +412,7 @@ namespace System
 			LONG result = RegQueryInfoKey(key, szClassBuffer, &dwClassNameLength,
 				NULL, &dwSubKeyCount, &dwMaxSubKeyName, NULL, &dwValueCount,
 				&dwMaxValueName, &dwMaxValueLength, NULL, &ftLastWritten);
-						
+
 			RegCloseKey(key);
 			if (result != ERROR_SUCCESS)
 			{
@@ -401,8 +423,8 @@ namespace System
 
 		int Key::valuesCount()
 		{
-			/* Call this function to determine the number of subkeys.
-				the function returns -1 on error */
+			// Call this function to determine the number of subkeys.
+			// the function returns -1 on error
 			HKEY key;
 			HKEY root = translateBase(base);
 
@@ -431,6 +453,6 @@ namespace System
 			return (int)dwValueCount;
 		}
 
-	}/* Registry */
+	} // Registry
 
-}/* System */
+} //System

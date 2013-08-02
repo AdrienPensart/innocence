@@ -1,5 +1,5 @@
-#ifndef _SINGLETON_HPP_
-#define _SINGLETON_HPP_
+#ifndef _SINGLETON_
+#define _SINGLETON_
 
 #include "NonCopyable.hpp"
 
@@ -9,20 +9,16 @@ namespace Common
     class Singleton : public NonCopyable
     {
         public:
-			
             static T& instance()
-            {
-                static T single_instance;
-		        return single_instance;
-            }
-        
+			{
+				static T single_instance;
+				return single_instance;
+			}
         protected:
-
             Singleton(){}
             ~Singleton(){}
-		
     };
 
 } // Commin
 
-#endif // _SINGLETON_HPP_
+#endif // _SINGLETON_

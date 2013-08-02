@@ -29,18 +29,19 @@ int main(int argc, char * argv[])
 		LOG.setHeader("LISTEN");
 	}
 
-	Session session;
+	
 	ConnectionInfo info;
 	info.ip = "127.0.0.1";
 	info.port = 80;
 	info.deadline.set(60);
 	info.password = "crunch";
-	
+	Session session(info);
+
 	if(arg == "connect")
 	{
 		//while(true)
 		{
-			if(session.connect(info))
+			if(session.connect())
 			{
 				cout << "Connect ok.\n";
 				session.setId(0);
@@ -53,7 +54,7 @@ int main(int argc, char * argv[])
 	{
 		while(true)
 		{
-			if(session.wait_connect(info))
+			if(session.waitConnect())
 			{
 				cout << "WaitConnect ok.\n";
 				session.setId(0);

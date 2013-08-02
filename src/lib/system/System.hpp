@@ -25,6 +25,7 @@ namespace System
     SystemVersion getSystemVersion();
 	void getWindowsPath(std::string& path);
 	void getWindowsPath(std::wstring& path);
+	std::string getWindowsPath();
     std::string getSystemVersionString();
     bool shutdown();
     bool reboot();

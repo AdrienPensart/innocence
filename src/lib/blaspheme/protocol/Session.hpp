@@ -1,9 +1,12 @@
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef _SESSION_
+#define _SESSION_
 
+#include <common/Exception.hpp>
 #include <network/TcpClient.hpp>
+
 #include "Authentication.hpp"
 #include "ConnectionInfo.hpp"
+
 #include <stack>
 #include <exception>
 
@@ -12,7 +15,7 @@ namespace Blaspheme
     typedef std::stack<Network::TcpClient> AuxTcpClient;
     typedef unsigned int SessionId;
     
-    class UnknowCommandException : public std::exception{};
+    typedef Common::Exception UnknowCommandException;
     
 	/*
 		Une session est composee d'un flux principal
@@ -27,12 +30,13 @@ namespace Blaspheme
 		Une session possede un ID unique, qui permet au serveur d'identifier les connexions
 		au client de maniere unique
 	*/
+
     class Session
     {
         public:
 
-			Session(Network::TcpClient mainStream=Network::TcpClient());
-			//Session(const Session&);
+			Session(Blaspheme::ConnectionInfo cinfo=Blaspheme::ConnectionInfo(), Network::TcpClient mainStream = Network::TcpClient());
+			Session(const Session&);
 			virtual ~Session();
 
 			// Fonctions d'envoi et de reception de commandes (par le flux principal)
@@ -40,10 +44,15 @@ namespace Blaspheme
             Session& operator>>(std::string& object);
             Session& send(const std::string& command);
             Session& recv(std::string& command);
-			bool connect(Blaspheme::ConnectionInfo&);
-			bool wait_connect(Blaspheme::ConnectionInfo&);
+			bool connect();
+			bool waitConnect();
+			
 			const SessionId& getId();
             void setId(const SessionId& newId);
+
+			const Blaspheme::ConnectionInfo& getConnection() const;
+			void setConnection(const Blaspheme::ConnectionInfo& cinfo);
+
             static SessionId getNextId();
             Network::TcpClient& stream();
             void reset();
@@ -52,7 +61,8 @@ namespace Blaspheme
             //void setAuthentication(AuthenticationMethod * _authPlugin);
 
         private:
-        
+			
+			Blaspheme::ConnectionInfo info;
             std::string lastCmdStatus;
             static SessionId maxIdAttributed;
             // flux principal de commande
@@ -62,8 +72,8 @@ namespace Blaspheme
             // flux auxiliaires
             AuxTcpClient auxStreams;
 			// plugin d'authentification
-			StringBasedAuth authPlugin;
+			AuthenticationMethod * authPlugin;
     };
-}
+} // Blaspheme
 
-#endif // SESSION_H
+#endif // _SESSION_

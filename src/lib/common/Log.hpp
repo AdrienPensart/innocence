@@ -1,7 +1,7 @@
-#ifndef _LOGGER_HPP_
-#define _LOGGER_HPP_
+#ifndef _LOGGER_
+#define _LOGGER_
 
-#include "Singleton.hpp"
+#include "NonCopyable.hpp"
 #include "Convert.hpp"
 #include "Observable.hpp"
 #include "LogObserver.hpp"
@@ -11,31 +11,30 @@
 
 namespace Common
 {
-    class Log : public Singleton<Log>, public Observable<LogObserver, std::string>
+    class Log : public Observable<LogObserver, std::string>, public Common::NonCopyable
     {
         public:
             
+			Log();
             void trace();
             void setHeader(const std::string& header);
             void enterFunction(const std::string& func);
             void leaveFunction();
 			void sendRaw(const std::string& object);
             Log& operator << (const std::string& object);
-        
-        protected:
-
-            Log();
+			static Log lout;
 
         private:
             
-            friend class Singleton<Log>;
             bool tracing;
             std::string header;
             std::vector<std::string> functions;
     };
     
-	#define LOG	Common::Log::instance()
-    struct ScopedLog
+	#define COMMENT SLASH(/)
+	#define SLASH(s) /##s
+
+	struct ScopedLog
     {
         ScopedLog(const std::string& log);
         ~ScopedLog();
@@ -48,10 +47,16 @@ namespace Common
         ~FunctionLog();
     };
 
-} /* Common */
+} // Common
+
+#ifdef INNOCENCE_DEBUG
+	#define LOG Common::Log::lout
+#else
+	#define LOG COMMENT
+#endif
 
 #define SCOPED_LOG(x) Common::ScopedLog scoped_log((x));
 #define FUNC_LOG(x) Common::FunctionLog function_log((x));
 #define LOG_THIS_FUNCTION Common::FunctionLog function_log((__FUNCTION__));
 
-#endif // _LOGGER_HPP_
+#endif // _LOGGER_

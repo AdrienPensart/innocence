@@ -1,4 +1,5 @@
 #include "CommandDispatcher.hpp"
+#include <common/Log.hpp>
 
 namespace Inhibition
 {
@@ -13,8 +14,9 @@ namespace Inhibition
         }
     }
 
-    void CommandDispatch::addServerFunction(const std::string& name, ServerAbstractFunction * pFunc)
+    void CommandDispatch::addServerFunction(const std::string& name, SlaveAbstractFunction * pFunc)
     {
+		LOG << "Adding new function : " + name + " at address : " + toString(pFunc);
         functions.insert(Functions::value_type(name, pFunc));
     }
 
@@ -23,6 +25,7 @@ namespace Inhibition
         Functions::iterator function_to_execute = functions.find(inputCmd);
         if(function_to_execute != functions.end())
         {
+			LOG << "Executing function " + inputCmd + " at address : " + toString(function_to_execute->second);
             (*(function_to_execute->second))();
             return true;
         }
@@ -33,6 +36,5 @@ namespace Inhibition
     {
         return functions.find(inputCmd) != functions.end();
     }
-    
 }
 

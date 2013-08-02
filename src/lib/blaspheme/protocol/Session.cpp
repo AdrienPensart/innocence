@@ -9,33 +9,48 @@ namespace Blaspheme
 {
 	SessionId Session::maxIdAttributed = 0;
 	
-	Session::Session(Network::TcpClient _mainStream)
-		: mainStream(_mainStream), sessionId(0)
+	Session::Session(Blaspheme::ConnectionInfo infoArg, Network::TcpClient mainStreamArg)
+		: info(infoArg), mainStream(mainStreamArg), sessionId(0)
 	{
+		LOG << "Session constructor";
+		authPlugin = new StringBasedAuth(info);
+	}
+
+	Session::Session(const Session& session)
+	{
+		LOG << "Session copy";
+		authPlugin = new StringBasedAuth(session.info);
+		info = session.info;
+		lastCmdStatus = session.lastCmdStatus;
+		maxIdAttributed = session.maxIdAttributed;
+		mainStream = session.mainStream;
+		sessionId = session.sessionId;
+		auxStreams = session.auxStreams;
 	}
 
 	Session::~Session()
 	{
-		//LOG << "Session destructor";
-		//delete authPlugin;
+		LOG << "Session destructor";
+		delete authPlugin;
+		authPlugin = 0;
 	}
 	
-	bool Session::connect(Blaspheme::ConnectionInfo& cinfo)
+	bool Session::connect()
 	{
-		//LOG << Connecting to "+toString(cinfo.ip)+" on port "+toString(cinfo.port);
-		if(mainStream.connect(cinfo.ip, cinfo.port))
+		LOG_THIS_FUNCTION
+		if(mainStream.connect(info.ip, info.port))
         {
-			authPlugin.setPassword(cinfo.password);
-            if(authPlugin.recvAuth(*this))
+			LOG << "Waiting authentication";
+            if(authPlugin->recvAuth(*this))
             {
-                send(toString(0));
-                string str_id;
+                *this << "0";
+                string stringId;
                 SessionId id;
-                recv(str_id);
-                fromString(str_id, id);
+                *this >> stringId;
+                fromString(stringId, id);
                 sessionId = id;
                 
-                LOG << "Main connection acquired, my ID : " + str_id;
+                LOG << "Main connection acquired, my ID : " + stringId;
                 return true;
             }
             else
@@ -47,25 +62,25 @@ namespace Blaspheme
 		return false;
 	}
 
-	bool Session::wait_connect(Blaspheme::ConnectionInfo& cinfo)
+	bool Session::waitConnect()
 	{
-		Network::TcpServer listener(cinfo.port);
-		//LOG << "Listening for incoming connections...";
-		if(listener.accept(mainStream, cinfo.deadline))
+		LOG_THIS_FUNCTION
+		Network::TcpServer listener(info.port);
+		if(listener.accept(mainStream, info.deadline))
 		{
-			LOG << "Client accepted.";
+			LOG << "Client accepted, stop listening";
 			listener.stopListen();
-			authPlugin.setPassword(cinfo.password);
-			if(authPlugin.sendAuth(*this))
+			LOG << "Sending authentication";
+			if(authPlugin->sendAuth(*this))
             {
 				string stringId;
-				recv(stringId);
+				*this >> stringId;
 				fromString(stringId, sessionId);
 				LOG << "Stream ID received : " + stringId;
                 if(sessionId == 0)
                 {
-					LOG << "New client connected";
-					send("0");
+					LOG << "New client connected, sending initial id";
+					*this << "0";
                 }
                 else
                 {
@@ -163,4 +178,14 @@ namespace Blaspheme
 		return mainStream;
 	}
 
-} /* Blaspheme */
+	const Blaspheme::ConnectionInfo& Session::getConnection() const
+	{
+		return info;
+	}
+
+	void Session::setConnection(const Blaspheme::ConnectionInfo& infoArg)
+	{
+		info = infoArg;
+	}
+
+} // Blaspheme

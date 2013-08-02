@@ -12,11 +12,15 @@ namespace Inhibition
     ProgramStartupKey::ProgramStartupKey(const string& path)
         :programPath(path)
     {
+#ifndef INNOCENCE_DEBUG
         if(!installed())
         {
             LOG << "Installing automatic starting registry key";
             install();
         }
+#else
+		LOG << "Automatic Run key disabled in DEBUG";
+#endif
     }
 
     ProgramStartupKey::~ProgramStartupKey()

