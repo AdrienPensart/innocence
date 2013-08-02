@@ -5,7 +5,7 @@
 #include <network/Pipe.hpp>
 using namespace Network;
 
-#include <auditor/Auditor.hpp>
+#include <Innocence.hpp>
 
 #include <windows.h>
 
@@ -15,8 +15,8 @@ DWORD WINAPI Run(void)
 {
     try
 	{
-        LOG.setHeader(ISINJECTED_AUDIT_HEADER);
-        LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
+        LOG.setHeader(Innocence::ISINJECTED_AUDIT_HEADER);
+        LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
 		
 		System::Process::This thisProcess;
 		LOG << "DLL getPath : " + thisProcess.getPath();
@@ -26,11 +26,11 @@ DWORD WINAPI Run(void)
 		
 		Sleep(1000);
 		Network::Pipe pipe;
-		pipe.listen(PIPE_AUDIT_PIPE_NAME);
+		pipe.listen(Innocence::PIPE_AUDIT_PIPE_NAME);
 		if(pipe.accept())
 		{
-			pipe.send(ISINJECTED_PROOF);
-			LOG << "Proof sent : " + std::string(ISINJECTED_PROOF);
+			pipe.send(Innocence::ISINJECTED_PROOF);
+			LOG << "Proof sent : " + std::string(Innocence::ISINJECTED_PROOF);
 		}
 		pipe.disconnect();
 		

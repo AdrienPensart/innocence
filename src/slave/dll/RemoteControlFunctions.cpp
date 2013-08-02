@@ -11,7 +11,7 @@ using namespace std;
 using namespace System;
 
 #include <blaspheme/transfer/FileTransfer.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 using namespace Blaspheme;
 
 #include <malicious/Screenshot.hpp>

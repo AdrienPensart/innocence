@@ -1,5 +1,5 @@
 #include <common/Log.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <blaspheme/protocol/Authentication.hpp>
 using namespace Network;
 

@@ -76,7 +76,7 @@ using namespace std;
 #include <system/File.hpp>
 #include <system/Process.hpp>
 #include <blaspheme/protocol/Session.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Common;
 using namespace Network;

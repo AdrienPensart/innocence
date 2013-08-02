@@ -1,6 +1,6 @@
 #include <common/Log.hpp>
 #include <system/Registry.hpp>
-#include <auditor/Auditor.hpp>
+#include <Innocence.hpp>
 
 using namespace System;
 using namespace System::Registry;
@@ -10,8 +10,8 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     static const char * RUN_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
-	LOG.setHeader(REGISTRE_AUDIT_HEADER);
-    LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
+	LOG.setHeader(Innocence::REGISTRE_AUDIT_HEADER);
+    LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
 	try
 	{
         LOG << "Program dir : " + toString(argv[0]);

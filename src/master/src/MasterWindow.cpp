@@ -7,7 +7,7 @@ using namespace std;
 #include <QFileDialog>
 
 #include <common/Log.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 using namespace Network;
 
 #include "Slave.hpp"

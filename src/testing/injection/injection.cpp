@@ -8,7 +8,7 @@ using namespace Common;
 #include <malicious/Injector.hpp>
 
 #include <system/Process.hpp>
-#include <auditor/Auditor.hpp>
+#include <Innocence.hpp>
 
 #include <network/Pipe.hpp>
 using namespace Network;
@@ -19,8 +19,8 @@ int main(int argc, char * argv[])
 	int exitCode = EXIT_FAILURE;
 	try
 	{
-		LOG.setHeader(INJECTION_AUDIT_HEADER);
-        LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
+		LOG.setHeader(Innocence::INJECTION_AUDIT_HEADER);
+        LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
 		LOG.addObserver(new Common::LogToConsole);
 
 		// #define _WIN32_WINNT _WIN32_WINNT_WINXP
@@ -38,11 +38,11 @@ int main(int argc, char * argv[])
 		LOG << "Waiting for injection proof";
 		Network::Pipe pipe;
 		LOG << "Connecting to pipe";
-		if(pipe.connect(PIPE_AUDIT_PIPE_NAME))
+		if(pipe.connect(Innocence::PIPE_AUDIT_PIPE_NAME))
 		{
 			std::string buffer;
 			pipe.recv(buffer);
-			if(buffer == ISINJECTED_PROOF)
+			if(buffer == Innocence::ISINJECTED_PROOF)
 			{
 				LOG << "Injection passed";
 				exitCode = EXIT_SUCCESS;

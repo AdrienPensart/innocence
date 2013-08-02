@@ -1,6 +1,6 @@
 #include <system/Registry.hpp>
 #include <common/Log.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <string>
 using namespace System::Registry;
 using namespace std;
@@ -34,22 +34,22 @@ namespace Inhibition
 
     bool ProgramStartupKey::installed()
     {
-        Key startKey(localMachine, RUN_KEY_PATH);
-        return startKey.isValueExists(RUN_KEY_NAME);
+        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+        return startKey.isValueExists(Innocence::RUN_KEY_NAME);
     }
 
     void ProgramStartupKey::install()
     {
-        Key startKey(localMachine, RUN_KEY_PATH);
-        startKey.createValue(RUN_KEY_NAME, programPath);
+        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+        startKey.createValue(Innocence::RUN_KEY_NAME, programPath);
     }
 
     void ProgramStartupKey::uninstall()
     {
-        Key startKey(localMachine, RUN_KEY_PATH);
-        if(startKey.isValueExists(RUN_KEY_NAME))
+        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+        if(startKey.isValueExists(Innocence::RUN_KEY_NAME))
         {
-            startKey.removeValue(RUN_KEY_NAME);
+            startKey.removeValue(Innocence::RUN_KEY_NAME);
         }
     }
 }

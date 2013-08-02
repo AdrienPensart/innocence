@@ -2,7 +2,7 @@
 
 #include <common/Log.hpp>
 #include <system/File.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <blaspheme/hash/Hash.hpp>
 
 namespace Blaspheme

@@ -8,15 +8,15 @@ using namespace Malicious;
 
 #include <common/Log.hpp>
 
-#include <auditor/Auditor.hpp>
+#include <Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
 	int exitCode = EXIT_FAILURE;
     try
 	{
-        LOG.setHeader(STEALTH_AUDIT_HEADER);
-	    LOG.addObserver(new Common::LogToNetwork(AUDIT_COLLECTOR_IP, AUDIT_COLLECTOR_PORT));
+        LOG.setHeader(Innocence::STEALTH_AUDIT_HEADER);
+	    LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
 		LOG.addObserver(new Common::LogToConsole());
 
         System::Process::This thisProcess;

