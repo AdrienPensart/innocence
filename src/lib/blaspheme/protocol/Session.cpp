@@ -11,17 +11,23 @@ namespace Blaspheme
 {
 	SessionId Session::maxIdAttributed = 0;
 	
-	Session::Session(ConnectionInfo infoArg, Network::TcpClient mainStreamArg)
-		: info(infoArg), mainStream(mainStreamArg), sessionId(0)
+	Session::Session(ConnectionInfo infoArg, Network::TcpClient mainStreamArg) :
+		info(infoArg),
+		mainStream(mainStreamArg),
+		sessionId(0),
+		auth(0),
+		cipher(0)
 	{
 		LOG << "Session constructor";
-		authPlugin = new StringBasedAuth(info);
+		auth = new StringBasedAuth(info);
+		cipher = new NoCiphering;
 	}
 
 	Session::Session(const Session& session)
 	{
 		LOG << "Session copy";
-		authPlugin = new StringBasedAuth(session.info);
+		cipher = new NoCiphering;
+		auth = new StringBasedAuth(session.info);
 		info = session.info;
 		lastCmdStatus = session.lastCmdStatus;
 		maxIdAttributed = session.maxIdAttributed;
@@ -33,8 +39,10 @@ namespace Blaspheme
 	Session::~Session()
 	{
 		LOG << "Session destructor";
-		delete authPlugin;
-		authPlugin = 0;
+		delete auth;
+		auth = 0;
+		delete cipher;
+		cipher = 0;
 	}
 	
 	bool Session::connect()
@@ -43,7 +51,7 @@ namespace Blaspheme
 		if(mainStream.connect(info.ip, info.port))
         {
 			LOG << "Waiting authentication";
-            if(authPlugin->recvAuth(*this))
+            if(auth->recvAuth(*this))
             {
                 *this << "0";
                 string stringId;
@@ -73,7 +81,7 @@ namespace Blaspheme
 			LOG << "Client accepted, stop listening";
 			listener.stopListen();
 			LOG << "Sending authentication";
-			if(authPlugin->sendAuth(*this))
+			if(auth->sendAuth(*this))
             {
 				string stringId;
 				*this >> stringId;
@@ -106,25 +114,35 @@ namespace Blaspheme
 	*/
 	Session& Session::operator<<(const std::string& object)
     {
-        mainStream.send(object+'\n');
+		std::string buffer = object+'\n';
+		cipher->encrypt(buffer);
+        mainStream.send(buffer);
         return *this;
     }
 
 	Session& Session::operator>>(std::string& object)
     {
-        mainStream.recv(object, '\n', false);
+		std::string buffer;
+        mainStream.recv(buffer, '\n', false);
+		cipher->decrypt(buffer);
+		object = buffer;
         return *this;
     }
 
 	Session& Session::send(const std::string& object)
     {
-        mainStream.send(object+'\n');
+		std::string buffer = object+'\n';
+		cipher->encrypt(buffer);
+        mainStream.send(buffer);
         return *this;
     }
 
 	Session& Session::recv(std::string& object)
     {
+		std::string buffer;
         mainStream.recv(object, '\n', false);
+		cipher->decrypt(buffer);
+		object = buffer;
         return *this;
     }
 

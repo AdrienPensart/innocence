@@ -5,6 +5,7 @@
 #include <network/TcpClient.hpp>
 
 #include "Authentication.hpp"
+#include "Cipher.hpp"
 
 #include <stack>
 #include <exception>
@@ -68,9 +69,9 @@ namespace Blaspheme
             Network::TcpClient mainStream;
             // ID unique de la connexion principale
             SessionId sessionId;
-            // flux auxiliaires
             AuxTcpClient auxStreams;
-			// plugin d'authentification
-			AuthenticationMethod * authPlugin;
+			
+			AuthenticationMethod * auth;
+			CipheringMethod * cipher;
     };
 } // Blaspheme

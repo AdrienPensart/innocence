@@ -17,9 +17,9 @@ namespace Blaspheme
     {
         public:
         
-            NoCiphering(){}
-            void encrypt(std::string&){}
-            void decrypt(std::string&){}
+            NoCiphering();
+            void encrypt(std::string&);
+            void decrypt(std::string&);
     };
 
     class XORCiphering : public CipheringMethod

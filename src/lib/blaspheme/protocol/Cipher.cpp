@@ -2,6 +2,18 @@
 
 namespace Blaspheme
 {
+	NoCiphering::NoCiphering()
+	{
+	}
+
+    void NoCiphering::encrypt(std::string&)
+	{
+	}
+
+    void NoCiphering::decrypt(std::string&)
+	{
+	}
+
     XORCiphering::XORCiphering(const std::string& initial_key)
     :xor_key(initial_key)
     {

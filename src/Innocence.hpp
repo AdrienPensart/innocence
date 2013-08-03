@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Build.hpp"
 #include <network/Types.hpp>
 #include <network/Timeout.hpp>
 

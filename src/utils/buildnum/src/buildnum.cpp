@@ -53,24 +53,22 @@ int main(int argc, char * argv[])
 	string line;
 	while (std::getline(buffer, line))
 	{
-		//cout << "Reading line : " << line << endl;
 		std::istringstream iss(line);
 		string define;
 		string build;
 		string num;
-		if ((iss >> define >> build >> num))
+		if ((iss >> define >> build >> num) && define == "#define" && build == "BUILD")
 		{
 			int buildNum;
 			fromString(num, buildNum);
 			buildNum++;
 			num = toString(buildNum);
-			cout << "Updating Build Number to " << num << endl;
+			cout << "Updating Build Number to " << num;
 			string output = define + " " + build + " " + num + "\n";
 			headerout << output;
 		}
 		else
 		{
-			cout << line << '\n';
 			headerout << line << '\n';
 		}
 	}
