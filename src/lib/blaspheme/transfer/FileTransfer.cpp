@@ -54,7 +54,7 @@ namespace Blaspheme
     {
         if(td.transferred > td.totalsize)
         {
-            throw TransferOverflow();
+            throw TransferException("Overflow");
         }
         return (td.transferred == td.totalsize);
     }
@@ -78,7 +78,7 @@ namespace Blaspheme
                 {
                     // l'envoyeur n'a pas trouve le fichier a envoyer
                     state = CANCELED;
-                    throw RemoteFileNotFound();
+					throw TransferException("Remote file not found : "+filename);
                 }
                 
                 stream.recv(buffer_size, '\n', false);
@@ -89,8 +89,7 @@ namespace Blaspheme
             else
             {
                 state = CANCELED;
-                LOG << "Can't open file " + filename;
-                throw LocalFileNotFound();
+                throw TransferException("Local file does not exist : " + filename);
             }
         }
         catch(...)
@@ -162,7 +161,7 @@ namespace Blaspheme
         {
             // l'envoyeur n'a pas trouve le fichier a envoyer
             state = CANCELED;
-            throw RemoteFileNotFound();
+            throw TransferException("Remote file not found");
         }
 
         // reception de la taille
@@ -242,11 +241,10 @@ namespace Blaspheme
             }
             else
             {
-                LOG << "File opening failed " + filename;
                 // On doit notifier au receveur de fichier que le fichier ne peut pas 
                 // etre ouvert
                 stream << FAILURE;
-                throw LocalFileNotFound();
+                throw TransferException("Local file not found : " + filename);
             }
         }
         catch(...)
@@ -268,8 +266,7 @@ namespace Blaspheme
             std::streamsize temp_sent = (int)stream.send(&buffer[0]+sent, (int)(to_send-sent));
             if(temp_sent <= 0)
             {
-				LOG << "Upload transfer returned : " + toString(temp_sent) + ", network error : " + Network::SocketException::getLastError();
-                throw TransferException();
+                throw TransferException("Upload transfer failed : " + toString(temp_sent) + ", network error : " + Network::SocketException::getLastError());
             }
             sent += temp_sent;
         }
@@ -296,4 +293,4 @@ namespace Blaspheme
         notify(td);
     }
 
-} /* Blaspheme */
+} // Blaspheme

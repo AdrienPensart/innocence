@@ -19,4 +19,4 @@ namespace Blaspheme
 		    std::string getHashFromFile(const std::string& filename);
             std::string getHash(const char * chunk, size_t size);
     };
-} /* Blaspheme */
+} // Blaspheme

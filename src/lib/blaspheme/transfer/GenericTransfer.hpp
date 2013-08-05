@@ -100,8 +100,7 @@ namespace Blaspheme
                 filehandle.open(filepath.c_str(),  std::ios::in | std::ios::out | std::ios::binary);
                 if (filehandle.is_open())
                 {
-                    LOG << "Can't open file " + filepath;
-                    throw FileNotFound();
+                    throw TransferException("Local file not found : " + filepath);
                 }
                 filesize = System::Size(filehandle);
             }

@@ -1,9 +1,11 @@
-SET (CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.1.0\\5.1.0\\msvc2012")
-FIND_PACKAGE(Qt5Widgets REQUIRED)
-SET(CMAKE_AUTOMOC OFF)
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDES})
-ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
+set(MASTER_TARGET "master")
+
+set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.1.0\\5.1.0\\msvc2012")
+find_package(Qt5Widgets REQUIRED)
+set(CMAKE_AUTOMOC OFF)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(${Qt5Widgets_INCLUDES})
+add_definitions(${Qt5Widgets_DEFINITIONS})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -23,7 +25,7 @@ if(WIN32)
 endif()
 
 add_executable(
-	master 
+	${MASTER_TARGET} 
 	${MASTER_GUI_TYPE}
 	${MASTER_MOC_SRC_FILES}
 	${MASTER_SRC_FILES}
@@ -31,16 +33,17 @@ add_executable(
 	${MASTER_MOC_FILES}
 )
 
-# target_link_libraries(master system common network blaspheme ${QT_LIBRARIES})# ${QT_JPEG_PLUGIN})
-QT5_USE_MODULES(master Widgets)
-target_link_libraries(master system_md common_md network_md blaspheme_md)
-set_target_properties(master PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
+# target_link_libraries(${MASTER_TARGET} system common network blaspheme ${QT_LIBRARIES})# ${QT_JPEG_PLUGIN})
+QT5_USE_MODULES(${MASTER_TARGET} Widgets)
+target_link_libraries(${MASTER_TARGET} system_md common_md network_md blaspheme_md)
+set_target_properties(${MASTER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${MASTER_TARGET}")
 
 if(WIN32 AND NOT UNIX)
 	install(PROGRAMS ${CMAKE_SOURCE_DIR}/utils/nc.exe DESTINATION innocence)
 ELSE(WIN32 AND NOT UNIX)
 	message(STATUS "NetCat est une dependance sur les systèmes UNIX")
 ENDIF(WIN32 AND NOT UNIX)
-install(TARGETS master RUNTIME DESTINATION innocence)
-install(FILES "${QT_BINARY_DIR}/QtCore${QT_VERSION_MAJOR}.dll"
-			  "${QT_BINARY_DIR}/QtGui${QT_VERSION_MAJOR}.dll" DESTINATION innocence)
+
+# install(TARGETS ${MASTER_TARGET} RUNTIME DESTINATION innocence)
+# install(FILES "${QT_BINARY_DIR}/QtCore${QT_VERSION_MAJOR}.dll"
+			  # "${QT_BINARY_DIR}/QtGui${QT_VERSION_MAJOR}.dll" DESTINATION innocence)

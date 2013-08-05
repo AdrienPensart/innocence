@@ -1,9 +1,10 @@
-SET (CMAKE_PREFIX_PATH ${QT_INSTALL_DIR})
-FIND_PACKAGE(Qt5Widgets REQUIRED)
-SET(CMAKE_AUTOMOC OFF)
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDES})
-ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
+set(LOGGER_GUI_TARGET "logger_gui")
+set(CMAKE_PREFIX_PATH ${QT_INSTALL_DIR})
+find_package(Qt5Widgets REQUIRED)
+set(CMAKE_AUTOMOC OFF)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(${Qt5Widgets_INCLUDES})
+add_definitions(${Qt5Widgets_DEFINITIONS})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -21,7 +22,7 @@ if(WIN32)
 endif(WIN32)
 
 add_executable(
-    logger_gui
+    ${LOGGER_GUI_TARGET}
     ${LOGGER_GUI_TYPE}
 	${LOGGER_GUI_MOC_SRC_FILES}
 	${LOGGER_GUI_SRC_FILES}
@@ -29,10 +30,10 @@ add_executable(
 	${LOGGER_GUI_MOC_FILES}
 )
 
-QT5_USE_MODULES(logger_gui Widgets)
-target_link_libraries(logger_gui common_md system_md network_md ${QT_LIBRARIES})
-set_target_properties(logger_gui PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
-install(TARGETS logger_gui DESTINATION innocence)
+QT5_USE_MODULES(${LOGGER_GUI_TARGET} Widgets)
+target_link_libraries(${LOGGER_GUI_TARGET} common_md system_md network_md ${QT_LIBRARIES})
+set_target_properties(${LOGGER_GUI_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${LOGGER_GUI_TARGET}")
+install(TARGETS ${LOGGER_GUI_TARGET} DESTINATION innocence)
 
 
 

@@ -9,20 +9,11 @@
 #include <network/Stream.hpp>
 #include <common/Convert.hpp>
 #include <common/Observable.hpp>
+#include <common/Exception.hpp>
 
 namespace Blaspheme
 {
-    // Classes d'exceptions
-    class TransferException  : public std::exception{};
-    class TimeoutException   : public TransferException{};
-    class BadChecksum        : public TransferException{};
-    class FileNotFound       : public TransferException{};
-    class LocalFileNotFound  : public FileNotFound{};
-    class RemoteFileNotFound : public FileNotFound{};
-    class ReadingError       : public TransferException{};
-	class BadConversion      : public TransferException{};
-    class TransferOverflow   : public TransferException{};
-    class TransferUnderflow  : public TransferException{};
+    typedef Common::Exception TransferException;
     
     class TransferDescriptor
     {

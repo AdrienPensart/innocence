@@ -7,14 +7,81 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace Common
 {
+	typedef std::vector<std::string> CallStack;
+
+	class Message
+	{
+		public:
+			
+			Message(const std::string& content, const CallStack& callStack);
+
+			const std::string& getContent() const ;
+			const std::string& getCallStack() const ;
+			const std::string& getTime() const ;
+			virtual std::string build();
+
+		private:
+
+			static unsigned int id;
+			const std::string content;
+			const std::string callStack;
+			const std::string emittedTime;
+	};
+
+	// for error messages
+	class ExceptionMessage : public Message
+	{
+		public:
+			
+			ExceptionMessage(const std::string& typeArg, const std::string& content, const CallStack& callStack);
+			const std::string& getType() const;
+			virtual std::string build();
+
+		private:
+
+			std::string type;
+	};
+
+	class Audit
+	{
+		public:
+			
+			Audit(const std::string& module, const unsigned int& buildId, const std::string& buildDate);
+			virtual ~Audit();
+			void addMessage(const Message& message);
+			virtual std::string build();
+
+		private:
+
+			const unsigned int buildId;
+			const std::string buildDate;
+			const std::string module;
+			std::vector<Message> messages;
+			const std::string startedAt;
+	};
+
+	class GlobalAudit
+	{
+		public:
+			
+			GlobalAudit();
+			virtual ~GlobalAudit();
+			virtual std::string build();
+
+		private:
+
+			std::vector<Audit> audits;
+			time_t startedAt;
+	};
+
     class Log : public Observable<LogObserver, std::string>, public Common::NonCopyable
     {
         public:
             
-			Log();
             void trace();
             void setHeader(const std::string& header);
             void enterFunction(const std::string& func);
@@ -25,9 +92,10 @@ namespace Common
 
         private:
             
+			Log();
             bool tracing;
             std::string header;
-            std::vector<std::string> functions;
+            CallStack functions;
     };
     
 	#define COMMENT SLASH(/)

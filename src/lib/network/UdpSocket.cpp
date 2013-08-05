@@ -13,7 +13,6 @@ namespace Network
     
     UdpSocket::UdpSocket()
     {
-        
     }
     
     void UdpSocket::acquire()
@@ -110,4 +109,35 @@ namespace Network
         }
         return returnChar;
     }
+
+	int UdpSocket::send(const std::string& object)
+	{
+		return Stream::send(object);
+	}
+
+    int UdpSocket::send(const std::string& object, Timeout to)
+	{
+		return Stream::send(object, to);
+	}
+            
+    int UdpSocket::recv(std::string& object, char delimiter, bool include)
+	{
+		return Stream::recv(object, delimiter, include);
+	}
+
+    string UdpSocket::recv()
+	{
+		return Stream::recv();
+	}
+
+	int UdpSocket::recv(std::string& object)
+	{
+		return Stream::recv(object);
+	}
+
+	int UdpSocket::recv(string& object, Timeout to)
+	{
+		return Stream::recv(object, to);
+	}
+
 }

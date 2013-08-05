@@ -96,9 +96,9 @@ namespace Inhibition
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
 		}
-        catch(FileNotFound&)
+        catch(TransferException& e)
         {
-            LOG << "File does not exist";
+            LOG << e.what();
         }
         LOG << "StartDownload : Ended";
     }
@@ -115,9 +115,9 @@ namespace Inhibition
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
         }
-        catch(FileNotFound&)
+        catch(TransferException& e)
         {
-            LOG << "File does not exist";
+            LOG << e.what();
         }
         LOG << "StartUpload : Ended";
     }
@@ -157,9 +157,9 @@ namespace Inhibition
         {
             LOG << "Unable to list logic disks";
         }
-        catch(FileNotFound&)
+        catch(TransferException& e)
         {
-            LOG << "The directory to list doest not exist";
+            LOG << e.what();
         }
         catch(...)
         {
@@ -270,9 +270,9 @@ namespace Inhibition
             LOG << "Screenshot sent, deleting it";
 			remove(SCREENSHOT_FILENAME);
 		}
-        catch(BadChecksum& )
+        catch(TransferException& e)
         {
-            LOG << "Checksum error";
+            LOG << e.what();
         }
         catch(...)
         {
