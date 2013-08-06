@@ -1,5 +1,5 @@
 #include "LogObserver.hpp"
-
+#include <Innocence.hpp>
 #include <iostream>
 
 namespace Common
@@ -9,24 +9,29 @@ namespace Common
         socket_udp.setDestInfo(_debug_server, _debug_port);
     }
 
-    void LogToNetwork::update(const std::string& object)
+    void LogToNetwork::update(const Message& message)
     {
-        socket_udp << object;
+        socket_udp << message.build();
     }
     
+	LogToCollector::LogToCollector() : 
+		LogToNetwork(Innocence::LOG_COLLECTOR_IP, Innocence::LOG_COLLECTOR_PORT)
+    {
+    }
+
     LogToFile::LogToFile(const std::string& _filepath)
     :filepath(_filepath)
     {
         file.open(filepath.c_str());
         if(!file.is_open())
         {
-            throw std::exception("Can't open log file.");
+            throw Common::Exception("Can't open log file");
         }
     }
 
-    void LogToFile::update(const std::string& object)
+    void LogToFile::update(const Message& message)
     {
-        file << object;
+        file << message.build();
     }
     
     LogToConsole::LogToConsole(const std::string& _title)
@@ -34,9 +39,9 @@ namespace Common
     {
     }
 
-    void LogToConsole::update(const std::string& object)
+    void LogToConsole::update(const Message& message)
     {
-		std::cout << object;
+		std::cout << message.build();
     }
 
 } // Common

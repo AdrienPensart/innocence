@@ -8,7 +8,7 @@
 #include "Cipher.hpp"
 
 #include <stack>
-#include <exception>
+//#include <exception>
 
 namespace Blaspheme
 {

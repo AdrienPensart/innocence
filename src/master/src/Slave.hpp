@@ -11,14 +11,13 @@
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/protocol/Session.hpp>
 #include <string>
-using std::string;
 
 #include "GraphicProgressBar.hpp"
 
 namespace Master
 {
     extern QMutex stream_mutex;
-  
+
     class Slave : public QObject
     {
         Q_OBJECT

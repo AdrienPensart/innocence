@@ -50,14 +50,11 @@ void RemoteShell()
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("TEST RSHELL");
-    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+    LOG.addObserver(new Common::LogToCollector);
 	try
 	{
 		RemoteShell();
 	}
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

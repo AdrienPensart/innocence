@@ -1,5 +1,5 @@
 set(AUDITOR_AGENT_TARGET "auditor_agent")
 file(GLOB_RECURSE ${AUDITOR_AGENT_TARGET}_source_files src/*)
 add_executable(${AUDITOR_AGENT_TARGET} ${auditor_agent_source_files})
-target_link_libraries(${AUDITOR_AGENT_TARGET} system network common)
+target_link_libraries(${AUDITOR_AGENT_TARGET} audit system network common)
 set_target_properties(${AUDITOR_AGENT_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${AUDITOR_AGENT_TARGET}")

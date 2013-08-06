@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Message.hpp"
+
 #include <network/UdpSocket.hpp>
 #include <fstream>
 
@@ -9,7 +11,7 @@ namespace Common
     {
         public:
 
-            virtual void update(const std::string& object)=0;
+            virtual void update(const Message& message)=0;
     };
 
     class LogToFile : public LogObserver
@@ -17,7 +19,7 @@ namespace Common
         public:
 
             LogToFile(const std::string& filepath);
-            virtual void update(const std::string& object);
+            virtual void update(const Message& message);
 
         private:
 
@@ -30,22 +32,29 @@ namespace Common
         public:
 
             LogToNetwork(const Network::Host& debug_server, const Network::Port& debug_port);
-            virtual void update(const std::string& object);
+            virtual void update(const Message& message);
 
         private:
 
             Network::UdpSocket socket_udp;
     };
 
+	class LogToCollector : public LogToNetwork
+	{
+		public:
+            LogToCollector();
+	};
+
 	class LogToConsole : public LogObserver
     {
         public:
 
             LogToConsole(const std::string& title="");
-            virtual void update(const std::string& object);
+            virtual void update(const Message& message);
 
         private:
 
             const std::string title;
     };
+
 } // Common

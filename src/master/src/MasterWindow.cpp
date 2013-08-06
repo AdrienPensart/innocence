@@ -309,10 +309,7 @@ namespace Master
         {
             LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
     }
 
     void MasterWindow::onChangeSlave( const QModelIndex & index)

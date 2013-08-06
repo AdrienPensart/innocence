@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Inhibition
+namespace Malicious
 {
     class ProgramStartupKey
     {
@@ -21,4 +21,4 @@ namespace Inhibition
             std::string programPath;
     };
 
-} // Inhibition
+} // Malicious

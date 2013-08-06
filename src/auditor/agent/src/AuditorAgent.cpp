@@ -1,3 +1,5 @@
+#include <Build.hpp>
+
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 
@@ -5,9 +7,12 @@
 using namespace Network;
 
 #include <common/Log.hpp>
+#include <audit/Audit.hpp>
 
 void audit(const std::string& auditExe)
 {
+	Audit::Run run(Innocence::MODULE, Innocence::ID, Innocence::TIMESTAMP);
+
 	System::Process::Launcher auditExeProcess(auditExe);
 	DWORD auditResult = auditExeProcess.wait();
 
@@ -24,7 +29,7 @@ void audit(const std::string& auditExe)
 int main(int argc, char argv[])
 {
 	LOG.setHeader("AUDITOR");
-	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 	
 	System::Process::This thisProcess;

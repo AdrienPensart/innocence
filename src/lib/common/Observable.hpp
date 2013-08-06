@@ -15,7 +15,7 @@ namespace Common
             {
                 for(std::list<Observer *>::iterator iter = observers.begin(); iter != observers.end(); ++iter)
                 {
-                    delete *iter;;
+                    delete *iter;
                 }
             }
 

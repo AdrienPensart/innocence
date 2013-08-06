@@ -7,7 +7,7 @@ namespace Malicious
 {
     void SetDebugPrivileges()
     {
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
 
 	    TOKEN_PRIVILEGES Debug_Privileges;
 	    if (!LookupPrivilegeValue (NULL, // Privieleges for the local system
@@ -51,7 +51,7 @@ namespace Malicious
 
 	void inject(DWORD pid, std::string dll)
 	{
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
 
 		// l'adresse de LoadLibraryA est la même dans tous les processus
 		// donc la fonction pourra correctement s'exécuter dans l'espace 

@@ -29,7 +29,7 @@ int run(int argc, char ** argv)
 int main(int argc, char * argv[])
 {
 	LOG.setHeader("MASTER");
-	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 #ifdef _WIN32
 	System::Process::This thisProcess;
@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     LOG.setHeader("MASTER");
-	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToCollector);
 
     // administrator rights are preferred to execute the Server
     System::Process::This thisProcess;

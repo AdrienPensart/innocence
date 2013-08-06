@@ -141,7 +141,7 @@ namespace Malicious
 
     void ProcessHider::stopService()
     {
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
         SERVICE_STATUS status;
         ControlService(service, SERVICE_CONTROL_STOP, &status);
         if(!DeleteService(service)) 

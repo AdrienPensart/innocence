@@ -49,10 +49,7 @@ namespace Master
         {
             LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         LOG << "Ending listening thread";
     }
 

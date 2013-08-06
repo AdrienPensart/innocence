@@ -2,18 +2,14 @@
 	#include <windows.h>
 #endif
 
-#include <common/Log.hpp>
-#include <ctime>
+#include <typeinfo>
+
+#include "Log.hpp"
+#include "Message.hpp"
+
 
 namespace Common
 {
-	std::string genTime()
-	{
-		time_t now = time(0);
-		const char * dt = ctime(&now);
-		return dt;
-	}
-
 	std::string genCallStack(const CallStack& callStack)
 	{
 		std::string graph;
@@ -26,81 +22,6 @@ namespace Common
             }
         }
 		return graph;
-	}
-
-	unsigned int Message::id = 0;
-
-	Message::Message(const std::string& contentArg, const CallStack& callStackArg) : 
-		content(contentArg),
-		callStack(genCallStack(callStackArg)),
-		emittedTime(genTime())
-	{
-	}
-
-	const std::string& Message::getContent() const
-	{
-		return content;
-	}
-
-	const std::string& Message::getCallStack() const
-	{
-		return callStack;
-	}
-
-	std::string Message::build()
-	{
-		return "not implemented";
-	}
-
-	ExceptionMessage::ExceptionMessage(const std::string& typeArg, const std::string& contentArg, const CallStack& callStackArg) : 
-		Message(contentArg, callStackArg),
-		type(typeArg)
-	{
-	}
-
-	std::string ExceptionMessage::build()
-	{
-		return "not implemented";
-	}
-
-	const std::string& ExceptionMessage::getType() const
-	{
-		return type;
-	}
-
-	Audit::Audit(const std::string& moduleArg, const unsigned int& buildIdArg, const std::string& buildDateArg) :
-		module(moduleArg),
-		buildId(buildIdArg),
-		buildDate(buildDateArg),
-		startedAt(genTime())
-	{
-	}
-
-	Audit::~Audit()
-	{
-	}
-
-	void Audit::addMessage(const Message& message)
-	{
-		messages.push_back(message);
-	}
-
-	std::string Audit::build()
-	{
-		return "not implemented";
-	}
-
-	GlobalAudit::GlobalAudit()
-	{
-	}
-
-	GlobalAudit::~GlobalAudit()
-	{
-	}
-
-	std::string GlobalAudit::build()
-	{
-		return "not implemented";
 	}
 
 	Log Log::lout;
@@ -125,30 +46,30 @@ namespace Common
         functions.pop_back();
     }
 
-    void Log::setHeader(const std::string& _header)
+    void Log::setHeader(const std::string& headerArg)
     {
-        header = _header;
+        header = headerArg;
     }
     
+	const std::string& Log::getHeader() const
+	{
+		return header;
+	}
+
     Log& Log::operator << (const std::string& object)
     {
-        std::string graph;
-        // parcourt des appels de function
-        for(unsigned int indexFunctions = 0; indexFunctions != functions.size(); indexFunctions++)
-        {
-            graph += functions[indexFunctions];
-            if(indexFunctions + 1 != functions.size())
-            {
-                graph += ":";
-            }
-        }
-        notify(header + " -> " + graph + " : " + object + '\n');
+        std::string graph = genCallStack(functions);
+		Message message(object, graph);
+        notify(message);
         return *this;
     }
     
-	void Log::sendRaw(const std::string& object)
+	Log& Log::operator << (Exception& e)
 	{
-		notify(object);
+		std::string graph = genCallStack(functions);
+		ExceptionMessage message(typeid(e).name(), e.what(), graph);
+		notify(message);
+		return *this;
 	}
 
     ScopedLog::ScopedLog(const std::string& log):

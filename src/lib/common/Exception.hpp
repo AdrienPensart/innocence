@@ -16,7 +16,7 @@ namespace Common
 			
         protected:
 
-			void setMessage(const std::string msg);
+			//void setMessage(const std::string msg);
 
 		private:
 

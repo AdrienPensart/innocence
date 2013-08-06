@@ -1,5 +1,5 @@
 set(AUDITOR_SERVER_TARGET "auditor_server")
 file(GLOB_RECURSE ${AUDITOR_SERVER_TARGET}_source_files src/*)
 add_executable(${AUDITOR_SERVER_TARGET} ${auditor_server_source_files})
-target_link_libraries(${AUDITOR_SERVER_TARGET} system network common)
+target_link_libraries(${AUDITOR_SERVER_TARGET} audit system network common)
 set_target_properties(${AUDITOR_SERVER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS "-DPROJECT_MODULE=${AUDITOR_SERVER_TARGET}")

@@ -27,10 +27,7 @@ int run(int argc, char ** argv)
     {
         cout << e.what() << endl;
     }
-    catch(...)
-    {
-		cout << "Unknown exception";
-    }
+    CATCH_UNKNOWN_EXCEPTION
     return returnValue;
 }
 

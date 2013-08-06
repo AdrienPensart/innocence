@@ -18,9 +18,9 @@ namespace Network
 	{
 		public:
 	        
-			SocketException(SocketHandleImpl sock, const std::string& msgArg)
+			SocketException(SocketHandleImpl sock, const std::string& msgArg) : 
+				Exception(msgArg + " " + getLastError() + "\n")
 			{
-				setMessage(msgArg + " " + getLastError() + "\n");
 			}
 			
 			virtual ~SocketException() throw(){}

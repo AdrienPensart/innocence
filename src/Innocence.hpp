@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Build.hpp"
+//#include <Build.hpp>
 #include <network/Types.hpp>
 #include <network/Timeout.hpp>
 
@@ -9,7 +9,8 @@ namespace Innocence
     enum
 	{
 		CONNECTION_INFO_SIZE = 256,
-		AUDIT_COLLECTOR_PORT = 80
+		LOG_COLLECTOR_PORT = 80,
+		AUDIT_SERVER_PORT = 81
 	};
     
     struct ConnectionInfo
@@ -28,7 +29,8 @@ namespace Innocence
 	#define SEPERATOR ':'
 	
 	// AUDITOR AGENT & SERVER CONFIG
-	static const char * AUDIT_COLLECTOR_IP = "127.0.0.1";
+	static const char * LOG_COLLECTOR_IP = "127.0.0.1";
+	static const char * AUDIT_SERVER_IP = "127.0.0.1";
 
 	static const char * PIPE_AUDIT_HEADER = "AUDIT PIPE";
 	static const char * PIPE_AUDIT_PIPE_NAME = "\\\\.\\pipe\\audit_pipe";

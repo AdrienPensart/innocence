@@ -12,19 +12,13 @@ int main(int argc, char *argv[])
 	try
 	{
 		LOG.setHeader(Innocence::ELEVATOR_AUDIT_HEADER);
-		LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
-
+		LOG.addObserver(new Common::LogToCollector);
 		System::Process::This thisProcess;
-
 		return elevate(thisProcess.getProgramDir()+"\\isadmin.exe");
     }
-    catch(std::exception& e)
+    catch(Common::Exception&)
     {
-        LOG << e.what();
     }
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_FAILURE;
 }

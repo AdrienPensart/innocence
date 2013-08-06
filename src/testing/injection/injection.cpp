@@ -1,5 +1,8 @@
 //#define WINVER 0x0500
 //#define _WIN32_WINNT 0x0500
+//#define _WIN32_WINNT _WIN32_WINNT_WINXP
+
+#include <audit/Audit.hpp>
 
 #include <common/Log.hpp>
 using namespace Common;
@@ -20,10 +23,8 @@ int main(int argc, char * argv[])
 	try
 	{
 		LOG.setHeader(Innocence::INJECTION_AUDIT_HEADER);
-        LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
+        LOG.addObserver(new Common::LogToCollector);
 		LOG.addObserver(new Common::LogToConsole);
-
-		// #define _WIN32_WINNT _WIN32_WINNT_WINXP
 		
 		System::Process::This thisProcess;		
         Malicious::InternetExplorer ie(false);
@@ -66,13 +67,9 @@ int main(int argc, char * argv[])
 			LOG << "IE well killed from DLL";
 		}
     }
-    catch(std::exception& e)
+    catch(Common::Exception&)
     {
-        LOG << e.what();
     }
-	catch(...)
-	{
-		LOG << "Unknow exception from injection main";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }

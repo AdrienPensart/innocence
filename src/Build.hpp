@@ -1,6 +1,6 @@
 #pragma once
 
-#define BUILD 15
+#define BUILD 36
 
 namespace Innocence
 {
@@ -10,7 +10,7 @@ namespace Innocence
 	static const char * MODULE = "undefined project module";
 #endif
 
-	static const char * ID = "BUILD";
+	static unsigned int ID = BUILD;
 	static const char * DATE = "__DATE__";
 	static const char * TIME = "__TIME__";
 	static const char * TIMESTAMP = "__TIMESTAMP__";

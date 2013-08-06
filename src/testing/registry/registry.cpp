@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
 {
     static const char * RUN_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
 	LOG.setHeader(Innocence::REGISTRE_AUDIT_HEADER);
-    LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
+    LOG.addObserver(new Common::LogToCollector);
 	try
 	{
         LOG << "Program dir : " + toString(argv[0]);
@@ -22,13 +22,9 @@ int main(int argc, char * argv[])
 
         startKey.removeValue("test");
 	}
-	catch(std::exception& e)
+	catch(Common::Exception&)
 	{
-		LOG << e.what();
 	}
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

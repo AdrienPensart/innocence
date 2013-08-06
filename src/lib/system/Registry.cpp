@@ -8,7 +8,7 @@ namespace System
 {
 	namespace Registry
 	{
-		RegistryError::RegistryError(const std::string& msg, long code)
+		std::string GenErrorMessage(const std::string& msg, long code)
 		{
 			std::string def = msg;
 			if(code != -1)
@@ -19,7 +19,12 @@ namespace System
 				def += " : ";
 				def += std::string(buff, buffSize);
 			}
-			setMessage(def);
+			return def;
+		}
+
+		RegistryError::RegistryError(const std::string& msg, long code) : 
+			Exception(GenErrorMessage(msg, code))
+		{
 		}
 
 		// code extrait de la MSDN

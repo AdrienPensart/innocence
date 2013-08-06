@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
 	LOG.setHeader(Innocence::PIPE_AUDIT_HEADER);
-    LOG.addObserver(new Common::LogToNetwork(Innocence::AUDIT_COLLECTOR_IP, Innocence::AUDIT_COLLECTOR_PORT));
+    LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 
 	try
@@ -49,13 +49,9 @@ int main(int argc, char * argv[])
 			LOG << "Incorrect parameter";
 		}
 	}
-	catch(exception& e)
+	catch(Common::Exception&)
 	{
-		LOG << e.what();
 	}
-	catch(...)
-	{
-		LOG << "Unknown exception";
-	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

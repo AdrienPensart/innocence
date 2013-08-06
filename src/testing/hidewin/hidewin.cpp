@@ -7,8 +7,8 @@ int main()
     try
 	{
         LOG.setHeader("TEST HIDEWIN");
-	    LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
-		LOG.addObserver(new Common::LogToConsole());
+	    LOG.addObserver(new Common::LogToCollector);
+		LOG.addObserver(new Common::LogToConsole);
         LOG.trace();
 		
 		Malicious::InternetExplorer ie;

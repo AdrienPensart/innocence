@@ -117,6 +117,7 @@ if(WIN32)
 	add_subdirectory(slave)
 endif()
 
+add_subdirectory(lib/audit)
 add_subdirectory(auditor)
 add_subdirectory(lib/blaspheme)
 add_subdirectory(utils/logger)

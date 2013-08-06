@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 	}
 	catch(...)
 	{
-		std::cout << "Unkown exception";
+		std::cout << "Unknown exception";
 	}
 	return EXIT_SUCCESS;
 }
