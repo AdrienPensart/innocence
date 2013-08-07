@@ -1,4 +1,5 @@
 #include "TcpServer.hpp"
+#include "SelectSet.hpp"
 #include "Interface.hpp"
 
 namespace Network
@@ -82,7 +83,7 @@ namespace Network
 	
     bool TcpServer::isThereConnection(Timeout to)
     {
-        return SelectSocket::SelectOnRead(*this, to);
+        return SelectSet::SelectOnRead(*this, to);
     }
     
     bool TcpServer::accept(TcpClient& client_sock)
@@ -118,7 +119,7 @@ namespace Network
     
     bool TcpServer::accept(TcpClient& client_sock, Timeout to)
     {
-        if (SelectSocket::SelectOnRead(*this, to))
+        if (SelectSet::SelectOnRead(*this, to))
         {
             return accept(client_sock);
         }

@@ -1,15 +1,13 @@
 #include <common/Log.hpp>
 #include <malicious/Screenshot.hpp>
-
-#include <iostream>
-using namespace std;
-using namespace Common;
 using namespace Malicious;
+
+#include <Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("SESSION");
-	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
+	LOG.setIdentity(Innocence::identity);
+	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
 
 	Screenshot sc;
 	sc.take("test.jpg", 100);

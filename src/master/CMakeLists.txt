@@ -36,8 +36,7 @@ add_executable(
 # target_link_libraries(${MASTER_TARGET} system common network blaspheme ${QT_LIBRARIES})# ${QT_JPEG_PLUGIN})
 QT5_USE_MODULES(${MASTER_TARGET} Widgets)
 target_link_libraries(${MASTER_TARGET} system_md common_md network_md blaspheme_md)
-add_definitions(-DPROJECTMODULE=${MASTER_TARGET})
-set_target_properties(${MASTER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
+set_target_properties(${MASTER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD} COMPILE_DEFINITIONS PROJECT_MODULE="${MASTER_TARGET}")
 
 if(WIN32 AND NOT UNIX)
 	install(PROGRAMS ${CMAKE_SOURCE_DIR}/utils/nc.exe DESTINATION innocence)

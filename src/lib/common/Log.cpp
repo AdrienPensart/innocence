@@ -2,11 +2,9 @@
 	#include <windows.h>
 #endif
 
-#include <typeinfo>
-
 #include "Log.hpp"
 #include "Message.hpp"
-
+#include <Identity.hpp>
 
 namespace Common
 {
@@ -24,6 +22,7 @@ namespace Common
 		return graph;
 	}
 
+	Innocence::Identity Log::identity;
 	Log Log::lout;
 
     Log::Log()
@@ -46,32 +45,19 @@ namespace Common
         functions.pop_back();
     }
 
-    void Log::setHeader(const std::string& headerArg)
+    void Log::setIdentity(const Innocence::Identity& identityArg)
     {
-        header = headerArg;
+        identity = identityArg;
     }
-    
-	const std::string& Log::getHeader() const
-	{
-		return header;
-	}
 
     Log& Log::operator << (const std::string& object)
     {
         std::string graph = genCallStack(functions);
-		Message message(object, graph);
+		Message message(identity, object, graph);
         notify(message);
         return *this;
     }
     
-	Log& Log::operator << (Exception& e)
-	{
-		std::string graph = genCallStack(functions);
-		ExceptionMessage message(typeid(e).name(), e.what(), graph);
-		notify(message);
-		return *this;
-	}
-
     ScopedLog::ScopedLog(const std::string& log):
     msg(log)
     {

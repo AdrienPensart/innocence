@@ -2,7 +2,6 @@
 #include <blaspheme/protocol/Session.hpp>
 
 #include <Innocence.hpp>
-using namespace Innocence;
 
 #include <iostream>
 using namespace std;
@@ -12,7 +11,7 @@ using namespace Blaspheme;
 
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("SESSION");
+	LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
 
 	if(argc != 2)
@@ -21,6 +20,7 @@ int main(int argc, char * argv[])
 		return EXIT_SUCCESS;
 	}
 	string arg = argv[1];
+	/*
 	if(arg == "connect")
 	{
 		LOG.setHeader("CONNECT");
@@ -29,8 +29,8 @@ int main(int argc, char * argv[])
 	{
 		LOG.setHeader("LISTEN");
 	}
-
-	ConnectionInfo info;
+	*/
+	Innocence::ConnectionInfo info;
 	info.ip = "127.0.0.1";
 	info.port = 80;
 	info.deadline.set(60);

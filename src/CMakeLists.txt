@@ -100,13 +100,14 @@ message(STATUS "ELEVATOR64_EXE_PATH = ${ELEVATOR64_EXE_PATH}")
 message(STATUS "ELEVATORDLL64_HPP_PATH = ${ELEVATORDLL64_HPP_PATH}")
 message(STATUS "ELEVATORDLL64_DLL_PATH = ${ELEVATORDLL64_DLL_PATH}")
 
+# generate build number
 add_custom_target(
 	innocence ALL "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
 	DEPENDS "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	COMMENT "Execute : ${BUILDNUMBER} ${CMAKE_SOURCE_DIR}/Build.hpp"
 	VERBATIM
-	SOURCES Build.hpp Innocence.hpp
+	SOURCES Build.hpp Innocence.hpp Identity.hpp Settings.hpp
 )
 
 add_subdirectory(lib/network)

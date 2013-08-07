@@ -4,10 +4,16 @@
 #include "Convert.hpp"
 #include "Observable.hpp"
 #include "LogObserver.hpp"
+#include <Identity.hpp>
 
 #include <string>
 #include <vector>
 #include <map>
+
+namespace Innocence
+{
+	class Identity;
+}
 
 namespace Common
 {
@@ -20,21 +26,17 @@ namespace Common
         public:
             
             void trace();
-            void setHeader(const std::string& header);
-			const std::string& getHeader()const;
+			static void setIdentity(const Innocence::Identity& identity);
             void enterFunction(const std::string& func);
             void leaveFunction();
-
             Log& operator << (const std::string& object);
-			Log& operator << (Exception& e);
-
 			static Log lout;
 
         private:
             
 			Log();
             bool tracing;
-            std::string header;
+			static Innocence::Identity identity;
             CallStack functions;
     };
     

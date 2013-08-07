@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
 	int exitCode = EXIT_FAILURE;
     try
 	{
-        LOG.setHeader(Innocence::STEALTH_AUDIT_HEADER);
+        LOG.setIdentity(Innocence::identity);
 	    LOG.addObserver(new Common::LogToCollector);
 		LOG.addObserver(new Common::LogToConsole);
 

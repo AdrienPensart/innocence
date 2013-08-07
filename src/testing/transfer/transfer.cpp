@@ -5,9 +5,7 @@
 using namespace Blaspheme;
 using namespace Network;
 
-#include <iostream>
-#include <cstdlib>
-using namespace std;
+#include <Innocence.hpp>
 
 class TransferShow : public TransferObserver
 {
@@ -15,13 +13,13 @@ class TransferShow : public TransferObserver
 
 		void update(const TransferDescriptor& td)
 		{
-			cout << td.percentage << '\n';
+			LOG << toString(td.percentage);
 		}
 };
 
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("TEST TRANSFER");
+	LOG.setIdentity(Innocence::identity);
     LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 	try

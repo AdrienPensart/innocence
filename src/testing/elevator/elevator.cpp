@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
 	try
 	{
-		LOG.setHeader(Innocence::ELEVATOR_AUDIT_HEADER);
+		LOG.setIdentity(Innocence::identity);
 		LOG.addObserver(new Common::LogToCollector);
 		System::Process::This thisProcess;
 		return elevate(thisProcess.getProgramDir()+"\\isadmin.exe");

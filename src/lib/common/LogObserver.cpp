@@ -1,19 +1,41 @@
 #include "LogObserver.hpp"
-#include <Innocence.hpp>
+#include "Log.hpp"
+#include <Settings.hpp>
+
 #include <iostream>
 
 namespace Common
 {
-	LogToNetwork::LogToNetwork(const Network::Host& _debug_server, const Network::Port& _debug_port)
+	LogToNetwork::LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort)
     {
-        socket_udp.setDestInfo(_debug_server, _debug_port);
+        //socket.setDestInfo(loggerIp, loggerPort);
+		connected = socket.connect(loggerIp, loggerPort);
+		if(!connected)
+		{
+			LOG << "Failed to connect to network observer on " + loggerIp + ":" + toString(loggerPort);
+		}
     }
 
     void LogToNetwork::update(const Message& message)
     {
-        socket_udp << message.build();
+		try
+		{
+			if(connected)
+			{
+				socket << message.getContent() + '\n';
+			}
+		}
+		catch(Network::Deconnection&)
+		{
+			connected = false;
+		}
     }
     
+	Network::Stream&  LogToNetwork::getStream()
+	{
+		return socket;
+	}
+
 	LogToCollector::LogToCollector() : 
 		LogToNetwork(Innocence::LOG_COLLECTOR_IP, Innocence::LOG_COLLECTOR_PORT)
     {
@@ -31,7 +53,7 @@ namespace Common
 
     void LogToFile::update(const Message& message)
     {
-        file << message.build();
+		file << message.getContent();
     }
     
     LogToConsole::LogToConsole(const std::string& _title)
@@ -41,7 +63,7 @@ namespace Common
 
     void LogToConsole::update(const Message& message)
     {
-		std::cout << message.build();
+		std::cout << message.getContent() << '\n';
     }
 
 } // Common

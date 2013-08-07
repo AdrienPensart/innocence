@@ -1,4 +1,5 @@
 #include "TcpClient.hpp"
+#include "SelectSet.hpp"
 #include "Interface.hpp"
 
 namespace Network
@@ -126,7 +127,7 @@ namespace Network
             throw SocketException(this->getDescriptor(), "TcpClient::Send : size of object is 0");
         }
 
-        if(SelectSocket::SelectOnWrite(*this, to))
+        if(SelectSet::SelectOnWrite(*this, to))
         {
             int returnChar = bsd_send(sockethandle, object, sizeOfObject, 0);
             if(returnChar == SOCK_ERROR)
@@ -159,7 +160,7 @@ namespace Network
         {
             throw SocketException(this->getDescriptor(), "TcpClient::Recv : size of object is 0");
         }
-        if(SelectSocket::SelectOnRead(*this, to))
+        if(SelectSet::SelectOnRead(*this, to))
         {
             int returnChar = bsd_recv(sockethandle, object, sizeOfObject, 0);
             if(returnChar == SOCK_ERROR)
@@ -199,5 +200,10 @@ namespace Network
 	int TcpClient::recv(std::string& object, char delimiter, bool include)
 	{
 		return Stream::recv(object, delimiter, include);
+	}
+
+	int TcpClient::recv(std::string& object, char delimiter, Timeout to, bool include)
+	{
+		return Stream::recv(object, delimiter, to, include);
 	}
 }

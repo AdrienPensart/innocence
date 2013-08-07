@@ -15,7 +15,7 @@ DWORD WINAPI Run(void)
 {
     try
 	{
-        LOG.setHeader(Innocence::ISINJECTED_AUDIT_HEADER);
+        LOG.setIdentity(Innocence::identity);
         LOG.addObserver(new Common::LogToCollector);
 		
 		System::Process::This thisProcess;

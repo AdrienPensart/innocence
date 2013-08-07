@@ -1,5 +1,5 @@
 #include "UdpSocket.hpp"
-#include "Select.hpp"
+#include "SelectSet.hpp"
 
 #include <string>
 using std::string;
@@ -69,7 +69,7 @@ namespace Network
         acquire();
         
         int returnChar = 0;
-        if(SelectSocket::SelectOnWrite(*this, to))
+        if(SelectSet::SelectOnWrite(*this, to))
         {
             returnChar = sendto(sockethandle,object,sizeOfObject,0,(Addr *)&attachedAddr,sizeof(sockaddr_in));
             if (returnChar == SOCK_ERROR)
@@ -98,7 +98,7 @@ namespace Network
         acquire();
         
         int returnChar = 0;
-        if(SelectSocket::SelectOnRead(*this, to))
+        if(SelectSet::SelectOnRead(*this, to))
         {
             socklen_t sin_size = sizeof(AddrIn);
             returnChar = recvfrom(sockethandle, object, sizeOfObject, 0,(Addr *)&attachedAddr, &sin_size);

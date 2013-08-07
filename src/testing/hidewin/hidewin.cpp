@@ -2,11 +2,13 @@
 #include <common/Log.hpp>
 using namespace Malicious;
 
+#include <Innocence.hpp>
+
 int main()
 {
     try
 	{
-        LOG.setHeader("TEST HIDEWIN");
+        LOG.setIdentity(Innocence::identity);
 	    LOG.addObserver(new Common::LogToCollector);
 		LOG.addObserver(new Common::LogToConsole);
         LOG.trace();

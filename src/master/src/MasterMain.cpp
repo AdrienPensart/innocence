@@ -8,7 +8,7 @@
 
 int run(int argc, char ** argv)
 {
-    int returnValue;
+    int returnValue = EXIT_FAILURE;
     try
     {
         QApplication app(argc, argv);
@@ -16,11 +16,7 @@ int run(int argc, char ** argv)
         master.show();
         returnValue = app.exec();
     }
-    catch(...)
-    {
-        LOG << "Unkown exception";
-        return EXIT_FAILURE;
-    }
+	CATCH_UNKNOWN_EXCEPTION
     return returnValue;
 }
 
@@ -28,9 +24,9 @@ int run(int argc, char ** argv)
 #ifdef INNOCENCE_DEBUG
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("MASTER");
-	LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToConsole);
+	LOG.addObserver(new Common::LogToCollector);
 #ifdef _WIN32
 	System::Process::This thisProcess;
     if(!System::isAdministrator())
@@ -47,7 +43,7 @@ int main(int argc, char * argv[])
 #else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    LOG.setHeader("MASTER");
+    LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToCollector);
 
     // administrator rights are preferred to execute the Server

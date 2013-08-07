@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-	LOG.setHeader(Innocence::PIPE_AUDIT_HEADER);
+	LOG.setIdentity(Innocence::identity);
     LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 

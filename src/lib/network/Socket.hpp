@@ -5,8 +5,6 @@
 
 namespace Network
 {
-	typedef UnexpectedEvent Deconnection;
-
     /**
      * Représente un socket basique, sans protocole particulier associé, cette
      * classe sert de base à TcpSocket, UdpSocket et RawSocket

@@ -11,7 +11,7 @@ using namespace Network;
 
 void audit(const std::string& auditExe)
 {
-	Audit::Run run(Innocence::MODULE, Innocence::ID, Innocence::TIMESTAMP);
+	Audit::Run run(Innocence::identity.getModule(), Innocence::identity.getBuildId(), Innocence::identity.getBuildTimestamp());
 
 	System::Process::Launcher auditExeProcess(auditExe);
 	DWORD auditResult = auditExeProcess.wait();
@@ -28,7 +28,7 @@ void audit(const std::string& auditExe)
 
 int main(int argc, char argv[])
 {
-	LOG.setHeader("AUDITOR");
+	LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 	

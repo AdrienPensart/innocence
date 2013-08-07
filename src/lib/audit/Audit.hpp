@@ -1,7 +1,6 @@
 #pragma once
 
 #include <common/LogObserver.hpp>
-
 #include <common/Message.hpp>
 #include <vector>
 
@@ -11,30 +10,33 @@ namespace Audit
 	{
 		public:
 			
-			Run(std::string module, unsigned int buildId, std::string buildDate);
+			Run(const std::string& module, const std::string& buildId, const std::string& buildDate);
 			virtual ~Run();
 			void addMessage(const Common::Message& message);
 			virtual std::string build();
+			const std::string& getModule() const;
+			const std::string& getBuildId() const;
+			const std::string& getBuildDate() const;
 
 		private:
 
-			const unsigned int buildId;
+			const std::string buildId;
 			const std::string buildDate;
 			const std::string module;
 			std::vector<Common::Message> messages;
 			const std::string startedAt;
 	};
 
-	class LogToAuditor : public Common::LogObserver
+	class LogToAuditor : public Common::LogToNetwork
 	{
 		public:
 
-            LogToAuditor(Run& run);
+            LogToAuditor();
             virtual void update(const Common::Message& message);
 
         private:
 
-            Run& run;
+            //Run& run;
 	};
 
 	class GlobalAudit
@@ -43,6 +45,7 @@ namespace Audit
 			
 			GlobalAudit();
 			virtual ~GlobalAudit();
+			void addRun(const Run& run);
 			virtual std::string build();
 
 		private:

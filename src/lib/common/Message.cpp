@@ -3,6 +3,8 @@
 
 #include <ctime>
 
+#include <Identity.hpp>
+
 namespace Common
 {
 	std::string genTime()
@@ -14,14 +16,11 @@ namespace Common
 
 	unsigned int Message::id = 0;
 
-	Message::Message(const std::string& contentArg, const std::string& callStackArg) : 
+	Message::Message(const Innocence::Identity& identityArg, const std::string& contentArg, const std::string& callStackArg) : 
+		identity(identityArg),
 		content(contentArg),
 		callStack(callStackArg),
 		emittedTime(genTime())
-	{
-	}
-
-	Message::~Message()
 	{
 	}
 
@@ -35,24 +34,4 @@ namespace Common
 		return callStack;
 	}
 
-	std::string Message::build() const
-	{
-		return LOG.getHeader() + " -> " + getCallStack() + " : " + getContent() + "\n";
-	}
-
-	ExceptionMessage::ExceptionMessage(const std::string& typeArg, const std::string& contentArg, const std::string& callStackArg) : 
-		Message(contentArg, callStackArg),
-		type(typeArg)
-	{
-	}
-
-	std::string ExceptionMessage::build() const
-	{
-		return LOG.getHeader() + " -> " + getCallStack() + " : " + getContent() + "\n";
-	}
-
-	const std::string& ExceptionMessage::getType() const
-	{
-		return type;
-	}
 } // Common

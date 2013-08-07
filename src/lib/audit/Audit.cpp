@@ -1,9 +1,10 @@
 #include "Audit.hpp"
+#include <Innocence.hpp>
 #include <common/Log.hpp>
 
 namespace Audit
 {
-	Run::Run(std::string moduleArg, unsigned int buildIdArg, std::string buildDateArg) :
+	Run::Run(const std::string& moduleArg, const std::string& buildIdArg, const std::string& buildDateArg) :
 		module(moduleArg),
 		buildId(buildIdArg),
 		buildDate(buildDateArg),
@@ -13,6 +14,21 @@ namespace Audit
 
 	Run::~Run()
 	{
+	}
+
+	const std::string& Run::getModule() const
+	{
+		return module;
+	}
+
+	const std::string& Run::getBuildId() const
+	{
+		return buildId;
+	}
+
+	const std::string& Run::getBuildDate() const
+	{
+		return buildDate;
 	}
 
 	void Run::addMessage(const Common::Message& message)
@@ -25,14 +41,14 @@ namespace Audit
 		return "not implemented";
 	}
 
-	LogToAuditor::LogToAuditor(Run& runArg) : 
-		run(runArg)
+	LogToAuditor::LogToAuditor() : 
+		LogToNetwork(Innocence::AUDIT_SERVER_IP, Innocence::AUDIT_SERVER_PORT)
 	{
 	}
 
     void LogToAuditor::update(const Common::Message& message)
 	{
-		run.addMessage(message);
+		//run.addMessage(message);
 	}
 
 	GlobalAudit::GlobalAudit()
@@ -41,6 +57,11 @@ namespace Audit
 
 	GlobalAudit::~GlobalAudit()
 	{
+	}
+
+	void GlobalAudit::addRun(const Run& run)
+	{
+		audits.push_back(run);
 	}
 
 	std::string GlobalAudit::build()

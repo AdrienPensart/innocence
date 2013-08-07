@@ -2,9 +2,11 @@
 #include <malicious/FastSmtp.hpp>
 using namespace std;
 
+#include <Innocence.hpp>
+
 int main(int argc, char * argv[])
 {
-	LOG.setHeader("TEST MAIL");
+	LOG.setIdentity(Innocence::identity);
     LOG.addObserver(new Common::LogToCollector);
 	try
 	{

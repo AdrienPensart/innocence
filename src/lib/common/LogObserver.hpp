@@ -2,7 +2,7 @@
 
 #include "Message.hpp"
 
-#include <network/UdpSocket.hpp>
+#include <network/TcpClient.hpp>
 #include <fstream>
 
 namespace Common
@@ -31,12 +31,14 @@ namespace Common
     {
         public:
 
-            LogToNetwork(const Network::Host& debug_server, const Network::Port& debug_port);
+            LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort);
             virtual void update(const Message& message);
+			Network::Stream& getStream();
 
         private:
 
-            Network::UdpSocket socket_udp;
+			bool connected;
+            Network::TcpClient socket;
     };
 
 	class LogToCollector : public LogToNetwork

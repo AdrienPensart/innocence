@@ -1,5 +1,5 @@
 #include "Stream.hpp"
-#include "Select.hpp"
+#include "SelectSet.hpp"
 
 namespace Network
 {
@@ -97,6 +97,30 @@ namespace Network
         }
         return received_char;
     }
+
+	int Stream::recv(std::string& object, char delimiter, Timeout to, bool include)
+	{
+		object.clear();
+        char last;
+        for(;;)
+        {
+            if(!recv(&last, 1, to))
+            {
+                break;
+            }
+            if(last != delimiter)
+            {
+                object += last;
+            }
+            else
+            {
+                if(include)
+                    object+=delimiter;
+                break;
+            }
+        }
+		return object.size();
+	}
 
     int Stream::recv(std::string& object, char delimiter, bool include)
     {

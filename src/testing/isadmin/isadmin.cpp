@@ -8,7 +8,7 @@ using namespace System;
 
 int main(int argc, char *argv[])
 {
-	LOG.setHeader(Innocence::ISADMIN_AUDIT_HEADER);
+	LOG.setIdentity(Innocence::identity);
 	LOG.addObserver(new Common::LogToCollector);
 	LOG.addObserver(new Common::LogToConsole);
 	if(isAdministrator())

@@ -51,7 +51,8 @@ namespace Network
             /**
              * Reception d'une chaine de caractere jusqu'au caractère c
              */
-            virtual int recv(std::string& object, char delimiter, bool include=false);
+			virtual int recv(std::string& object, char delimiter, bool include=false);
+            virtual int recv(std::string& object, char delimiter, Timeout to, bool include=false);
             
 		    /**
 		     * Renvoi la taille du buffer d'envoi / réception (optimisation)

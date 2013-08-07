@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Socket.hpp"
-#include "Select.hpp"
 
 namespace Network
 {
