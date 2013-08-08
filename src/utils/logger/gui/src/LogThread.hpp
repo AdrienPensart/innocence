@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QThread>
-#include <common/LogServer.hpp>
-#include <common/Message.hpp>
-using Common::Message;
+#include <log/LogServer.hpp>
+#include <log/Message.hpp>
+using Log::Message;
 
 class LogThread : public QThread
 {
@@ -22,15 +22,15 @@ class LogThread : public QThread
             
 	private:
        
-		Common::LogServer logserver;
+		Log::LogServer logserver;
 };
 
-class LogToGui : public Common::LogObserver
+class LogToGui : public Log::LogObserver
 {
     public:
 
         LogToGui(LogThread * logThread);
-        virtual void update(const Common::Message& message);
+        virtual void update(const Message& message);
 
     private:
 	

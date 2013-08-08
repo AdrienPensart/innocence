@@ -12,7 +12,7 @@
 #include "PasswordsDialog.hpp"
 #include "EditSlaveDialog.hpp"
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpClient.hpp>
 

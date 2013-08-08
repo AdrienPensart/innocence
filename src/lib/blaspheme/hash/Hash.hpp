@@ -11,7 +11,7 @@ namespace Blaspheme
 
 		    MD5 md5;
             std::string hashit(const char * chunk, size_t size);
-		    std::string convToString(unsigned char *bytes);
+		    std::string convert(unsigned char *bytes);
 
 	    public:
 

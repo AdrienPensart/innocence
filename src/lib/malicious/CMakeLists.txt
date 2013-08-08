@@ -41,4 +41,4 @@ add_custom_command(
 	COMMENT "Generating ${ELEVATORDLL64_HPP_PATH} WITH ${ELEVATORDLL64_DLL_PATH}"
 )
 
-target_link_libraries(malicious common system myjpeg)
+target_link_libraries(malicious log network system myjpeg)

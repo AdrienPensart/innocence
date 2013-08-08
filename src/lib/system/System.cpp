@@ -398,7 +398,7 @@ namespace System
 			}
 
 			systemString += " (build ";
-			systemString += toString(osvi.dwBuildNumber);
+			systemString += Common::toString(osvi.dwBuildNumber);
 			systemString += ")";
 			if ( osvi.dwMajorVersion >= 6 )
 			{

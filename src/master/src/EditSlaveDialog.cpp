@@ -1,9 +1,9 @@
 #include "EditSlaveDialog.hpp"
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <system/File.hpp>
 using namespace std;
 
@@ -78,18 +78,18 @@ namespace Master
         }
         
         std::string new_client_name = destinationSlaveNameEdit->text().toStdString();
-        std::string new_port = toString(destinationMasterPortEdit->value());
+        std::string new_port = Common::toString(destinationMasterPortEdit->value());
         std::string new_server = destinationMasterIpEdit->text().toStdString();
         std::string new_password = destinationSlavePasswordEdit->text().toStdString();
 
         string buffer = new_server + SEPERATOR + new_port + SEPERATOR + new_client_name + SEPERATOR + new_password + MARKER;
         
-		if(buffer.size() >= Innocence::CONNECTION_INFO_SIZE - MARKER_SIZE)
+		if(buffer.size() >= Common::CONNECTION_INFO_SIZE - MARKER_SIZE)
         {
             QMessageBox::critical(this, windowTitle(),tr("Les informations que vous avez entrées sont trop longues."));
         }
         
-        for(size_t index = begin_info ; index != begin_info + Innocence::CONNECTION_INFO_SIZE - MARKER_SIZE ; index++)
+        for(size_t index = begin_info ; index != begin_info + Common::CONNECTION_INFO_SIZE - MARKER_SIZE ; index++)
         {
             content_exe[index] = '\0';
         }

@@ -1,6 +1,5 @@
-#include <common/Log.hpp>
-#include <Innocence.hpp>
-using namespace Innocence;
+#include <log/Log.hpp>
+#include <common/Innocence.hpp>
 
 #include <blaspheme/protocol/Authentication.hpp>
 using namespace Network;
@@ -9,18 +8,19 @@ using namespace Network;
 
 namespace Blaspheme
 {
-	AuthenticationMethod::AuthenticationMethod(const ConnectionInfo& infoArg) :
+	AuthenticationMethod::AuthenticationMethod(const Common::ConnectionInfo& infoArg) :
 		info(infoArg)
 	{
 	}
 
-	const ConnectionInfo& AuthenticationMethod::getInfo()
+	const Common::ConnectionInfo& AuthenticationMethod::getInfo()
 	{
 		return info;
 	}
 
 	bool NoAuthentication::sendAuth(Session&)
 	{
+		TRACE_FUNCTION
 		LOG << "No authentication plugin";
 		return true;
 	}
@@ -32,7 +32,7 @@ namespace Blaspheme
 		return true;
 	}
 
-    StringBasedAuth::StringBasedAuth(const ConnectionInfo& infoArg) : 
+    StringBasedAuth::StringBasedAuth(const Common::ConnectionInfo& infoArg) : 
 		AuthenticationMethod(infoArg)
     {
     }
@@ -75,7 +75,7 @@ namespace Blaspheme
         return false;
     }
 
-	ChallengedBasedAuth::ChallengedBasedAuth(const ConnectionInfo& infoArg) : 
+	ChallengedBasedAuth::ChallengedBasedAuth(const Common::ConnectionInfo& infoArg) : 
 		AuthenticationMethod(infoArg)
 	{
 	}

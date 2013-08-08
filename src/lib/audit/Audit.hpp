@@ -1,7 +1,7 @@
 #pragma once
 
-#include <common/LogObserver.hpp>
-#include <common/Message.hpp>
+#include <log/LogObserver.hpp>
+#include <log/Message.hpp>
 #include <vector>
 
 namespace Audit
@@ -12,7 +12,7 @@ namespace Audit
 			
 			Run(const std::string& module, const std::string& buildId, const std::string& buildDate);
 			virtual ~Run();
-			void addMessage(const Common::Message& message);
+			void addMessage(const Log::Message& message);
 			virtual std::string build();
 			const std::string& getModule() const;
 			const std::string& getBuildId() const;
@@ -23,16 +23,16 @@ namespace Audit
 			const std::string buildId;
 			const std::string buildDate;
 			const std::string module;
-			std::vector<Common::Message> messages;
+			std::vector<Log::Message> messages;
 			const std::string startedAt;
 	};
 
-	class LogToAuditor : public Common::LogToNetwork
+	class LogToAuditor : public Log::LogToNetwork
 	{
 		public:
 
             LogToAuditor();
-            virtual void update(const Common::Message& message);
+            virtual void update(const Log::Message& message);
 
         private:
 

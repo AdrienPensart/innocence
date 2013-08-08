@@ -11,10 +11,10 @@ namespace Blaspheme
 	    md5.MD5Update(&ctx, (unsigned char*)chunk, size);
 	    unsigned char buff[16] = "";	
 	    md5.MD5Final((unsigned char*)buff,&ctx);
-	    return convToString(buff);	
+	    return convert(buff);	
     }
 
-    std::string Hash::convToString(unsigned char *bytes)
+    std::string Hash::convert(unsigned char *bytes)
     {
 	    char asciihash[33];
 
@@ -62,7 +62,7 @@ namespace Blaspheme
 	    */
 	    md5.MD5Final (digest, &context);
  	    fclose (file);
-	    return convToString(digest);
+	    return convert(digest);
     }	
 
-} /* Blaspheme */
+} // Blaspheme

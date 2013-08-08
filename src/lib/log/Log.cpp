@@ -2,11 +2,12 @@
 	#include <windows.h>
 #endif
 
+#include <common/Identity.hpp>
+
 #include "Log.hpp"
 #include "Message.hpp"
-#include <Identity.hpp>
 
-namespace Common
+namespace Log
 {
 	std::string genCallStack(const CallStack& callStack)
 	{
@@ -22,35 +23,35 @@ namespace Common
 		return graph;
 	}
 
-	Innocence::Identity Log::identity;
-	Log Log::lout;
+	Common::Identity Lout::identity;
+	Lout Lout::lout;
 
-    Log::Log()
+    Lout::Lout()
         : tracing(false)
     {
     }
     
-    void Log::trace()
+    void Lout::trace()
     {
         tracing = true;
     }
 
-    void Log::enterFunction(const std::string& func)
+    void Lout::enterFunction(const std::string& func)
     {
         functions.push_back(func);
     }
 
-    void Log::leaveFunction()
+    void Lout::leaveFunction()
     {
         functions.pop_back();
     }
 
-    void Log::setIdentity(const Innocence::Identity& identityArg)
+    void Lout::setIdentity(const Common::Identity& identityArg)
     {
         identity = identityArg;
     }
 
-    Log& Log::operator << (const std::string& object)
+    Lout& Lout::operator << (const std::string& object)
     {
         std::string graph = genCallStack(functions);
 		Message message(identity, object, graph);
@@ -78,7 +79,7 @@ namespace Common
     {
         LOG.leaveFunction();
     }
-} // Common
+} // Log
 
 /*
 

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Identity.hpp>
+#include "Identity.hpp"
 
-namespace Innocence
+namespace Common
 {
 
-#define BUILD 41
+#define BUILD 54
 
 #define Q(x) #x
 #define QUOTE(x) Q(x)
@@ -18,4 +18,4 @@ namespace Innocence
 
 	static Identity identity(MODULE, QUOTE(BUILD), __DATE__, __TIME__, __TIMESTAMP__);
 
-} // Innocence
+} // Common

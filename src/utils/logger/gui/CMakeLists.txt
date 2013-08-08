@@ -33,9 +33,6 @@ add_executable(
 )
 
 QT5_USE_MODULES(${LOGGER_GUI_TARGET} Widgets)
-target_link_libraries(${LOGGER_GUI_TARGET} common_md system_md network_md ${QT_LIBRARIES})
+target_link_libraries(${LOGGER_GUI_TARGET} log_md system_md network_md ${QT_LIBRARIES})
 set_target_properties(${LOGGER_GUI_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD} COMPILE_DEFINITIONS PROJECT_MODULE="${LOGGER_GUI_TARGET}")
-install(TARGETS ${LOGGER_GUI_TARGET} DESTINATION innocence)
-
-
-
+#install(TARGETS ${LOGGER_GUI_TARGET} DESTINATION innocence)

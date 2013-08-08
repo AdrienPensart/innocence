@@ -2,7 +2,7 @@
 
 #include <system/Process.hpp>
 #include <common/Exception.hpp>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 #include <objbase.h>
 
@@ -87,19 +87,19 @@ namespace Malicious
 		HRESULT CoInitializeResult = CoInitialize(NULL);
 		if(CoInitializeResult != S_OK)
 		{
-			throw Common::Exception("COM Initialization failed : " + toString(CoInitializeResult));
+			throw Common::Exception("COM Initialization failed : " + Common::toString(CoInitializeResult));
 		}
 
 		HRESULT CoCreateInstanceResult = CoCreateInstance(CLSID_InternetExplorer, NULL, CLSCTX_LOCAL_SERVER, IID_IWebBrowser2, (void**)&browser);
 		if(CoCreateInstanceResult != S_OK || !browser)
 		{
-			throw Common::Exception("CoCreateInstance failed : " + toString(CoCreateInstanceResult));
+			throw Common::Exception("CoCreateInstance failed : " + Common::toString(CoCreateInstanceResult));
 		}
 
 		HRESULT PutVisibleResult = browser->put_Visible(false);
 		if(PutVisibleResult != S_OK)
 		{
-			throw Common::Exception("IWebBrowser2::PutVisible failed : " + toString(PutVisibleResult));
+			throw Common::Exception("IWebBrowser2::PutVisible failed : " + Common::toString(PutVisibleResult));
 		}
 
 		CoGetServerPID(browser, &pid);
@@ -109,7 +109,7 @@ namespace Malicious
 	{
 		if(killOnDestroy)
 		{
-			LOG << "Killing IE with PID : "+toString(pid);
+			LOG << "Killing IE with PID : "+Common::toString(pid);
 			kill();
 		}
 	}
@@ -124,7 +124,7 @@ namespace Malicious
 		HRESULT quitResult = browser->Quit();
 		if(quitResult != S_OK)
 		{
-			throw Common::Exception("IWebBrowser2::Quit failed : " + toString(quitResult));
+			throw Common::Exception("IWebBrowser2::Quit failed : " + Common::toString(quitResult));
 		}
 	}
 }

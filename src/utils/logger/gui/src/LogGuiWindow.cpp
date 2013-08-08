@@ -9,18 +9,15 @@ LogGuiWindow::LogGuiWindow(QWidget * parent) :
 {
 	setupUi(this);
 	connect(saveLogButton, SIGNAL(clicked()), this, SLOT(saveLog()));
+	qRegisterMetaType<Message>("Message");
 	QObject::connect(&logThread, SIGNAL(newMessage(Message)), this, SLOT(addMessage(Message)));
 	logThread.start();
 }
 
-void LogGuiWindow::addMessage(Common::Message message)
+void LogGuiWindow::addMessage(Log::Message message)
 {
-	QString msg = QString::fromStdString(message.getContent());
-	if(msg[msg.size()-1] == '\n')
-	{
-		msg.chop(1);
-	}
-	debugOutputEdit->append(msg);
+	std::string bufferMsg = message.getIdentity().getModule() + " -> (" + message.getCallStack() + ") : " + message.getContent();
+	debugOutputEdit->append(QString::fromStdString(bufferMsg));
 }
 
 void LogGuiWindow::saveLog()

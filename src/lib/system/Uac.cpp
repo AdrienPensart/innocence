@@ -1,5 +1,5 @@
 #include "Uac.hpp"
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 #include <winnt.h>
 
@@ -18,19 +18,20 @@ namespace System
 			}
 			else
 			{
-				LOG << "GetTokenInformation failed : " + toString(GetLastError());
+				LOG << "GetTokenInformation failed : " + Common::toString(GetLastError());
 			}
 			CloseHandle(hToken);
 		}
 		else
 		{
-			LOG << "OpenProcessToken failed : " + toString(GetLastError());
+			LOG << "OpenProcessToken failed : " + Common::toString(GetLastError());
 		}
 		return bResult;
 	}
 
 	bool isUacActivated()
 	{
+		TRACE_FUNCTION
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
@@ -42,6 +43,7 @@ namespace System
 
 	bool isAdministrator()
 	{
+		TRACE_FUNCTION
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
@@ -53,6 +55,7 @@ namespace System
 
     std::string GetElevationType()
 	{
+		TRACE_FUNCTION
 		TOKEN_ELEVATION_TYPE g_tet = TokenElevationTypeDefault;
 		if (!GetElevationType(&g_tet))
         {
@@ -75,6 +78,7 @@ namespace System
 
 	bool RunAsAdministrator(const std::string& exe, const std::string& dir, bool show)
 	{
+		TRACE_FUNCTION
 		SHELLEXECUTEINFO TempInfo = {0};
 		TempInfo.cbSize = sizeof(SHELLEXECUTEINFOA);
 		TempInfo.fMask = 0;

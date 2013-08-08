@@ -3,14 +3,15 @@
 #include <network/TcpServer.hpp>
 #include <network/SelectSet.hpp>
 
-#include "Observable.hpp"
+#include <common/Observable.hpp>
+#include <common/NonCopyable.hpp>
+
 #include "LogObserver.hpp"
-#include "NonCopyable.hpp"
 #include "Message.hpp"
 
-namespace Common
+namespace Log
 {
-	class LogServer : public Observable<LogObserver, Message>, public Common::NonCopyable
+	class LogServer : public Common::Observable<LogObserver, Message>, public Common::NonCopyable
 	{
 		public:
 
@@ -26,4 +27,4 @@ namespace Common
 			Network::SocketSet in;
 	};
 
-} // Common
+} // Log

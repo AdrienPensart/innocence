@@ -1,15 +1,15 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <network/Pipe.hpp>
 using namespace Network;
 using namespace std;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-    LOG.addObserver(new Common::LogToCollector);
-	LOG.addObserver(new Common::LogToConsole);
+	LOG.setIdentity(Common::identity);
+    LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Log::LogToConsole);
 
 	try
 	{
@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
 			LOG << "Server mode";
 			string buffer = "un message !";
 			Network::Pipe pipe_server;
-			pipe_server.listen(Innocence::PIPE_AUDIT_PIPE_NAME);
+			pipe_server.listen(Common::PIPE_AUDIT_PIPE_NAME);
 			if(pipe_server.accept())
 			{
 				LOG << "Sending test : "+buffer;
@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 		{
 			LOG << "Client mode";
 			Network::Pipe pipe_client;
-			if(pipe_client.connect(Innocence::PIPE_AUDIT_PIPE_NAME))
+			if(pipe_client.connect(Common::PIPE_AUDIT_PIPE_NAME))
 			{
 				string buffer;
 				pipe_client.recv(buffer);

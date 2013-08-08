@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <list>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <common/Exception.hpp>
 using namespace std;
 
@@ -125,7 +125,7 @@ namespace System
 				processChain.push_back(nextPid);
 				pe = GetParentProcessEntry(nextPid);
 				std::transform(pe.second.begin(), pe.second.end(), pe.second.begin(), ::tolower);
-				//LOG << "Comparing " + pe.second + "(" + toString(pe.first) + ") and " + programName + "(" + toString(nextPid) + ")";
+				//LOG << "Comparing " + pe.second + "(" + Common::toString(pe.first) + ") and " + programName + "(" + Common::toString(nextPid) + ")";
 				if(pe.second != programName)
 				{
 					break;
@@ -136,7 +136,7 @@ namespace System
 			// killing all processes in reverse order
 			for(std::list<DWORD>::reverse_iterator i = processChain.rbegin(); i != processChain.rend(); i++)
 			{
-				LOG << "Killing process with pid " + toString(*i);
+				LOG << "Killing process with pid " + Common::toString(*i);
 				System::Process::KillProcess(*i);
 			}
 		}
@@ -217,7 +217,7 @@ namespace System
 			if(!createProcessResult)
 			{
 				running = false;
-				throw Common::Exception("Creating the process " + executable + " failed : " + toString(GetLastError()));
+				throw Common::Exception("Creating the process " + executable + " failed : " + Common::toString(GetLastError()));
 			}
 			else
 			{
@@ -261,7 +261,7 @@ namespace System
 
 			if ( !LookupPrivilegeValue(NULL, lpszPrivilege, &luid) )
 			{
-				LOG << "LookupPrivilegeValue failed : " + toString(GetLastError());
+				LOG << "LookupPrivilegeValue failed : " + Common::toString(GetLastError());
 				return false;
 			}
 
@@ -278,7 +278,7 @@ namespace System
 
 			if ( !AdjustTokenPrivileges(hToken,FALSE,&tp,sizeof(TOKEN_PRIVILEGES),(PTOKEN_PRIVILEGES) NULL,(PDWORD) NULL) )
 			{
-				LOG << "AdjustTokenPrivileges failed : " + toString(GetLastError());
+				LOG << "AdjustTokenPrivileges failed : " + Common::toString(GetLastError());
 				return false;
 			}
 			if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
@@ -297,7 +297,7 @@ namespace System
 			HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 			if (hSnapshot == INVALID_HANDLE_VALUE)
 			{
-				LOG << "CreateToolhelp32Snapshot failed : " + toString(GetLastError());
+				LOG << "CreateToolhelp32Snapshot failed : " + Common::toString(GetLastError());
 			}
 			else
 			{
@@ -392,12 +392,12 @@ namespace System
 				}
 				else
 				{
-					LOG << "KillProcess (TerminateProcess) failed : " + toString(GetLastError());
+					LOG << "KillProcess (TerminateProcess) failed : " + Common::toString(GetLastError());
 				}
 			}
 			else
 			{
-				LOG << "KillProcess (OpenProcess) failed : " + toString(GetLastError());
+				LOG << "KillProcess (OpenProcess) failed : " + Common::toString(GetLastError());
 			}
 			return false;
 		}

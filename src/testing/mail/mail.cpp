@@ -1,13 +1,13 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <malicious/FastSmtp.hpp>
 using namespace std;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-    LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Common::identity);
+    LOG.addObserver(new Log::LogToCollector);
 	try
 	{
         /*

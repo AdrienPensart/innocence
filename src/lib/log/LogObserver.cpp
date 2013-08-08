@@ -1,10 +1,11 @@
 #include "LogObserver.hpp"
 #include "Log.hpp"
-#include <Settings.hpp>
+#include "Message.hpp"
 
+#include <common/Settings.hpp>
 #include <iostream>
 
-namespace Common
+namespace Log
 {
 	LogToNetwork::LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort)
     {
@@ -12,7 +13,7 @@ namespace Common
 		connected = socket.connect(loggerIp, loggerPort);
 		if(!connected)
 		{
-			LOG << "Failed to connect to network observer on " + loggerIp + ":" + toString(loggerPort);
+			LOG << "Failed to connect to network observer on " + loggerIp + ":" + Common::toString(loggerPort);
 		}
     }
 
@@ -22,7 +23,7 @@ namespace Common
 		{
 			if(connected)
 			{
-				socket << message.getContent() + '\n';
+				socket << message.serialize() + '\n';
 			}
 		}
 		catch(Network::Deconnection&)
@@ -37,7 +38,7 @@ namespace Common
 	}
 
 	LogToCollector::LogToCollector() : 
-		LogToNetwork(Innocence::LOG_COLLECTOR_IP, Innocence::LOG_COLLECTOR_PORT)
+		LogToNetwork(Common::LOG_COLLECTOR_IP, Common::LOG_COLLECTOR_PORT)
     {
     }
 
@@ -53,7 +54,7 @@ namespace Common
 
     void LogToFile::update(const Message& message)
     {
-		file << message.getContent();
+		file << message.getIdentity().getModule() << message.getContent();
     }
     
     LogToConsole::LogToConsole(const std::string& _title)
@@ -63,7 +64,6 @@ namespace Common
 
     void LogToConsole::update(const Message& message)
     {
-		std::cout << message.getContent() << '\n';
+		std::cout << message.getIdentity().getModule() << " -> (" << message.getCallStack() << ") : " << message.getContent() << '\n';
     }
-
-} // Common
+} // Log

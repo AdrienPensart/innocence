@@ -1,11 +1,11 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <network/TcpServer.hpp>
 #include <blaspheme/transfer/GenericTransfer.hpp>
 #include <blaspheme/hash/Hash.hpp>
 using namespace Blaspheme;
 using namespace Network;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 class TransferShow : public TransferObserver
 {
@@ -13,15 +13,15 @@ class TransferShow : public TransferObserver
 
 		void update(const TransferDescriptor& td)
 		{
-			LOG << toString(td.percentage);
+			LOG << Common::toString(td.percentage);
 		}
 };
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-    LOG.addObserver(new Common::LogToCollector);
-	LOG.addObserver(new Common::LogToConsole);
+	LOG.setIdentity(Common::identity);
+    LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Log::LogToConsole);
 	try
 	{
 		if(argc != 3)

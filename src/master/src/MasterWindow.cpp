@@ -6,8 +6,8 @@ using namespace std;
 #include <QtWidgets/QMessageBox>
 #include <QFileDialog>
 
-#include <common/Log.hpp>
-#include <Innocence.hpp>
+#include <log/Log.hpp>
+#include <common/Innocence.hpp>
 using namespace Network;
 
 #include "Slave.hpp"

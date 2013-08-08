@@ -2,7 +2,7 @@
 
 #include <QThread>
 #include <blaspheme/protocol/Session.hpp>
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 namespace Master
 {
@@ -38,7 +38,7 @@ namespace Master
         private:
             
             bool continue_listen;
-            Innocence::ConnectionInfo info;
+            Common::ConnectionInfo info;
     };
     
 } // Master

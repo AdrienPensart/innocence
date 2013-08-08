@@ -1,6 +1,6 @@
 #include "SlaveTableModel.hpp"
 #include "Slave.hpp"
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 namespace Master
 {

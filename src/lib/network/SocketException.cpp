@@ -1,11 +1,15 @@
 #include "SocketException.hpp"
 
+#include <common/Convert.hpp>
+#include <log/Log.hpp>
+
 namespace Network
 {
 	SocketException::SocketException(SocketHandleImpl sock, const std::string& msgArg) : 
-		Exception(msgArg + " " + getLastError() + "\n"),
+		Exception(msgArg + " " + getLastError()),
 		socketValue(sock)
 	{
+		LOG << "SocketException : " + Common::toString(typeid(this).name()) + msgArg + " " + getLastError();
 	}
 			
 	SocketException::~SocketException() throw()
@@ -20,9 +24,9 @@ namespace Network
 	std::string SocketException::getLastError()
 	{
 		#ifdef WIN32
-			return toString(WSAGetLastError());
+			return Common::toString(WSAGetLastError());
 		#else
-			return toString(errno);
+			return Common::toString(errno);
 		#endif
 	}
 			

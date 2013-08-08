@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 #include <common/Exception.hpp>
 #include <network/TcpClient.hpp>
 
@@ -35,7 +35,7 @@ namespace Blaspheme
     {
         public:
 
-			Session(Innocence::ConnectionInfo cinfo=Innocence::ConnectionInfo(), Network::TcpClient mainStream = Network::TcpClient());
+			Session(Common::ConnectionInfo cinfo=Common::ConnectionInfo(), Network::Timeout deadline=Network::Timeout(60,0));
 			Session(const Session&);
 			virtual ~Session();
 
@@ -50,8 +50,8 @@ namespace Blaspheme
 			const SessionId& getId();
             void setId(const SessionId& newId);
 
-			const Innocence::ConnectionInfo& getConnection() const;
-			void setConnection(const Innocence::ConnectionInfo& cinfo);
+			const Common::ConnectionInfo& getConnection() const;
+			void setConnection(const Common::ConnectionInfo& cinfo);
 
             static SessionId getNextId();
             Network::TcpClient& stream();
@@ -62,11 +62,12 @@ namespace Blaspheme
 
         private:
 			
-			Innocence::ConnectionInfo info;
+			Common::ConnectionInfo info;
             std::string lastCmdStatus;
             static SessionId maxIdAttributed;
             // flux principal de commande
             Network::TcpClient mainStream;
+			Network::Timeout deadline;
             // ID unique de la connexion principale
             SessionId sessionId;
             AuxTcpClient auxStreams;

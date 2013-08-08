@@ -1,9 +1,8 @@
 #include <blaspheme/protocol/Session.hpp>
 #include <network/TcpServer.hpp>
-#include <Innocence.hpp>
-using namespace Innocence;
+#include <common/Innocence.hpp>
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <string>
 using std::string;
 
@@ -11,12 +10,12 @@ namespace Blaspheme
 {
 	SessionId Session::maxIdAttributed = 0;
 	
-	Session::Session(ConnectionInfo infoArg, Network::TcpClient mainStreamArg) :
+	Session::Session(Common::ConnectionInfo infoArg, Network::Timeout deadlineArg) :
 		info(infoArg),
-		mainStream(mainStreamArg),
 		sessionId(0),
 		auth(0),
-		cipher(0)
+		cipher(0),
+		deadline(deadlineArg)
 	{
 		LOG << "Session constructor";
 		auth = new StringBasedAuth(info);
@@ -57,7 +56,7 @@ namespace Blaspheme
                 string stringId;
                 SessionId id;
                 *this >> stringId;
-                fromString(stringId, id);
+                Common::fromString(stringId, id);
                 sessionId = id;
                 
                 LOG << "Main connection acquired, my ID : " + stringId;
@@ -76,7 +75,7 @@ namespace Blaspheme
 	{
 		TRACE_FUNCTION
 		Network::TcpServer listener(info.port);
-		if(listener.accept(mainStream, info.deadline))
+		if(listener.accept(mainStream, deadline))
 		{
 			LOG << "Client accepted, stop listening";
 			listener.stopListen();
@@ -85,7 +84,7 @@ namespace Blaspheme
             {
 				string stringId;
 				*this >> stringId;
-				fromString(stringId, sessionId);
+				Common::fromString(stringId, sessionId);
 				LOG << "Stream ID received : " + stringId;
                 if(sessionId == 0)
                 {
@@ -198,12 +197,12 @@ namespace Blaspheme
 		return mainStream;
 	}
 
-	const ConnectionInfo& Session::getConnection() const
+	const Common::ConnectionInfo& Session::getConnection() const
 	{
 		return info;
 	}
 
-	void Session::setConnection(const ConnectionInfo& infoArg)
+	void Session::setConnection(const Common::ConnectionInfo& infoArg)
 	{
 		info = infoArg;
 	}

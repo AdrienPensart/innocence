@@ -1,24 +1,24 @@
 #include "LogThread.hpp"
 
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 
 LogToGui::LogToGui(LogThread * logThreadArg) : 
 	logThread(logThreadArg)
 {
 }
 
-void LogToGui::update(const Common::Message& message)
+void LogToGui::update(const Log::Message& message)
 {
-	Common::Message msg = message;
+	Log::Message msg = message;
 	logThread->addMessage(msg);
 }
 
 LogThread::LogThread() : 
-	logserver(Innocence::LOG_COLLECTOR_PORT)
+	logserver(Common::LOG_COLLECTOR_PORT)
 {
-	logserver.addObserver(new Common::LogToConsole);
-	//logserver.addObserver(new LogToGui(this));
+	logserver.addObserver(new Log::LogToConsole);
+	logserver.addObserver(new LogToGui(this));
 }
 
 LogThread::~LogThread()
@@ -27,7 +27,7 @@ LogThread::~LogThread()
 	wait();
 }
 
-void LogThread::addMessage(Common::Message message)
+void LogThread::addMessage(Log::Message message)
 {
 	emit newMessage(message);
 }

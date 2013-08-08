@@ -1,5 +1,5 @@
 #include <system/Process.hpp>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <QApplication>
 
 #include "LogGuiWindow.hpp"

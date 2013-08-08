@@ -1,11 +1,11 @@
 //#define WINVER 0x0500
 //#define _WIN32_WINNT 0x0500
 //#define _WIN32_WINNT _WIN32_WINNT_WINXP
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 #include <audit/Audit.hpp>
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 using namespace Common;
 
 #include <malicious/InternetExplorer.hpp>
@@ -16,18 +16,15 @@ using namespace Common;
 #include <network/Pipe.hpp>
 using namespace Network;
 
-#include <iostream>
-using namespace std;
-
 int main(int argc, char * argv[])
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	int exitCode = EXIT_FAILURE;
 	try
 	{
-		LOG.setIdentity(Innocence::identity);
-        LOG.addObserver(new Common::LogToCollector);
-		LOG.addObserver(new Common::LogToConsole);
+		LOG.setIdentity(Common::identity);
+        LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Log::LogToConsole);
 		LOG.addObserver(new Audit::LogToAuditor);
 
 		System::Process::This thisProcess;		
@@ -35,7 +32,7 @@ int main(int argc, char * argv[])
 		std::string dllPath = thisProcess.getProgramDir() + "\\isinjected.dll";
 		
 		// We can't inject in parent iexplore.exe
-		LOG << "COM IE Child Instance Pid : " + toString(ie.getPid());
+		LOG << "COM IE Child Instance Pid : " + Common::toString(ie.getPid());
         Malicious::inject(ie.getPid(), dllPath);
         
 		Sleep(2000);
@@ -43,11 +40,11 @@ int main(int argc, char * argv[])
 		LOG << "Waiting for injection proof";
 		Network::Pipe pipe;
 		LOG << "Connecting to pipe";
-		if(pipe.connect(Innocence::PIPE_AUDIT_PIPE_NAME))
+		if(pipe.connect(Common::PIPE_AUDIT_PIPE_NAME))
 		{
 			std::string buffer;
 			pipe.recv(buffer);
-			if(buffer == Innocence::ISINJECTED_PROOF)
+			if(buffer == Common::ISINJECTED_PROOF)
 			{
 				LOG << "Injection passed";
 				exitCode = EXIT_SUCCESS;

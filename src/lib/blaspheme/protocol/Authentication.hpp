@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 namespace Blaspheme
 {
@@ -11,21 +11,21 @@ namespace Blaspheme
     {
         public:
 
-			AuthenticationMethod(const Innocence::ConnectionInfo& info);
+			AuthenticationMethod(const Common::ConnectionInfo& info);
             virtual bool sendAuth(Session&)=0;
 			virtual bool recvAuth(Session&)=0;
-			const Innocence::ConnectionInfo& getInfo();
+			const Common::ConnectionInfo& getInfo();
 
 		private:
 
-			const Innocence::ConnectionInfo& info;
+			const Common::ConnectionInfo& info;
     };
     
     class NoAuthentication : public AuthenticationMethod
     {
         public:
 
-			NoAuthentication(const Innocence::ConnectionInfo& info);
+			NoAuthentication(const Common::ConnectionInfo& info);
 			virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
     };
@@ -34,7 +34,7 @@ namespace Blaspheme
     {
         public:
 
-            StringBasedAuth(const Innocence::ConnectionInfo& info);
+            StringBasedAuth(const Common::ConnectionInfo& info);
             virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
     };
@@ -43,7 +43,7 @@ namespace Blaspheme
 	{
 		public:
 			
-			ChallengedBasedAuth(const Innocence::ConnectionInfo& info);
+			ChallengedBasedAuth(const Common::ConnectionInfo& info);
             virtual bool sendAuth(Session&);
 			virtual bool recvAuth(Session&);
 	};

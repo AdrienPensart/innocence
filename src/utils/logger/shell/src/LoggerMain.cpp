@@ -1,10 +1,12 @@
-#include <common/LogServer.hpp>
-#include <Innocence.hpp>
+#include <log/LogServer.hpp>
+#include <log/Log.hpp>
+#include <log/Message.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
-	Common::LogServer logserver(Innocence::LOG_COLLECTOR_PORT);
-	logserver.addObserver(new Common::LogToConsole);
+	Log::LogServer logserver(Common::LOG_COLLECTOR_PORT);
+	logserver.addObserver(new Log::LogToConsole);
 	logserver.run();
 	return EXIT_SUCCESS;
 }

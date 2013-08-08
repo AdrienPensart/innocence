@@ -1,13 +1,13 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <malicious/Screenshot.hpp>
 using namespace Malicious;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToNetwork("127.0.0.1", 80));
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToNetwork("127.0.0.1", 80));
 
 	Screenshot sc;
 	sc.take("test.jpg", 100);

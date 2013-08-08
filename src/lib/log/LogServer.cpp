@@ -1,9 +1,9 @@
 #include "LogServer.hpp"
 #include "Log.hpp"
-#include <Identity.hpp>
+#include <common/Identity.hpp>
 using namespace Network;
 
-namespace Common
+namespace Log
 {
 	LogServer::LogServer(const Port& port) : 
 		deadline(1),
@@ -38,14 +38,8 @@ namespace Common
 							client->recv(buffer, '\n', deadline);
 							if(buffer.size())
 							{
-								std::string module;
-								std::string buildId;
-								std::string buildDate;
-								std::string buildTime;
-								std::string buildTimestamp;
-
-								Innocence::Identity identity(module, buildId, buildDate, buildTime, buildTimestamp);
-								Message message(identity, buffer, graph);
+								Message message;
+								message.deserialize(buffer);
 								notify(message);
 							}
 						}
@@ -81,4 +75,4 @@ namespace Common
 		interrupt = true;
 	}
 
-} // Common
+} // Log

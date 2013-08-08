@@ -1,17 +1,16 @@
-#include <Build.hpp>
-
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 
 #include <network/Network.hpp>
 using namespace Network;
 
-#include <common/Log.hpp>
+#include <common/Build.hpp>
+#include <log/Log.hpp>
 #include <audit/Audit.hpp>
 
 void audit(const std::string& auditExe)
 {
-	Audit::Run run(Innocence::identity.getModule(), Innocence::identity.getBuildId(), Innocence::identity.getBuildTimestamp());
+	Audit::Run run(Common::identity.getModule(), Common::identity.getBuildId(), Common::identity.getBuildTimestamp());
 
 	System::Process::Launcher auditExeProcess(auditExe);
 	DWORD auditResult = auditExeProcess.wait();
@@ -28,9 +27,9 @@ void audit(const std::string& auditExe)
 
 int main(int argc, char argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToCollector);
-	LOG.addObserver(new Common::LogToConsole);
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Log::LogToConsole);
 	
 	System::Process::This thisProcess;
     if(!System::isAdministrator())

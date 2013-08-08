@@ -2,7 +2,7 @@
 
 #include <winsock2.h>
 #include <cstdio>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 namespace Malicious
 {
@@ -25,7 +25,7 @@ namespace Malicious
         WORD wVer    = MAKEWORD(2,2);
         if (WSAStartup(wVer,&wsaData) != NO_ERROR)
         {
-            LOG << "WSAStartup failed : " + toString(WSAGetLastError());
+            LOG << "WSAStartup failed : " + Common::toString(WSAGetLastError());
         }
         else if (LOBYTE( wsaData.wVersion ) != 2 || HIBYTE( wsaData.wVersion ) != 2 )
         {

@@ -1,21 +1,21 @@
 #include <malicious/InternetExplorer.hpp>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 using namespace Malicious;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main()
 {
     try
 	{
-        LOG.setIdentity(Innocence::identity);
-	    LOG.addObserver(new Common::LogToCollector);
-		LOG.addObserver(new Common::LogToConsole);
+        LOG.setIdentity(Common::identity);
+	    LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Log::LogToConsole);
         LOG.trace();
 		
 		Malicious::InternetExplorer ie;
 
-		LOG << "Internet Explorer PID : "+toString(ie.getPid());
+		LOG << "Internet Explorer PID : " + Common::toString(ie.getPid());
 
 		system("pause");
 

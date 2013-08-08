@@ -100,18 +100,20 @@ message(STATUS "ELEVATOR64_EXE_PATH = ${ELEVATOR64_EXE_PATH}")
 message(STATUS "ELEVATORDLL64_HPP_PATH = ${ELEVATORDLL64_HPP_PATH}")
 message(STATUS "ELEVATORDLL64_DLL_PATH = ${ELEVATORDLL64_DLL_PATH}")
 
-# generate build number
+file(GLOB_RECURSE common_source_files common/*)
+
+# generate build number and common target in the same time
 add_custom_target(
-	innocence ALL "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
-	DEPENDS "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/Build.hpp"
+	common ALL "${BUILDNUMBER}" "${CMAKE_SOURCE_DIR}/common/Build.hpp"
+	DEPENDS "${BUILDNUMBER}" ${common_source_files}
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	COMMENT "Execute : ${BUILDNUMBER} ${CMAKE_SOURCE_DIR}/Build.hpp"
+	COMMENT "Execute : ${BUILDNUMBER} ${CMAKE_SOURCE_DIR}/common/Build.hpp"
 	VERBATIM
-	SOURCES Build.hpp Innocence.hpp Identity.hpp Settings.hpp
+	SOURCES ${common_source_files}
 )
 
 add_subdirectory(lib/network)
-add_subdirectory(lib/common)
+add_subdirectory(lib/log)
 add_subdirectory(lib/system)
 if(WIN32)
 	add_subdirectory(lib/malicious)

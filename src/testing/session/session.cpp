@@ -1,25 +1,24 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
-#include <iostream>
-using namespace std;
 using namespace Common;
 using namespace Network;
 using namespace Blaspheme;
 
 int main(int argc, char * argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToConsole);
+	LOG.addObserver(new Log::LogToNetwork("127.0.0.1", 80));
 
 	if(argc != 2)
 	{
-		cout << "Usage : session connect|listen\n";
+		LOG << "Usage : session connect|listen\n";
 		return EXIT_SUCCESS;
 	}
-	string arg = argv[1];
+	std::string arg = argv[1];
 	/*
 	if(arg == "connect")
 	{
@@ -30,10 +29,9 @@ int main(int argc, char * argv[])
 		LOG.setHeader("LISTEN");
 	}
 	*/
-	Innocence::ConnectionInfo info;
+	Common::ConnectionInfo info;
 	info.ip = "127.0.0.1";
 	info.port = 80;
-	info.deadline.set(60);
 	info.password = "crunch";
 	Session session(info);
 
@@ -43,10 +41,10 @@ int main(int argc, char * argv[])
 		{
 			if(session.connect())
 			{
-				cout << "Connect ok.\n";
+				LOG << "Connect ok.\n";
 				session.setId(0);
 				session.reset();
-				cout << "Deconnexion.\n";
+				LOG << "Deconnexion.\n";
 			}
 		}
 	}
@@ -56,20 +54,20 @@ int main(int argc, char * argv[])
 		{
 			if(session.waitConnect())
 			{
-				cout << "WaitConnect ok.\n";
+				LOG << "WaitConnect ok.\n";
 				session.setId(0);
 				session.reset();
-				cout << "Deconnexion.\n";
+				LOG << "Deconnexion.\n";
 			}
 			else
 			{
-				cout << "Aucune connexion de client.\n";
+				LOG << "Aucune connexion de client.\n";
 			}
 		}
 	}
 	else
 	{
-		cout << "Usage : session connect|listen\n";
+		LOG << "Usage : session connect|listen\n";
 	}
 	return EXIT_SUCCESS;
 }

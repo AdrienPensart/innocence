@@ -13,7 +13,7 @@ namespace Network
 		int wsaReturn = WSAStartup(MAKEWORD (2, 2),&m_wsadata);
         if (wsaReturn)
         {
-            throw WinsockInitExcept("Unable to initialize Winsock : " + toString(wsaReturn));
+            throw WinsockInitExcept("Unable to initialize Winsock : " + Common::toString(wsaReturn));
         }
     }
     

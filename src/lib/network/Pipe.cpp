@@ -1,5 +1,7 @@
 #include "Pipe.hpp"
 
+#include <common/Convert.hpp>
+
 #ifdef WIN32
 
 namespace Network
@@ -26,7 +28,7 @@ namespace Network
         hPipe = CreateFile(pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
         if (hPipe == INVALID_HANDLE_VALUE)
         {
-             throw PipeException("Pipe connection failed (CreateFile) : " + toString(GetLastError()));
+             throw PipeException("Pipe connection failed (CreateFile) : " + Common::toString(GetLastError()));
         }
         return true;
     }
@@ -46,7 +48,7 @@ namespace Network
             NULL);                    // default security attribute
 		if (hPipe == INVALID_HANDLE_VALUE)
         {
-            throw PipeException("Pipe listen failed (CreateNamedPipe) : " + toString(GetLastError()));
+            throw PipeException("Pipe listen failed (CreateNamedPipe) : " + Common::toString(GetLastError()));
         }
         return true;
     }
@@ -56,7 +58,7 @@ namespace Network
 		bool bClientConnected = ConnectNamedPipe(hPipe, 0) != 0;
         if (!bClientConnected)
         {
-			throw PipeException("Pipe accept failed (ConnectNamedPipe) : " + toString(GetLastError()));
+			throw PipeException("Pipe accept failed (ConnectNamedPipe) : " + Common::toString(GetLastError()));
         }
         return true;
     }
@@ -77,7 +79,7 @@ namespace Network
         bool bResult = WriteFile(hPipe,object,size,(DWORD *)&bytesRead,0) != 0; // évite le warning C4800
         if ( (!bResult) || (size) != bytesRead)
         {
-			throw PipeException("Pipe send failed (WriteFile) : " + toString(GetLastError()));
+			throw PipeException("Pipe send failed (WriteFile) : " + Common::toString(GetLastError()));
         }
         FlushFileBuffers(hPipe);
         return bytesRead;
@@ -104,7 +106,7 @@ namespace Network
         bool bResult = ReadFile(hPipe, object,size,(DWORD *)&bytesRead,0) != 0;// évite le warning C4800
         if ( (!bResult) || (bytesRead==0))
         {
-	        throw PipeException("Pipe recv failed (ReadFile) : " + toString(GetLastError()));
+	        throw PipeException("Pipe recv failed (ReadFile) : " + Common::toString(GetLastError()));
         }
 	    return bytesRead;
     }

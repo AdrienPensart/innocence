@@ -5,7 +5,7 @@ using namespace std;
 #include "ListeningThread.hpp"
 
 #include <blaspheme/protocol/Session.hpp>
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <network/TcpClient.hpp>
 using namespace Network;
 using namespace Blaspheme;
@@ -17,7 +17,6 @@ namespace Master
 	{
 		changeListeningPort(port_value);
 		changePassword(pass_value);
-		info.deadline.set(0, 200);
 	}
 
     ListeningThread::~ListeningThread()
@@ -30,7 +29,7 @@ namespace Master
         LOG << "Starting listening thread, connections activated";
         try
         {
-			Session session(info);
+			Session session(info, Timeout(0, 200));
             while(continue_listen)
             {
 				
@@ -60,7 +59,7 @@ namespace Master
 
     void ListeningThread::changeListeningPort(int port)
     {
-        LOG << "Updating listening port : " + toString(port);
+        LOG << "Updating listening port : " + Common::toString(port);
         info.port = port;
     }
 

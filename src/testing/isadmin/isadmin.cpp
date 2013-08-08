@@ -1,16 +1,17 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 using namespace Common;
 
 #include <system/Uac.hpp>
 using namespace System;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 int main(int argc, char *argv[])
 {
-	LOG.setIdentity(Innocence::identity);
-	LOG.addObserver(new Common::LogToCollector);
-	LOG.addObserver(new Common::LogToConsole);
+	TRACE_FUNCTION
+	LOG.setIdentity(Common::identity);
+	LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Log::LogToConsole);
 	if(isAdministrator())
 	{
 		LOG << "You are administrator !";

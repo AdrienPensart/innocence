@@ -1,42 +1,38 @@
 #pragma once
 
-#include "NonCopyable.hpp"
-#include "Convert.hpp"
-#include "Observable.hpp"
+#include <common/NonCopyable.hpp>
+#include <common/Convert.hpp>
+#include <common/Observable.hpp>
+#include <common/Identity.hpp>
+
 #include "LogObserver.hpp"
-#include <Identity.hpp>
 
 #include <string>
 #include <vector>
 #include <map>
 
-namespace Innocence
-{
-	class Identity;
-}
-
-namespace Common
+namespace Log
 {
 	typedef std::vector<std::string> CallStack;
 
 	std::string genCallStack(const CallStack& callStack);
 
-    class Log : public Observable<LogObserver, Message>, public Common::NonCopyable
+    class Lout : public Common::Observable<LogObserver, Message>, public Common::NonCopyable
     {
         public:
             
             void trace();
-			static void setIdentity(const Innocence::Identity& identity);
+			static void setIdentity(const Common::Identity& identity);
             void enterFunction(const std::string& func);
             void leaveFunction();
-            Log& operator << (const std::string& object);
-			static Log lout;
+            Lout& operator << (const std::string& object);
+			static Lout lout;
 
         private:
             
-			Log();
+			Lout();
             bool tracing;
-			static Innocence::Identity identity;
+			static Common::Identity identity;
             CallStack functions;
     };
     
@@ -53,15 +49,15 @@ namespace Common
         ~FunctionLog();
     };
 
-} // Common
+} // Log
 
 // hack to comment log lines when in release mode
 #define COMMENT SLASH(/)
 #define SLASH(s) /##s
 
 #ifdef INNOCENCE_DEBUG
-	#define LOG Common::Log::lout
-	#define TRACE_FUNCTION Common::FunctionLog function_log((__FUNCTION__));
+	#define LOG Log::Lout::lout
+	#define TRACE_FUNCTION Log::FunctionLog function_log((__FUNCTION__));
 #else
 	#define LOG COMMENT
 	#define TRACE_FUNCTION COMMENT

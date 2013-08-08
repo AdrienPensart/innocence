@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Message.hpp"
-
 #include <network/TcpClient.hpp>
 #include <fstream>
 
-namespace Common
+namespace Log
 {
+	class Message;
+
 	class LogObserver
     {
         public:
@@ -59,4 +59,4 @@ namespace Common
             const std::string title;
     };
 
-} // Common
+} // Log

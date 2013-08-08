@@ -3,8 +3,8 @@
 #include <QDialog>
 #include <ui_DebuggingConsole.h>
 #include "LogThread.hpp"
-#include <common/Message.hpp>
-using Common::Message;
+#include <log/Message.hpp>
+using Log::Message;
 
 class LogGuiWindow : public QDialog, public Ui::DebuggingDialog
 {

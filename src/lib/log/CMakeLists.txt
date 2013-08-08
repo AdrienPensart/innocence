@@ -1,0 +1,10 @@
+file(GLOB_RECURSE log_source_files *.hpp *.cpp)
+
+add_library(log STATIC ${log_source_files})
+add_library(log_md STATIC ${log_source_files})
+
+target_link_libraries(log network)
+target_link_libraries(log_md network_md)
+
+set_target_properties(log PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
+set_target_properties(log_md PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
