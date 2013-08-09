@@ -1,12 +1,18 @@
 #include "FileTransfer.hpp"
 
 #include <log/Log.hpp>
+#include <network/Stream.hpp>
 #include <system/File.hpp>
 #include <common/Innocence.hpp>
 #include <blaspheme/hash/Hash.hpp>
 
 namespace Blaspheme
 {
+	TransferException::TransferException(const std::string& msgArg)
+	{
+		LOG << "TransferException : " + Common::toString(typeid(this).name()) + msgArg;
+	}
+
     TransferDescriptor::TransferDescriptor()
     {
         transferred = 0;
@@ -107,8 +113,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "Download transfer returned " + Common::toString(recvd);
-                throw TransferException();
+                throw TransferException("Download transfer returned " + Common::toString(recvd));
             }
             
             file.write(&buffer[0], recvd);
@@ -184,8 +189,7 @@ namespace Blaspheme
             int recvd = stream.recv(&buffer[0], buffer.size());
             if(recvd <= 0)
             {
-                LOG << "InMemoryDownload transfer returned " + Common::toString(recvd);
-                throw TransferException();
+                throw TransferException("InMemoryDownload transfer returned " + Common::toString(recvd));
             }
             
             memory_buffer.append(&buffer[0], recvd);

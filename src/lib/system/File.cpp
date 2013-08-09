@@ -43,14 +43,9 @@ namespace System
     }
     
 	#ifdef WIN32
-	std::string FileListing::get_logical_volumes()
+	std::string FileListing::getLogicalVolumes()
 	{
 		DWORD lecteurs = GetLogicalDrives();
-		if(lecteurs == 0)
-		{
-			throw ListingError();
-		}
-
 		static DWORD modif_bit[] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200,
 							  0x400, 0x800, 0x1000, 0x2000, 0x4000, 0x8000, 0x10000,
 							  0x20000, 0x40000, 0x80000, 0x100000, 0x200000, 0x400000,
@@ -71,7 +66,7 @@ namespace System
 		return volumes;
 	}
 
-	std::string FileListing::get_directory_list(const std::string& directory_to_list)
+	std::string FileListing::getDirectoryList(const std::string& directory_to_list)
 	{
 		std::string str_directory = directory_to_list + "*";
 		WIN32_FIND_DATA file;

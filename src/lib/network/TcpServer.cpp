@@ -32,7 +32,7 @@ namespace Network
         // est-on déjà en ecoute ?
         if(listening)
         {
-            throw SocketException(this->getDescriptor(), "TcpServer is already listening");
+            throw SocketException("listen : already listening", getDescriptor());
         }
         
         // configuration des options d'écoute
@@ -54,17 +54,17 @@ namespace Network
             static const int reuse = -1;
             if(setOptions(SOL_SOCKET,SO_REUSEADDR,(int *)&reuse,sizeof(reuse)))
             {
-                throw SocketException(this->getDescriptor(), "Option SO_REUSEADDR cannot be set");
+                throw SocketException("Option SO_REUSEADDR can't be set", getDescriptor());
             }
         }
         
         if(bind(sockethandle, (Addr *)&attachedAddr, sizeof(Addr)) != 0)
         {
-            throw SocketException(this->getDescriptor(), "TcpServer:ListenTo:Bind:");
+            throw SocketException("bind failed" + getDescriptor());
         }
         if (bsd_listen(sockethandle, nbSock) <= SOCK_ERROR)
         {
-            throw SocketException(this->getDescriptor(), "TcpServer:ListenTo:Listen:");
+            throw SocketException("listen failed", getDescriptor());
         }
         
         listening = true;
@@ -91,7 +91,7 @@ namespace Network
         // si le serveur n'est pas en mode ecoute, on lance une exception
         if(!listening)
         {
-            throw SocketException(this->getDescriptor(), "TcpServer::Accept::Not Listening.");
+            throw SocketException("not listening", getDescriptor());
         }
             
         // test preliminaire de validite

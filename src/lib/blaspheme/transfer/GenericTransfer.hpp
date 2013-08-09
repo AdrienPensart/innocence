@@ -1,5 +1,6 @@
 #pragma once
 
+#include <network/Stream.hpp>
 #include <system/File.hpp>
 #include "FileTransfer.hpp"
 

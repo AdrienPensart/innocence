@@ -7,7 +7,6 @@
 
 #ifdef WIN32
 
-#include <exception>
 #include <string>
 #include <windows.h>
 

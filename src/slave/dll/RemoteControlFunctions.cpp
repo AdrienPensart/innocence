@@ -136,12 +136,12 @@ namespace Inhibition
             // de listes de périphériques
             if(directory_to_list == "\\")
             {
-                string volumes = lister.get_logical_volumes();
+                string volumes = lister.getLogicalVolumes();
                 session() << volumes+FINISHED;
             }
             else
             {
-                string directory_list = lister.get_directory_list(directory_to_list);
+                string directory_list = lister.getDirectoryList(directory_to_list);
                 if(directory_list.size())
                 {
                     session() << directory_list+FINISHED;

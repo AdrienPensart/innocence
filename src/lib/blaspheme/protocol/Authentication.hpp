@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <common/Innocence.hpp>
+
+struct Common::ConnectionInfo;
 
 namespace Blaspheme
 {

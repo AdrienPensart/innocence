@@ -5,19 +5,11 @@
 
 namespace Network
 {
-	#ifdef WIN32
-        /**
-         *  Exception lancée si l'initialisation de Winsock sur les plateformes
-         *  Windows échoue
-         */
-        typedef Common::Exception WinsockInitExcept;
-    #endif
-
 	class SocketException : public Common::Exception
 	{
 		public:
 	        
-			SocketException(SocketHandleImpl sock, const std::string& msgArg);
+			SocketException(const std::string& msgArg, SocketHandleImpl sock=0, int errorCode=0);
 			virtual ~SocketException() throw();
 			const SocketHandleImpl& getValue() const;
 			static std::string getLastError();
@@ -25,12 +17,20 @@ namespace Network
 
 		protected:
 	        
+			int errorCode;
 			SocketHandleImpl socketValue;
 	};
 
-	typedef SocketException UnexpectedEvent;
-	typedef UnexpectedEvent InvalidBlocking;
-	typedef UnexpectedEvent Deconnection;
-	typedef UnexpectedEvent InvalidSock;
+	#ifdef WIN32
+        /**
+         *  Exception lancée si l'initialisation de Winsock sur les plateformes
+         *  Windows échoue
+         */
+        typedef SocketException WinsockInitExcept;
+    #endif
+
+	typedef SocketException InvalidBlocking;
+	typedef SocketException Deconnection;
+	typedef SocketException InvalidSock;
 
 } // Network

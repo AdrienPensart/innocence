@@ -4,6 +4,8 @@
 #include <tchar.h>
 #include <strsafe.h>
 
+#include <log/Log.hpp>
+
 namespace System
 {
 	namespace Registry
@@ -22,9 +24,15 @@ namespace System
 			return def;
 		}
 
-		RegistryError::RegistryError(const std::string& msg, long code) : 
-			Exception(GenErrorMessage(msg, code))
+		RegistryError::RegistryError(const std::string& msg, long code)
 		{
+			std::string buffer = "RegistryError : " + msg;
+			if(code)
+			{
+				buffer += " (" + GenErrorMessage(msg, code) + ")";
+			}
+			LOG << buffer;
+			setMessage(buffer);
 		}
 
 		// code extrait de la MSDN
@@ -45,16 +53,9 @@ namespace System
 			}
 
 			lResult = RegOpenKeyEx (hKeyRoot, lpSubKey, 0, KEY_READ, &hKey);
-			if (lResult != ERROR_SUCCESS) 
+			if (lResult != ERROR_SUCCESS || lResult != ERROR_FILE_NOT_FOUND) 
 			{
-				if (lResult == ERROR_FILE_NOT_FOUND) {
-					printf("Key not found.\n");
-					return true;
-				} 
-				else {
-					printf("Error opening key.\n");
-					return false;
-				}
+				return false;
 			}
 
 			lpEnd = lpSubKey + lstrlen(lpSubKey);
@@ -65,8 +66,7 @@ namespace System
 				*lpEnd =  TEXT('\0');
 			}
 			dwSize = MAX_PATH;
-			lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL,
-								   NULL, NULL, &ftWrite);
+			lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL, NULL, NULL, &ftWrite);
 			if (lResult == ERROR_SUCCESS) 
 			{
 				do

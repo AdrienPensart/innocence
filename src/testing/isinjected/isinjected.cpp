@@ -17,6 +17,7 @@ DWORD WINAPI Run(void)
 	{
         LOG.setIdentity(Common::identity);
         LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Log::LogToConsole);
 		
 		System::Process::This thisProcess;
 		LOG << "DLL getPath : " + thisProcess.getPath();

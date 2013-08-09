@@ -423,10 +423,10 @@ int main(int argc, char * argv[])
 		Bucket bucket;
 		bucket.catchClient(port, argv[2]);
 	}
-	catch(std::exception& e)
+	catch(Common::Exception&)
 	{
-		cout << e.what() << '\n';
 	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }
 */

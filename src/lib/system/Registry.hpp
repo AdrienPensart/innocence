@@ -3,7 +3,6 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <exception>
 
 #include <common/Exception.hpp>
 
@@ -14,8 +13,7 @@ namespace System
 		class RegistryError : public Common::Exception
 		{
 			public:
-
-				RegistryError(const std::string& msg, long code=-1);
+				RegistryError(const std::string& msg, long code=0);
 		};
 
 		// l'index est constitué du nom de la valeur

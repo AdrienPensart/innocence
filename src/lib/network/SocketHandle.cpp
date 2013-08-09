@@ -13,7 +13,7 @@ namespace Network
 		int wsaReturn = WSAStartup(MAKEWORD (2, 2),&m_wsadata);
         if (wsaReturn)
         {
-            throw WinsockInitExcept("Unable to initialize Winsock : " + Common::toString(wsaReturn));
+            throw WinsockInitExcept("Unable to initialize Winsock", 0,  wsaReturn);
         }
     }
     
@@ -62,7 +62,7 @@ namespace Network
     {
         if(!isValid())
         {
-            throw InvalidSock(this->getDescriptor(), "Socket::test() failed");
+            throw InvalidSock("validity test failed", getDescriptor());
         }
     }
 }

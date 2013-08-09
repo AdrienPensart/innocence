@@ -9,7 +9,7 @@ namespace Network
             sockethandle = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
             if(sockethandle == INVALID_SOCK)
             {
-				throw SocketException(this->getDescriptor(), "TcpSock:AcquireSocket:Socket:");
+				throw SocketException("socket failed", getDescriptor());
             }
         }
     }

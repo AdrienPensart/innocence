@@ -27,7 +27,10 @@ namespace Common
 			
         protected:
 
-			//void setMessage(const std::string msg);
+			void setMessage(const std::string& msgArg)
+			{
+				msg = msgArg;
+			}
 
 		private:
 

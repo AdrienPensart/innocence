@@ -44,9 +44,8 @@ namespace Master
 		{
 			LOG << "ListeningThread::run() : Untimely disconnected";
 		}
-        catch(std::exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
         CATCH_UNKNOWN_EXCEPTION
         LOG << "Ending listening thread";

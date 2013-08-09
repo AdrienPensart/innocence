@@ -20,7 +20,7 @@ namespace Network
         unsigned long size = 0;
         if (ioctlsocket(sockethandle, FIONREAD, &size) != 0)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Recv::ioctlsocket can't retrieve size of data");
+            throw SocketException("ioctlsocket can't retrieve buffer size", getDescriptor());
         }
         return size;
     }
@@ -100,7 +100,7 @@ namespace Network
         {
             if(shutdown(sockethandle,2) == SOCKET_ERROR)
             {
-                throw SocketException(this->getDescriptor(), "Impossible de deconnecter le socket");
+                throw SocketException("shutdown failed", getDescriptor());
             }
         }
     }
@@ -109,13 +109,13 @@ namespace Network
     {
         if(!sizeOfObject)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Send : size of object is 0");
+            throw SocketException("send : invalid object size", getDescriptor());
         }
         
         int returnChar = bsd_send(sockethandle, object, sizeOfObject, 0);
         if(returnChar == SOCK_ERROR)
         {
-            throw Deconnection(this->getDescriptor(), "TcpClient::Send : Deconnection");
+            throw Deconnection("send : disconnected", getDescriptor());
         }
         return returnChar;
     }
@@ -124,7 +124,7 @@ namespace Network
     {
         if(!sizeOfObject)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Send : size of object is 0");
+            throw SocketException("send : invalid object size", getDescriptor());
         }
 
         if(SelectSet::SelectOnWrite(*this, to))
@@ -132,7 +132,7 @@ namespace Network
             int returnChar = bsd_send(sockethandle, object, sizeOfObject, 0);
             if(returnChar == SOCK_ERROR)
             {
-				throw Deconnection(this->getDescriptor(), "TcpClient::Send : Deconnection");
+				throw Deconnection("send : disconnected", getDescriptor());
             }
             return returnChar;
         }
@@ -143,13 +143,13 @@ namespace Network
     {
         if(!sizeOfObject)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Recv : size of object is 0");
+            throw SocketException("recv : invalid object size", getDescriptor());
         }
 
         int returnChar = bsd_recv(sockethandle, object, sizeOfObject, 0);
         if(returnChar == SOCK_ERROR)
         {
-            throw Deconnection(this->getDescriptor(), "TcpClient::Recv : Deconnection");
+            throw Deconnection("recv : disconnected", getDescriptor());
         }
         return returnChar;
     }
@@ -158,14 +158,14 @@ namespace Network
     {
         if(!sizeOfObject)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Recv : size of object is 0");
+            throw SocketException("recv : invalid object size", getDescriptor());
         }
         if(SelectSet::SelectOnRead(*this, to))
         {
             int returnChar = bsd_recv(sockethandle, object, sizeOfObject, 0);
             if(returnChar == SOCK_ERROR)
             {
-                throw Deconnection(this->getDescriptor(), "TcpClient::Recv : Deconnection");
+                throw Deconnection("recv : disconnected", getDescriptor());
             }
             return returnChar;
         }

@@ -76,7 +76,7 @@ namespace Network
         {
             if(BSDSocket::bsd_close(sockethandle) == SOCKET_ERROR)
             {
-                throw SocketException(this->getDescriptor(), "Impossible de fermer le socket");
+                throw SocketException("close failed", this->getDescriptor());
             }
             sockethandle = NOT_ACQUIRED;
         }

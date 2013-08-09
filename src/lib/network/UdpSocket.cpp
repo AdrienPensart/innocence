@@ -22,7 +22,7 @@ namespace Network
             sockethandle = socket(AF_INET,SOCK_DGRAM,0);
             if(sockethandle == INVALID_SOCK)
             {
-				throw SocketException(this->getDescriptor(), "UdpSock:AcquireSocket:Socket failed");
+				throw SocketException("socket failed", getDescriptor());
             }
         }
     }
@@ -32,7 +32,7 @@ namespace Network
         unsigned long size = 0;
         if (ioctlsocket(sockethandle, FIONREAD, &size) != 0)
         {
-            throw SocketException(this->getDescriptor(), "TcpClient::Recv::ioctlsocket can't retrieve size of data");
+            throw SocketException("ioctlsocket can't retrieve buffer size", getDescriptor());
         }
         return size;
     }
@@ -48,7 +48,7 @@ namespace Network
         int error = bind(sockethandle, (Addr *)&attachedAddr, sizeof(Addr));
         if(error)
         {
-            throw SocketException(this->getDescriptor(), "UdpSock::Listen::Bind failed");
+            throw SocketException("bind failed", getDescriptor());
         }
     }
     
@@ -59,7 +59,7 @@ namespace Network
         int returnChar = sendto(sockethandle,object,sizeOfObject,0,(Addr *)&attachedAddr,sizeof(sockaddr_in));
         if (returnChar == SOCK_ERROR)
         {
-            throw SocketException(this->getDescriptor(), "UdpSock::Send::sendto : SOCK_ERROR");
+            throw SocketException("sendto failed", getDescriptor());
         }
         return returnChar;
     }
@@ -74,7 +74,7 @@ namespace Network
             returnChar = sendto(sockethandle,object,sizeOfObject,0,(Addr *)&attachedAddr,sizeof(sockaddr_in));
             if (returnChar == SOCK_ERROR)
             {
-                throw SocketException(this->getDescriptor(), "UdpSock::Send::sendto : SOCK_ERROR");
+                throw SocketException("sendto failed", getDescriptor());
             }
         }
         return returnChar;
@@ -88,7 +88,7 @@ namespace Network
         int returnChar = recvfrom(sockethandle, object, sizeOfObject, 0,(Addr *)&attachedAddr, &sin_size);
         if(returnChar == SOCK_ERROR)
         {
-            Deconnection(this->getDescriptor(), "UdpSock::Recv::recvfrom : Deconnection");
+            Deconnection("recvfrom : disconnected", getDescriptor());
         }
         return returnChar;
     }
@@ -104,7 +104,7 @@ namespace Network
             returnChar = recvfrom(sockethandle, object, sizeOfObject, 0,(Addr *)&attachedAddr, &sin_size);
             if(returnChar == SOCK_ERROR)
             {
-                Deconnection(this->getDescriptor(), "UdpSock::Recv::recvfrom : Deconnection");
+                Deconnection("recvfrom : disconnected", getDescriptor());
             }
         }
         return returnChar;

@@ -216,9 +216,8 @@ namespace Master
                 }
             }
         }
-        catch(std::exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
         catch(...)
         {
@@ -305,9 +304,8 @@ namespace Master
                 switchSlave();
             }
 		}
-        catch(std::exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
         CATCH_UNKNOWN_EXCEPTION
     }

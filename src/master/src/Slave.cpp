@@ -541,9 +541,8 @@ namespace Master
             transfer.addObserver(new GraphicProgressBar(bar));
             transfer.launch();
         }
-        catch(std::exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -565,9 +564,8 @@ namespace Master
             transfer.addObserver(new GraphicProgressBar(bar));
             transfer.launch();
 		}
-        catch(std::exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)

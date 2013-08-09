@@ -1,19 +1,17 @@
 #pragma once
 
-#include <exception>
+
 #include <string>
 #include <fstream>
 
 namespace System
-{
-	class ListingError  : public std::exception{};
-		
+{	
 	#ifdef WIN32
 	class FileListing
     {
         public:
-            std::string get_logical_volumes();
-            std::string get_directory_list(const std::string& directory_to_list);
+            std::string getLogicalVolumes();
+            std::string getDirectoryList(const std::string& directory);
 	};
 	#endif
 	

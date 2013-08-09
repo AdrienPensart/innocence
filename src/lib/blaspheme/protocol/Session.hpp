@@ -8,14 +8,11 @@
 #include "Cipher.hpp"
 
 #include <stack>
-//#include <exception>
 
 namespace Blaspheme
 {
     typedef std::stack<Network::TcpClient> AuxTcpClient;
     typedef unsigned int SessionId;
-    
-    typedef Common::Exception UnknowCommandException;
     
 	/*
 		Une session est composee d'un flux principal

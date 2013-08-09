@@ -54,7 +54,7 @@ namespace Network
         // erreur
         if (retval == SOCKET_ERROR)
         {
-			throw SocketException(socket.getDescriptor(), "SelectSet:SOCKET_ERROR");
+			throw SocketException("select failed", socket.getDescriptor());
         }
         else if (retval)
         {
@@ -96,7 +96,7 @@ namespace Network
         
         if (retval == SOCKET_ERROR)
         {
-			throw SocketException(0, "SelectSet:SOCKET_ERROR");
+			throw SocketException("select failed", 0);
         }
         
 		SocketSet output;

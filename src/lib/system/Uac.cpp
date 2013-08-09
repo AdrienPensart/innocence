@@ -92,4 +92,4 @@ namespace System
 		return bRet != 0;
 	}
     
-}/* System */
+} // System

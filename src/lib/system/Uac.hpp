@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <exception>
+#include <common/Exception.hpp>
 
 namespace System
 {
-	typedef std::exception UACException;
+	typedef Common::Exception UACException;
 	bool isUacActivated();
 	bool isAdministrator();
     std::string GetElevationType();

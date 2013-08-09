@@ -1,19 +1,27 @@
 #pragma once
 
 #include <fstream>
-//#include <exception>
 #include <vector>
 #include <list>
 #include <string>
 
-#include <network/Stream.hpp>
 #include <common/Convert.hpp>
 #include <common/Observable.hpp>
 #include <common/Exception.hpp>
 
+namespace Network
+{
+	class Stream;
+}
+
 namespace Blaspheme
 {
-    typedef Common::Exception TransferException;
+    class TransferException : public Common::Exception
+	{
+		public:
+	        
+			TransferException(const std::string& msgArg);
+	};
     
     class TransferDescriptor
     {

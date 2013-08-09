@@ -3,7 +3,6 @@
 #include <common/Exception.hpp>
 
 #include <string>
-#include <exception>
 #include <windows.h>
 #include <winioctl.h>
 
