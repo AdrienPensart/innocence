@@ -1,6 +1,7 @@
-#include <blaspheme/protocol/Session.hpp>
+#include "Session.hpp"
+#include "Authentication.hpp"
+#include "Cipher.hpp"
 #include <network/TcpServer.hpp>
-#include <common/Innocence.hpp>
 
 #include <log/Log.hpp>
 #include <string>

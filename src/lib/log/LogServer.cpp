@@ -66,6 +66,7 @@ namespace Log
 		}
 		catch(Common::Exception&)
 		{
+			LOG << "LogServer exception trap";
 		}
 		CATCH_UNKNOWN_EXCEPTION
 	}

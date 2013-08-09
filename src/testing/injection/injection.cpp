@@ -23,8 +23,8 @@ int main(int argc, char * argv[])
 	try
 	{
 		LOG.setIdentity(Common::identity);
-        LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Log::LogToConsole);
+        LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Audit::LogToAuditor);
 
 		System::Process::This thisProcess;		

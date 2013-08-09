@@ -1,6 +1,6 @@
 #include <log/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
-
+#include <audit/Audit.hpp>
 #include <common/Innocence.hpp>
 
 using namespace Common;
@@ -11,7 +11,8 @@ int main(int argc, char * argv[])
 {
 	LOG.setIdentity(Common::identity);
 	LOG.addObserver(new Log::LogToConsole);
-	LOG.addObserver(new Log::LogToNetwork("127.0.0.1", 80));
+	LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Audit::LogToAuditor);
 
 	if(argc != 2)
 	{

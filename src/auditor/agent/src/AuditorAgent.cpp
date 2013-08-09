@@ -1,11 +1,11 @@
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
-
 #include <network/Network.hpp>
 using namespace Network;
 
-#include <common/Build.hpp>
+#include <common/Innocence.hpp>
 #include <log/Log.hpp>
+#include <log/LogServer.hpp>
 #include <audit/Audit.hpp>
 
 void audit(const std::string& auditExe)
@@ -39,8 +39,17 @@ int main(int argc, char argv[])
 		return EXIT_SUCCESS;
 	}
 	
+	Log::LogServer logServer(Common::AUDIT_SERVER_PORT);
+	logServer.addObserver(new Log::LogToConsole);
+
+	Audit::AuditServer::instance().setLogServer(&logServer);
+	Audit::AuditServer::instance().start();
+
 	audit("elevator.exe");
 	audit("injection.exe");
 	audit("hideproc.exe");
+
+	Audit::AuditServer::instance().stop();
+	system("pause");
 	return EXIT_SUCCESS;
 }

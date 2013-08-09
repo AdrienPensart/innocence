@@ -4,16 +4,16 @@
 
 namespace Blaspheme
 {
-    class CipheringMethod
+    class CipherMethod
     {
         public:
         
-            CipheringMethod(){}
+            CipherMethod(){}
             virtual void encrypt(std::string&)=0;
             virtual void decrypt(std::string&)=0;
     };
     
-    class NoCiphering : public CipheringMethod
+    class NoCiphering : public CipherMethod
     {
         public:
         
@@ -22,7 +22,7 @@ namespace Blaspheme
             void decrypt(std::string&);
     };
 
-    class XORCiphering : public CipheringMethod
+    class XORCiphering : public CipherMethod
     {
         public:
         

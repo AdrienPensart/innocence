@@ -2,6 +2,7 @@
 #include <network/TcpServer.hpp>
 #include <blaspheme/transfer/GenericTransfer.hpp>
 #include <blaspheme/hash/Hash.hpp>
+#include <audit/Audit.hpp>
 using namespace Blaspheme;
 using namespace Network;
 
@@ -20,8 +21,10 @@ class TransferShow : public TransferObserver
 int main(int argc, char * argv[])
 {
 	LOG.setIdentity(Common::identity);
-    LOG.addObserver(new Log::LogToCollector);
 	LOG.addObserver(new Log::LogToConsole);
+    LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Audit::LogToAuditor);
+
 	try
 	{
 		if(argc != 3)

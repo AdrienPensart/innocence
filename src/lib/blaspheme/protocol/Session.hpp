@@ -1,16 +1,16 @@
 #pragma once
 
-#include <common/Innocence.hpp>
+#include <common/Settings.hpp>
 #include <common/Exception.hpp>
 #include <network/TcpClient.hpp>
-
-#include "Authentication.hpp"
-#include "Cipher.hpp"
 
 #include <stack>
 
 namespace Blaspheme
 {
+	class AuthenticationMethod;
+	class CipherMethod;
+
     typedef std::stack<Network::TcpClient> AuxTcpClient;
     typedef unsigned int SessionId;
     
@@ -70,6 +70,6 @@ namespace Blaspheme
             AuxTcpClient auxStreams;
 			
 			AuthenticationMethod * auth;
-			CipheringMethod * cipher;
+			CipherMethod * cipher;
     };
 } // Blaspheme

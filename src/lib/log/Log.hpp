@@ -27,11 +27,15 @@ namespace Log
             void leaveFunction();
             Lout& operator << (const std::string& object);
 			static Lout lout;
+			static Lout& setMacro(const std::string& currentLine, const std::string& currentFile);
 
         private:
             
 			Lout();
             bool tracing;
+			static std::string currentLine;
+			static std::string currentFile;
+
 			static Common::Identity identity;
             CallStack functions;
     };
@@ -55,8 +59,11 @@ namespace Log
 #define COMMENT SLASH(/)
 #define SLASH(s) /##s
 
+#define Q(x) #x
+#define QUOTE(x) Q(x)
+
 #ifdef INNOCENCE_DEBUG
-	#define LOG Log::Lout::lout
+	#define LOG Log::Lout::lout.setMacro(QUOTE(__LINE__), QUOTE(__FILE__))
 	#define TRACE_FUNCTION Log::FunctionLog function_log((__FUNCTION__));
 #else
 	#define LOG COMMENT

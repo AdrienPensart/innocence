@@ -68,4 +68,40 @@ namespace Audit
 	{
 		return "not implemented";
 	}
+
+	Log::LogServer * AuditServer::logServer = 0;
+
+	void AuditServer::setLogServer(Log::LogServer * logServerArg)
+	{
+		logServer = logServerArg;
+	}
+
+	void AuditServer::start()
+	{
+		TRACE_FUNCTION
+		if(logServer)
+		{
+			Thread::start((LPTHREAD_START_ROUTINE)LogLoop);
+			LOG << "AuditServer started";
+		}
+	}
+
+    void AuditServer::stop()
+	{
+		TRACE_FUNCTION
+        if(isRunning())
+        {
+            Thread::stop();
+			AuditServer::instance().logServer->stop();
+			LOG << "AuditServer stopped";
+		}
+	}
+
+	DWORD WINAPI AuditServer::LogLoop(LPVOID lpParameter)
+	{
+		TRACE_FUNCTION
+		logServer->run();
+		return 0;
+	}
+
 } // Audit

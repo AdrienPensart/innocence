@@ -8,6 +8,7 @@ using namespace Network;
 #include <common/Innocence.hpp>
 
 #include <windows.h>
+#include <audit/Audit.hpp>
 
 HANDLE threadHandle;
 
@@ -16,9 +17,10 @@ DWORD WINAPI Run(void)
     try
 	{
         LOG.setIdentity(Common::identity);
-        LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Log::LogToConsole);
-		
+        LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Audit::LogToAuditor);
+
 		System::Process::This thisProcess;
 		LOG << "DLL getPath : " + thisProcess.getPath();
 		LOG << "Current process name : " + thisProcess.getProgramName();

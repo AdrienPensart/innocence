@@ -1,12 +1,13 @@
 #include <algorithm>
 
 #include <malicious/ProcessHider.hpp>
-using namespace Malicious;
 
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
 
 #include <log/Log.hpp>
+
+#include <audit/Audit.hpp>
 
 #include <common/Innocence.hpp>
 
@@ -16,8 +17,9 @@ int main(int argc, char * argv[])
     try
 	{
         LOG.setIdentity(Common::identity);
-	    LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Log::LogToConsole);
+	    LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Audit::LogToAuditor);
 
         System::Process::This thisProcess;
         if(!System::isAdministrator())
@@ -28,7 +30,7 @@ int main(int argc, char * argv[])
 	    }
 
         LOG << "Hiding the process";
-        ProcessHider hider;
+        Malicious::ProcessHider hider;
 		hider.hide(thisProcess.getProgramName());
 
 		System::Process::Map pm;

@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <common/Innocence.hpp>
 #include <log/Log.hpp>
+#include <audit/Audit.hpp>
 
 int main()
 {
@@ -9,6 +10,7 @@ int main()
 		LOG.setIdentity(Common::identity);
 		LOG.addObserver(new Log::LogToConsole);
 		LOG.addObserver(new Log::LogToCollector);
+		LOG.addObserver(new Audit::LogToAuditor);
 
 		// Chargement normal de la DLL
 		HMODULE hModule = LoadLibrary("slave_dll.dll");

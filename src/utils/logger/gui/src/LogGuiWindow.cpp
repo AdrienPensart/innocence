@@ -16,7 +16,7 @@ LogGuiWindow::LogGuiWindow(QWidget * parent) :
 
 void LogGuiWindow::addMessage(Log::Message message)
 {
-	std::string bufferMsg = message.getIdentity().getModule() + " -> (" + message.getCallStack() + ") : " + message.getContent();
+	std::string bufferMsg = message.getIdentity().getModule() + " -> (" + message.getLine() + " in " + message.getFile() + ") (" + message.getCallStack() + ") : " + message.getContent();
 	debugOutputEdit->append(QString::fromStdString(bufferMsg));
 }
 

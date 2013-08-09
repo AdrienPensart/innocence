@@ -64,6 +64,6 @@ namespace Log
 
     void LogToConsole::update(const Message& message)
     {
-		std::cout << message.getIdentity().getModule() << " -> (" << message.getCallStack() << ") : " << message.getContent() << '\n';
+		std::cout << message.getIdentity().getModule() << " -> (" << message.getLine() << " in " << message.getFile() << ") (" << message.getCallStack() << ") : " << message.getContent() << '\n';
     }
 } // Log

@@ -6,6 +6,8 @@
 #include <system/Process.hpp>
 #include <system/Uac.hpp>
 
+#include <common/Build.hpp>
+
 int run(int argc, char ** argv)
 {
     int returnValue = EXIT_FAILURE;

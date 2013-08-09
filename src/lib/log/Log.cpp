@@ -24,6 +24,8 @@ namespace Log
 	}
 
 	Common::Identity Lout::identity;
+	std::string Lout::currentLine = QUOTE(__LINE__);
+	std::string Lout::currentFile = QUOTE(__FILE__);
 	Lout Lout::lout;
 
     Lout::Lout()
@@ -51,10 +53,17 @@ namespace Log
         identity = identityArg;
     }
 
+	Lout& Lout::setMacro(const std::string& currentLineArg, const std::string& currentFileArg)
+	{
+		currentLine = currentLineArg;
+		currentFile = currentFileArg;
+		return lout;
+	}
+
     Lout& Lout::operator << (const std::string& object)
     {
         std::string graph = genCallStack(functions);
-		Message message(identity, object, graph);
+		Message message(identity, object, graph, currentLine, currentFile);
         notify(message);
         return *this;
     }

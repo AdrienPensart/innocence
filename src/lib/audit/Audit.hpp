@@ -1,7 +1,10 @@
 #pragma once
 
+#include <common/Singleton.hpp>
+#include <log/LogServer.hpp>
 #include <log/LogObserver.hpp>
 #include <log/Message.hpp>
+#include <system/Thread.hpp>
 #include <vector>
 
 namespace Audit
@@ -53,4 +56,21 @@ namespace Audit
 			std::vector<Run> audits;
 			time_t startedAt;
 	};
+
+	class AuditServer : public Common::Singleton<AuditServer>, public System::Thread
+	{
+		public:
+
+			virtual void start();
+            virtual void stop();
+
+			static void run();
+			static void setLogServer(Log::LogServer * logServer);
+
+		private:
+
+			static DWORD WINAPI LogLoop(LPVOID lpParameter);
+			static Log::LogServer * logServer;
+	};
+
 } // Audit

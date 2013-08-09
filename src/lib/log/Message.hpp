@@ -13,12 +13,14 @@ namespace Log
 		public:
 			
 			Message();
-			Message(const Common::Identity& identity, const std::string& content, const std::string& callStack);
+			Message(const Common::Identity& identity, const std::string& content, const std::string& callStack, const std::string& line, const std::string& file);
 			
 			const Common::Identity& getIdentity() const;
 			const std::string& getContent() const ;
 			const std::string& getCallStack() const ;
 			const std::string& getTime() const ;
+			const std::string& getLine() const ;
+			const std::string& getFile() const ;
 
 			std::string serialize() const;
 			void deserialize(const std::string& buffer);
@@ -30,6 +32,8 @@ namespace Log
 			std::string content;
 			std::string callStack;
 			std::string emittedTime;
+			std::string line;
+			std::string file;
 	};
 
 } // Log

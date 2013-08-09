@@ -52,4 +52,4 @@ namespace Blaspheme
         xor_key = gived_xor_key;
     }
 
-} /* Blaspheme */
+} // Blaspheme
