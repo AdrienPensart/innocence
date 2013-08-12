@@ -15,7 +15,7 @@ namespace Log
 	{
 		public:
 
-			LogServer(const Network::Port& port);
+			LogServer(const Network::Port& port, Network::Timeout deadlineArg=Network::Timeout(1));
 			void run();
 			void stop();
 

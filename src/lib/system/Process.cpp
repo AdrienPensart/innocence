@@ -1,5 +1,6 @@
 #include "Process.hpp"
 #include "File.hpp"
+#include "Uac.hpp"
 
 #include <tchar.h>
 #include <tlhelp32.h>
@@ -95,8 +96,8 @@ namespace System
 			programPath = getPath();
 			programName = programPath;
 			programDir = programPath;
-			GetFileName(programName);
-			GetFileDir(programDir);
+			programName = GetFileName(programName);
+			programDir = GetFileDir(programDir);
 		}
 
 		This::~This()
@@ -139,6 +140,17 @@ namespace System
 				LOG << "Killing process with pid " + Common::toString(*i);
 				System::Process::KillProcess(*i);
 			}
+		}
+
+		bool This::runAsAdmin()
+		{
+			if(!isAdministrator())
+			{
+				LOG << "Try to run as administrator " + programPath + " as admin";
+				RunAsAdministrator(programName, programDir, true);
+				return false;
+			}
+			return true;
 		}
 
 		const std::string& This::getProgramPath()

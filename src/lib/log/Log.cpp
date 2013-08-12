@@ -25,7 +25,7 @@ namespace Log
 
 	Common::Identity Lout::identity;
 	std::string Lout::currentLine = QUOTE(__LINE__);
-	std::string Lout::currentFile = QUOTE(__FILE__);
+	std::string Lout::currentFile = __FILE__;
 	Lout Lout::lout;
 
     Lout::Lout()

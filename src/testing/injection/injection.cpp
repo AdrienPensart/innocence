@@ -1,23 +1,14 @@
-//#define WINVER 0x0500
-//#define _WIN32_WINNT 0x0500
-//#define _WIN32_WINNT _WIN32_WINNT_WINXP
 #include <common/Innocence.hpp>
-
 #include <audit/Audit.hpp>
-
 #include <log/Log.hpp>
-using namespace Common;
 
 #include <malicious/InternetExplorer.hpp>
 #include <malicious/Injector.hpp>
-
 #include <system/Process.hpp>
-
 #include <network/Pipe.hpp>
 using namespace Network;
 
-int main(int argc, char * argv[])
-//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int submain(int argc, char ** argv)
 {
 	int exitCode = EXIT_FAILURE;
 	try
@@ -74,3 +65,5 @@ int main(int argc, char * argv[])
 	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }
+
+INNOCENCE_MAIN

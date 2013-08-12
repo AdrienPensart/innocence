@@ -1,14 +1,12 @@
 #pragma once
 
 #include "Identity.hpp"
+#include "Common.hpp"
 
 namespace Common
 {
 
-#define BUILD 65
-
-#define Q(x) #x
-#define QUOTE(x) Q(x)
+#define BUILD 70
 
 #ifdef PROJECT_MODULE
 	static const char MODULE [] = PROJECT_MODULE;

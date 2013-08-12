@@ -3,15 +3,6 @@ cmake_minimum_required(VERSION 2.8.1)
 # innocence is entirely in C++ (or almost) !
 project(innocence CXX)
 
-# the debug flag in innocence modifies the behavior of logging
-# and stealth modes
-if ( CMAKE_BUILD_TYPE MATCHES Debug)
-	message(STATUS "Debug mode enabled")
-	add_definitions(-DINNOCENCE_DEBUG)
-elseif( CMAKE_BUILD_TYPE MATCHES Release)
-	message(STATUS "Release mode enabled")	
-endif ()
-
 # Installation directory of Qt
 set(QT_INSTALL_DIR "C:\\Qt\\Qt5.1.0\\5.1.0\\msvc2012")
 
@@ -25,12 +16,18 @@ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /SAFESEH:NO")
 #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
+# the debug flag in innocence modifies the behavior of logging
+# and stealth modes
 if ( CMAKE_BUILD_TYPE MATCHES Debug)
+	message(STATUS "Debug mode enabled")
+	add_definitions(-DINNOCENCE_DEBUG)
 	set(BUILD_FLAGS_MD "/MDd")
 	set(BUILD_FLAGS_MT "/MTd")
 elseif( CMAKE_BUILD_TYPE MATCHES Release)
+	message(STATUS "Release mode enabled")
 	set(BUILD_FLAGS_MD "/MD")
 	set(BUILD_FLAGS_MT "/MT")
+	set(GUI_TYPE WIN32)
 endif ()
 
 # hack to get around the "Debug" and "Release" directories cmake tries to add on Windows

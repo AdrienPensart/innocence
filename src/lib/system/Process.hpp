@@ -54,6 +54,7 @@ namespace System
 				const std::string getArg(unsigned int index);
 				char ** getArgs();
 				void killHierarchy();
+				bool runAsAdmin();
 
 			private:
 

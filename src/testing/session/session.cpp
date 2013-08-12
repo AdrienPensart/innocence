@@ -7,7 +7,7 @@ using namespace Common;
 using namespace Network;
 using namespace Blaspheme;
 
-int main(int argc, char * argv[])
+int submain(int argc, char ** argv)
 {
 	LOG.setIdentity(Common::identity);
 	LOG.addObserver(new Log::LogToConsole);
@@ -72,3 +72,5 @@ int main(int argc, char * argv[])
 	}
 	return EXIT_SUCCESS;
 }
+
+INNOCENCE_MAIN

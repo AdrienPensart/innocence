@@ -10,16 +10,23 @@ using namespace std;
 
 namespace System
 {
-	void GetFileDir(std::string& pathname)
+	std::string GetFileDir(const std::string& pathname)
 	{
 		size_t last = pathname.find_last_of('\\');
-		pathname = pathname.substr(0, last);
+		return pathname.substr(0, last);
 	}
 
-	void GetFileName(std::string& pathname)
+	std::string GetFileName(const std::string& pathname)
 	{
 		size_t last = pathname.find_last_of('\\');
-		pathname = pathname.substr(last+1, pathname.size());
+		return pathname.substr(last+1);
+	}
+
+	std::string GetFileBase(const std::string& pathname)
+	{
+		size_t last = pathname.find_last_of('\\');
+		size_t extension = pathname.find_last_of('.');
+		return pathname.substr(last+1, extension-last-1);
 	}
 
 	std::string ReadLine(std::fstream& handle)

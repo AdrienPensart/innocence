@@ -4,6 +4,7 @@
 #include <common/Convert.hpp>
 #include <common/Observable.hpp>
 #include <common/Identity.hpp>
+#include <common/Common.hpp>
 
 #include "LogObserver.hpp"
 
@@ -55,22 +56,18 @@ namespace Log
 
 } // Log
 
-// hack to comment log lines when in release mode
-#define COMMENT SLASH(/)
-#define SLASH(s) /##s
-
-#define Q(x) #x
-#define QUOTE(x) Q(x)
-
 #ifdef INNOCENCE_DEBUG
-	#define LOG Log::Lout::lout.setMacro(QUOTE(__LINE__), QUOTE(__FILE__))
+	#define LOG Log::Lout::lout.setMacro(QUOTE(__LINE__), __FILE__)
 	#define TRACE_FUNCTION Log::FunctionLog function_log((__FUNCTION__));
 #else
 	#define LOG COMMENT
 	#define TRACE_FUNCTION COMMENT
 #endif
 
-#define CATCH_UNKNOWN_EXCEPTION catch(...){LOG << "Unknown exception";}
+#define CATCH_UNKNOWN_EXCEPTION \
+catch(...){ \
+LOG << "Unknown exception"; \
+}
 
 //#define SCOPED_LOG(x) Common::ScopedLog scoped_log((x));
 //#define FUNC_LOG(x) Common::FunctionLog function_log((x));

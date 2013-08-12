@@ -4,26 +4,23 @@
 #include <common/Innocence.hpp>
 #include <audit/Audit.hpp>
 
-int main()
+int submain(int argc, char ** argv)
 {
+	int exitCode = EXIT_FAILURE;
     try
 	{
         LOG.setIdentity(Common::identity);
 		LOG.addObserver(new Log::LogToConsole);
 	    LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Audit::LogToAuditor);
-        LOG.trace();
 		
 		Malicious::InternetExplorer ie;
-
 		LOG << "Internet Explorer PID : " + Common::toString(ie.getPid());
-
-		system("pause");
-
+		Sleep(1000);
 		ie.kill();
 	}
-	catch(...)
-	{
-		LOG << "Erreur d'origine inconnue.";
-	}
+	CATCH_UNKNOWN_EXCEPTION
+	return exitCode;
 }
+
+INNOCENCE_MAIN

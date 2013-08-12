@@ -9,6 +9,11 @@ namespace System
 		return running;
 	}
 
+	bool Thread::join(const Network::Timeout& deadline)
+	{
+		return WaitForSingleObject(hThread, deadline.getMs()) == WAIT_OBJECT_0;
+	}
+
 	void Thread::start(LPTHREAD_START_ROUTINE routine)
 	{
 		TRACE_FUNCTION

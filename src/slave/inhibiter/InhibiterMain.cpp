@@ -24,11 +24,11 @@ using namespace std;
 void ExecuteCommand(InhibiterCore& injector, const string& command);
 void Inject(InhibiterCore& injector, const string& inhibitorPath);
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int submain(int argc, char ** argv)
 {	
-    TRACE_FUNCTION
     LOG.setIdentity(Common::identity);
 	LOG.addObserver(new Log::LogToCollector);
+	LOG.addObserver(new Log::LogToConsole);
 
 	System::Process::This thisProcess;
     InhibiterCore injector (thisProcess.getProgramPath());
@@ -54,6 +54,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     }
 	return EXIT_SUCCESS;
 }
+
+INNOCENCE_MAIN
 
 void ExecuteCommand(InhibiterCore& injector, const string& command)
 {

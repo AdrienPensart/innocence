@@ -15,7 +15,7 @@ add_custom_command(
 set(INHIBITER_TARGET "inhibiter")
 
 file(GLOB_RECURSE inhibiter_source_files inhibiter/*)
-add_executable(${INHIBITER_TARGET} WIN32 ${inhibiter_source_files})
+add_executable(${INHIBITER_TARGET} ${GUI_TYPE} ${inhibiter_source_files})
 set_target_properties(${INHIBITER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${INHIBITER_TARGET}")
 
 # substrate has to be built before inhibiter, because of resource inclusion

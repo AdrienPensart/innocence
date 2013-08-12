@@ -2,6 +2,7 @@
 
 #ifdef WIN32
 
+#include <network/Timeout.hpp>
 #include <windows.h>
 
 namespace System
@@ -11,6 +12,7 @@ namespace System
 		public:
 			virtual void start()=0;
             virtual void stop();
+			virtual bool join(const Network::Timeout& deadline=Network::Timeout::infinite());
 			bool isRunning();
 
 		protected:

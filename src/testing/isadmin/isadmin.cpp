@@ -3,9 +3,8 @@
 #include <common/Innocence.hpp>
 #include <audit/Audit.hpp>
 
-int main(int argc, char *argv[])
+int submain(int argc, char ** argv)
 {
-	TRACE_FUNCTION
 	LOG.setIdentity(Common::identity);
 	LOG.addObserver(new Log::LogToConsole);
 	LOG.addObserver(new Log::LogToCollector);
@@ -19,3 +18,5 @@ int main(int argc, char *argv[])
 	LOG << "You are NOT administrator";
 	return EXIT_FAILURE;
 }
+
+INNOCENCE_MAIN

@@ -2,6 +2,7 @@
 #include "Log.hpp"
 #include "Message.hpp"
 
+#include <system/File.hpp>
 #include <common/Settings.hpp>
 #include <iostream>
 
@@ -64,6 +65,12 @@ namespace Log
 
     void LogToConsole::update(const Message& message)
     {
-		std::cout << message.getIdentity().getModule() << " -> (" << message.getLine() << " in " << message.getFile() << ") (" << message.getCallStack() << ") : " << message.getContent() << '\n';
+		std::cout << message.getIdentity().getModule() 
+				  << " -> (line " << message.getLine() 
+				  << " in " << System::GetFileName(message.getFile()) 
+				  << ") (" << message.getCallStack() 
+				  << ") : " 
+				  << message.getContent() 
+				  << '\n';
     }
 } // Log

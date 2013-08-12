@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <string>
 #include <fstream>
 
@@ -15,8 +14,9 @@ namespace System
 	};
 	#endif
 	
-	void GetFileDir(std::string& pathname);
-	void GetFileName(std::string& pathname);
+	std::string GetFileDir(const std::string& pathname);
+	std::string GetFileName(const std::string& pathname);
+	std::string GetFileBase(const std::string& pathname);
     std::string ReadLine(std::fstream& handle);
 	std::string ReadAll(std::fstream& handle);
 	bool isReadable( const std::string & file);

@@ -5,7 +5,7 @@ using namespace std;
 #include <common/Innocence.hpp>
 #include <audit/Audit.hpp>
 
-int main(int argc, char * argv[])
+int submain(int argc, char ** argv)
 {
 	LOG.setIdentity(Common::identity);
     LOG.addObserver(new Log::LogToConsole);
@@ -71,3 +71,5 @@ int main(int argc, char * argv[])
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }
+
+INNOCENCE_MAIN

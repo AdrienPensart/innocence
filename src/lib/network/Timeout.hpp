@@ -22,14 +22,17 @@ namespace Network
 			 * Paramètre le timeout avec une durée en seconde et microsecondes.
 			 */
             void set(const long& sec, const long& usec=0);
-			
+			unsigned long getMs() const;
+
 			/**
 			 * Renvoi la structure C sous-jacente afin de garder une interface
 			 * avec la fonction select() par exemple.
 			 */
             timeval & c_struct();
+
+			static const Timeout& infinite();
+
 		private:
 			timeval time;
 	};
-
 } // Network

@@ -8,7 +8,7 @@ using namespace Common;
 
 #include <audit/Audit.hpp>
 
-int main(int argc, char *argv[])
+int submain(int argc, char **argv)
 {
 	try
 	{
@@ -26,3 +26,5 @@ int main(int argc, char *argv[])
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_FAILURE;
 }
+
+INNOCENCE_MAIN

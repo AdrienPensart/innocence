@@ -5,8 +5,8 @@ using namespace Network;
 
 namespace Log
 {
-	LogServer::LogServer(const Port& port) : 
-		deadline(1),
+	LogServer::LogServer(const Port& port, Timeout deadlineArg) : 
+		deadline(deadlineArg),
 		interrupt(false)
 	{
 		server = new TcpServer(port);

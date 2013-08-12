@@ -3,7 +3,7 @@
 #include <log/Log.hpp>
 #include <audit/Audit.hpp>
 
-int main()
+int submain(int argc, char ** argv)
 {
 	try
 	{
@@ -17,8 +17,11 @@ int main()
 		//HMODULE hModule = LoadLibrary("isinjected.dll");
 		Sleep(INFINITE);
 	}
-	catch(...)
+	catch(Common::Exception&)
 	{
 	}
+	CATCH_UNKNOWN_EXCEPTION
 	return 0;
 }
+
+INNOCENCE_MAIN
