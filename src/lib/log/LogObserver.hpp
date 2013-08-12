@@ -23,6 +23,7 @@ namespace Log
 
         private:
 
+			bool disabled;
 			const std::string filepath;
             std::ofstream file;
     };
@@ -44,6 +45,7 @@ namespace Log
 	class LogToCollector : public LogToNetwork
 	{
 		public:
+			LogToCollector(const Network::Host& loggerIp, const Network::Port& loggerPort);
             LogToCollector();
 	};
 

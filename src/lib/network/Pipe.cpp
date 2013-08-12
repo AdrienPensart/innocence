@@ -1,6 +1,6 @@
 #include "Pipe.hpp"
 
-#include <common/Convert.hpp>
+#include <common/Utility.hpp>
 
 #ifdef WIN32
 

@@ -1,22 +1,12 @@
 #include "Message.hpp"
 #include "Log.hpp"
-#include <ctime>
-#include <algorithm>
+#include <common/Utility.hpp>
 
 namespace Log
 {
 	namespace Private
 	{
 		const char * marker = "M#M";
-	}
-
-	std::string genTime()
-	{
-		time_t now;
-		time(&now);
-		std::string mytime = ctime(&now);
-		mytime.erase(std::remove(mytime.begin(), mytime.end(), '\n'), mytime.end());
-		return mytime;
 	}
 
 	unsigned int Message::id = 0;
@@ -31,7 +21,7 @@ namespace Log
 		callStack(callStackArg),
 		line(lineArg),
 		file(fileArg),
-		emittedTime(genTime())
+		emittedTime(Common::currentDate())
 	{
 	}
 
@@ -74,7 +64,7 @@ namespace Log
 	{
 		std::string bufferCopy = buffer;
 		std::vector<std::string> output;
-		Serializable::split(bufferCopy, Private::marker, output);
+		Common::split(bufferCopy, Private::marker, output);
 		identity.deserialize(output[0]);
 		content = output[1];
 		callStack = output[2];

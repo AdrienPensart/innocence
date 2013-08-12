@@ -1,5 +1,6 @@
 #include "Run.hpp"
 
+#include <common/Utility.hpp>
 #include <system/Process.hpp>
 #include <system/File.hpp>
 #include <log/Log.hpp>
@@ -9,7 +10,7 @@ namespace Audit
 	Run::Run(const std::string& executableArg) :
 		executable(executableArg),
 		result(EXIT_FAILURE),
-		startedAt(Log::genTime())
+		startedAt(Common::currentDate())
 	{
 		module = System::GetFileName(executable);
 	}

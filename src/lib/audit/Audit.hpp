@@ -9,6 +9,11 @@ namespace Audit
 	{
 		public:
 
+			LogToAuditor(const Network::Host& loggerIp, const Network::Port& loggerPort) : 
+				LogToNetwork(loggerIp, loggerPort)
+			{
+			}
+
             LogToAuditor() : 
 				LogToNetwork(Common::AUDIT_SERVER_IP, Common::AUDIT_SERVER_PORT)
 			{

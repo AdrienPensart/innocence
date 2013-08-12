@@ -2,14 +2,6 @@
 
 #include <system/Process.hpp>
 
-// hack to quote string at compile time
-#define Q(x) #x
-#define QUOTE(x) Q(x)
-
-// hack to comment log lines when in release mode
-#define COMMENT SLASH(/)
-#define SLASH(s) /##s
-
 // hack to uniform subsystems in windows
 #ifdef INNOCENCE_DEBUG
 #define INNOCENCE_MAIN \

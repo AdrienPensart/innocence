@@ -43,19 +43,36 @@ namespace Log
     {
     }
 
-    LogToFile::LogToFile(const std::string& _filepath)
-    :filepath(_filepath)
+	LogToCollector::LogToCollector(const Network::Host& loggerIp, const Network::Port& loggerPort) : 
+		LogToNetwork(loggerIp, loggerPort)
+	{
+	}
+
+    LogToFile::LogToFile(const std::string& filepathArg) : 
+		filepath(filepathArg),
+		disabled(false)
     {
-        file.open(filepath.c_str());
+        file.open(filepath.c_str(), std::ofstream::out | std::ofstream::trunc);
         if(!file.is_open())
         {
-            throw Common::Exception("Can't open log file");
+			disabled = true;
+            LOG << "Unable to create or open log file " + filepath;
         }
     }
 
     void LogToFile::update(const Message& message)
     {
-		file << message.getIdentity().getModule() << message.getContent();
+		if(!disabled)
+		{
+			file  << message.getIdentity().getModule()
+  				  << " on " << message.getIdentity().getOs()
+				  << " -> (" << message.getTime() << ", " << message.getLine() 
+				  << " in " << System::GetFileName(message.getFile()) 
+				  << ") (" << message.getCallStack() 
+				  << ") : " 
+				  << message.getContent() 
+				  << '\n';
+		}
     }
     
     LogToConsole::LogToConsole(const std::string& _title)
@@ -66,7 +83,8 @@ namespace Log
     void LogToConsole::update(const Message& message)
     {
 		std::cout << message.getIdentity().getModule() 
-				  << " -> (line " << message.getLine() 
+				  << " on " << message.getIdentity().getOs()
+				  << " -> (" << message.getTime() << ", line " << message.getLine() 
 				  << " in " << System::GetFileName(message.getFile()) 
 				  << ") (" << message.getCallStack() 
 				  << ") : " 

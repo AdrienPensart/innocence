@@ -6,8 +6,6 @@
 
 namespace Log
 {
-	std::string genTime();
-
 	class Message : public Common::Serializable
 	{
 		public:
@@ -35,5 +33,4 @@ namespace Log
 			std::string line;
 			std::string file;
 	};
-
 } // Log

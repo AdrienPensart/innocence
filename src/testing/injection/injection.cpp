@@ -1,4 +1,6 @@
 #include <common/Innocence.hpp>
+#include <common/ParseOptions.hpp>
+
 #include <audit/Audit.hpp>
 #include <log/Log.hpp>
 
@@ -14,9 +16,8 @@ int submain(int argc, char ** argv)
 	try
 	{
 		LOG.setIdentity(Common::identity);
-		LOG.addObserver(new Log::LogToConsole);
-        LOG.addObserver(new Log::LogToCollector);
-		LOG.addObserver(new Audit::LogToAuditor);
+
+		Common::ParseOptions(argc, argv);
 
 		System::Process::This thisProcess;		
         Malicious::InternetExplorer ie(false);
@@ -62,7 +63,7 @@ int submain(int argc, char ** argv)
     catch(Common::Exception&)
     {
     }
-	CATCH_UNKNOWN_EXCEPTION
+	//CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }
 

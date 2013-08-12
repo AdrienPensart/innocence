@@ -1,6 +1,6 @@
 #include "SocketException.hpp"
 
-#include <common/Convert.hpp>
+#include <common/Utility.hpp>
 #include <log/Log.hpp>
 
 namespace Network
