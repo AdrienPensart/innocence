@@ -9,8 +9,6 @@ namespace Log
 		const char * marker = "M#M";
 	}
 
-	unsigned int Message::id = 0;
-
 	Message::Message()
 	{
 	}
@@ -48,6 +46,11 @@ namespace Log
 	const std::string& Message::getTime() const
 	{
 		return emittedTime;
+	}
+
+	Common::Identity& Message::getIdentity()
+	{
+		return identity;
 	}
 
 	const Common::Identity& Message::getIdentity() const

@@ -12,36 +12,37 @@
 
 namespace System
 {
-	void getWindowsPath(std::string& path)
-    {
-        char winpath [MAX_PATH];
-        unsigned int size_returned = 0;        
-        if(size_returned = GetWindowsDirectory(winpath, MAX_PATH))
+	std::string getComputerName()
+	{
+		DWORD size = MAX_COMPUTERNAME_LENGTH;
+		char computerName [MAX_COMPUTERNAME_LENGTH];
+		if(GetComputerName(computerName, &size))
 		{
-			path.assign(winpath, size_returned);
+			return std::string(computerName, size);
 		}
+		return "";
+	}
+
+	std::string getCompleteComputerName()
+	{
+		DWORD size = MAX_COMPUTERNAME_LENGTH;
+		char computerName [MAX_COMPUTERNAME_LENGTH];
+		if(GetComputerNameEx(ComputerNameDnsFullyQualified, computerName, &size))
+		{
+			return std::string(computerName, size);
+		}
+		return "";
 	}
 
 	std::string getWindowsPath()
 	{
-		std::string path;
 		char winpath [MAX_PATH];
         unsigned int size_returned = 0;        
         if(size_returned = GetWindowsDirectory(winpath, MAX_PATH))
 		{
-			path.assign(winpath, size_returned);
+			return std::string(winpath, size_returned);
 		}
-		return path;
-	}
-
-	void getWindowsPath(std::wstring& path)
-	{
-		wchar_t winpath [MAX_PATH];
-        unsigned int size_returned = 0;        
-        if(size_returned = GetWindowsDirectoryW(winpath, MAX_PATH))
-		{
-			//path.assign(winpath, size_returned);
-		}
+		return "";
 	}
 
     void Token()

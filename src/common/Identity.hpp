@@ -32,7 +32,8 @@ namespace Common
 				buildTime(buildTimeArg),
 				buildTimestamp(buildTimestampArg),
 				executionDate(currentDate()),
-				os(System::getSystemVersionString())
+				os(System::getSystemVersionString()),
+				computer(System::getCompleteComputerName())
 			{
 			}
 			
@@ -71,14 +72,35 @@ namespace Common
 				return executionDate;
 			}
 
+			const std::string& getComputer() const
+			{
+				return computer;
+			}
+
 			const std::string& getOs() const
 			{
 				return os;
 			}
 
+			const std::string& getIp() const
+			{
+				return ip;
+			}
+
+			void setIp(const std::string& ipArg)
+			{
+				ip = ipArg;
+			}
+
 			std::string serialize() const
 			{
-				return module + Private::marker + os + Private::marker + buildId + Private::marker + buildDate + Private::marker + buildTime + Private::marker + buildTimestamp;
+				return module + Private::marker + 
+					   computer + Private::marker + 
+					   os + Private::marker + 
+					   buildId + Private::marker + 
+					   buildDate + Private::marker + 
+					   buildTime + Private::marker + 
+buildTimestamp;
 			}
 
 			void deserialize(const std::string& buffer)
@@ -86,15 +108,18 @@ namespace Common
 				std::vector<std::string> output;
 				split(buffer, Private::marker, output);
 				module = output[0];
-				os = output[1];
-				buildId = output[2];
-				buildDate = output[3];
-				buildTime = output[4];
-				buildTimestamp = output[5];
+				computer = output[1];
+				os = output[2];
+				buildId = output[3];
+				buildDate = output[4];
+				buildTime = output[5];
+				buildTimestamp = output[6];
 			}
 
 		private:
 
+			std::string computer;
+			std::string ip;
 			std::string os;
 			std::string module;
 			std::string executionDate;

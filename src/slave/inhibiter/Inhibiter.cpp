@@ -16,11 +16,10 @@ using namespace System;
 
 namespace Inhibiter
 {
-    InhibiterCore::InhibiterCore(const std::string& executable)
+    InhibiterCore::InhibiterCore(const std::string& executable) : 
+		current_executable_path(executable),
+		install_directory(System::getWindowsPath())
     {
-        current_executable_path = executable;
-        System::getWindowsPath(install_directory);
-
         executable_path = install_directory + "\\" + Common::INHIBITER_EXE_NAME;
         dll_path = install_directory + "\\" + Common::INHIBITION_DLL_NAME;
     }

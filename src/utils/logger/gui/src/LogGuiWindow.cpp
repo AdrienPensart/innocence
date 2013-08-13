@@ -24,15 +24,17 @@ namespace LogGui
 		const int currentRow = messagesTableWidget->rowCount();
 		messagesTableWidget->insertRow(currentRow);
 		messagesTableWidget->setItem(currentRow, 0, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getModule())));
-		messagesTableWidget->setItem(currentRow, 1, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getBuildId())));
-		messagesTableWidget->setItem(currentRow, 2, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getBuildDate())));
-		messagesTableWidget->setItem(currentRow, 3, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getExecutionDate())));
-		messagesTableWidget->setItem(currentRow, 4, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getOs())));
-		messagesTableWidget->setItem(currentRow, 5, new QTableWidgetItem(QString::fromStdString(message.getFile())));
-		messagesTableWidget->setItem(currentRow, 6, new QTableWidgetItem(QString::fromStdString(message.getLine())));
-		messagesTableWidget->setItem(currentRow, 7, new QTableWidgetItem(QString::fromStdString(message.getTime())));
-		messagesTableWidget->setItem(currentRow, 8, new QTableWidgetItem(QString::fromStdString(message.getCallStack())));
-		messagesTableWidget->setItem(currentRow, 9, new QTableWidgetItem(QString::fromStdString(message.getContent())));
+		messagesTableWidget->setItem(currentRow, 1, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getComputer())));
+		messagesTableWidget->setItem(currentRow, 2, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getIp())));
+		messagesTableWidget->setItem(currentRow, 3, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getBuildId())));
+		messagesTableWidget->setItem(currentRow, 4, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getBuildDate())));
+		messagesTableWidget->setItem(currentRow, 5, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getExecutionDate())));
+		messagesTableWidget->setItem(currentRow, 6, new QTableWidgetItem(QString::fromStdString(message.getIdentity().getOs())));
+		messagesTableWidget->setItem(currentRow, 7, new QTableWidgetItem(QString::fromStdString(message.getFile())));
+		messagesTableWidget->setItem(currentRow, 8, new QTableWidgetItem(QString::fromStdString(message.getLine())));
+		messagesTableWidget->setItem(currentRow, 9, new QTableWidgetItem(QString::fromStdString(message.getTime())));
+		messagesTableWidget->setItem(currentRow, 10, new QTableWidgetItem(QString::fromStdString(message.getCallStack())));
+		messagesTableWidget->setItem(currentRow, 11, new QTableWidgetItem(QString::fromStdString(message.getContent())));
 	}
 
 	void LogGuiWindow::saveLog()

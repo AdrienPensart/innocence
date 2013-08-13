@@ -14,6 +14,7 @@ namespace Log
 			Message(const Common::Identity& identity, const std::string& content, const std::string& callStack, const std::string& line, const std::string& file);
 			
 			const Common::Identity& getIdentity() const;
+			Common::Identity& getIdentity();
 			const std::string& getContent() const ;
 			const std::string& getCallStack() const ;
 			const std::string& getTime() const ;
@@ -25,7 +26,6 @@ namespace Log
 
 		private:
 
-			static unsigned int id;
 			Common::Identity identity;
 			std::string content;
 			std::string callStack;

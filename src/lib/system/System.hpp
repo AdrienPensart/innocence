@@ -22,10 +22,10 @@ namespace System
     };
 
     SystemVersion getSystemVersion();
-	void getWindowsPath(std::string& path);
-	void getWindowsPath(std::wstring& path);
 	std::string getWindowsPath();
     std::string getSystemVersionString();
+	std::string getComputerName();
+	std::string getCompleteComputerName();
     bool shutdown();
     bool reboot();
     bool logout();

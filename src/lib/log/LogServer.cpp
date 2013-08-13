@@ -40,6 +40,7 @@ namespace Log
 							{
 								Message message;
 								message.deserialize(buffer);
+								message.getIdentity().setIp(client->getIp());
 								notify(message);
 							}
 						}

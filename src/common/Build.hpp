@@ -6,7 +6,7 @@
 namespace Common
 {
 
-#define BUILD 72
+#define BUILD 75
 
 #ifdef PROJECT_MODULE
 	static const char MODULE [] = PROJECT_MODULE;
