@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>402</height>
+    <width>1147</width>
+    <height>734</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,88 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QTableWidget" name="messagesTableWidget">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>10</number>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>module</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>build ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>build date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>execution date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>system</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>file</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>line</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>emitted date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>callstack</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>content</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
     <widget class="QTextEdit" name="debugOutputEdit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="undoRedoEnabled">
       <bool>false</bool>
      </property>
@@ -32,22 +113,18 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="saveLogButton">
-       <property name="text">
-        <string>Enregistrer Log</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="deleteMsgButton">
-       <property name="text">
-        <string>Effacer Messages</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QPushButton" name="deleteMsgButton">
+     <property name="text">
+      <string>Effacer Messages</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="saveLogButton">
+     <property name="text">
+      <string>Enregistrer Log</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

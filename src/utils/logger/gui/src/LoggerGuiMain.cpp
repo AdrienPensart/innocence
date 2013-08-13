@@ -1,32 +1,25 @@
+#include <common/Common.hpp>
 #include <system/Process.hpp>
 #include <log/Log.hpp>
 #include <QApplication>
 
 #include "LogGuiWindow.hpp"
 
-int run(int argc, char ** argv)
+int submain(int argc, char ** argv)
 {
     int returnValue = EXIT_FAILURE;
     try
     {
 		QApplication app(argc, argv);
-		LogGuiWindow window;
+		LogGui::LogGuiWindow window;
 		window.show();
 		returnValue = app.exec();
     }
+	catch(Common::Exception&)
+	{
+	}
     CATCH_UNKNOWN_EXCEPTION
     return returnValue;
 }
 
-#ifdef INNOCENCE_DEBUG
-int main(int argc, char * argv[])
-{
-    return run(argc, argv);
-}
-#else
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-	System::Process::This thisProcess;
-	return run(thisProcess.getArgCount(), thisProcess.getArgs());
-}
-#endif // INNOCENCE_DEBUG
+INNOCENCE_MAIN

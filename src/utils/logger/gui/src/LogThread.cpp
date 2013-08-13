@@ -3,36 +3,39 @@
 #include <common/Innocence.hpp>
 #include <log/Log.hpp>
 
-LogToGui::LogToGui(LogThread * logThreadArg) : 
-	logThread(logThreadArg)
+namespace LogGui
 {
-}
+	LogToGui::LogToGui(LogThread * logThreadArg) : 
+		logThread(logThreadArg)
+	{
+	}
 
-void LogToGui::update(const Log::Message& message)
-{
-	Log::Message msg = message;
-	logThread->addMessage(msg);
-}
+	void LogToGui::update(const Log::Message& message)
+	{
+		Log::Message msg = message;
+		logThread->addMessage(msg);
+	}
 
-LogThread::LogThread() : 
-	logserver(Common::LOG_COLLECTOR_PORT)
-{
-	logserver.addObserver(new Log::LogToConsole);
-	logserver.addObserver(new LogToGui(this));
-}
+	LogThread::LogThread() : 
+		logserver(Common::LOG_COLLECTOR_PORT)
+	{
+		logserver.addObserver(new Log::LogToConsole);
+		logserver.addObserver(new LogToGui(this));
+	}
 
-LogThread::~LogThread()
-{
-	logserver.stop();
-	wait();
-}
+	LogThread::~LogThread()
+	{
+		logserver.stop();
+		wait();
+	}
 
-void LogThread::addMessage(Log::Message message)
-{
-	emit newMessage(message);
-}
+	void LogThread::addMessage(Log::Message message)
+	{
+		emit newMessage(message);
+	}
 
-void LogThread::run()
-{
-	logserver.run();
-}
+	void LogThread::run()
+	{
+		logserver.run();
+	}
+} // LogGui

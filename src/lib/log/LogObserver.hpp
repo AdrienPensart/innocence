@@ -61,4 +61,10 @@ namespace Log
             const std::string title;
     };
 
+	class LogToSql : public LogObserver
+	{
+		public:
+			virtual void update(const Message& message);
+	};
+
 } // Log

@@ -17,7 +17,7 @@ namespace Audit
 
 	void Run::run()
 	{
-		System::Process::Launcher auditExeProcess(executable);
+		System::Process::Launcher auditExeProcess(executable, "-collector 127.0.0.1:81 -auditor 127.0.0.1:82");
 		result = auditExeProcess.wait();
 	}
 

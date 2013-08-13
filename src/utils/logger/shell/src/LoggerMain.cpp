@@ -1,12 +1,24 @@
 #include <log/LogServer.hpp>
-#include <log/Log.hpp>
-#include <log/Message.hpp>
-#include <common/Innocence.hpp>
+#include <common/ParseOptions.hpp>
+#include <common/Settings.hpp>
+#include <common/Common.hpp>
 
-int main(int argc, char * argv[])
+int submain(int argc, char ** argv)
 {
-	Log::LogServer logserver(Common::LOG_COLLECTOR_PORT);
-	logserver.addObserver(new Log::LogToConsole);
-	logserver.run();
+	try
+	{
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
+
+		Log::LogServer logserver(Common::LOG_COLLECTOR_PORT);
+		logserver.addObserver(new Log::LogToConsole);
+		logserver.run();
+	}
+	catch(Common::Exception&)
+	{
+	}
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }
+
+INNOCENCE_MAIN

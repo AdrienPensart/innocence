@@ -5,34 +5,38 @@
 #include <log/Message.hpp>
 using Log::Message;
 
-class LogThread : public QThread
+namespace LogGui
 {
-	Q_OBJECT
-       
-	public:
-       
-		LogThread();
-		~LogThread();
-		void run();
-        void addMessage(Message message);
 
-	signals:
+	class LogThread : public QThread
+	{
+		Q_OBJECT
+       
+		public:
+       
+			LogThread();
+			~LogThread();
+			void run();
+			void addMessage(Message message);
+
+		signals:
         
-		void newMessage(Message message);
+			void newMessage(Message message);
             
-	private:
+		private:
        
-		Log::LogServer logserver;
-};
+			Log::LogServer logserver;
+	};
 
-class LogToGui : public Log::LogObserver
-{
-    public:
+	class LogToGui : public Log::LogObserver
+	{
+		public:
 
-        LogToGui(LogThread * logThread);
-        virtual void update(const Message& message);
+			LogToGui(LogThread * logThread);
+			virtual void update(const Message& message);
 
-    private:
+		private:
 	
-		LogThread * logThread;
-};
+			LogThread * logThread;
+	};
+} // LogGui
