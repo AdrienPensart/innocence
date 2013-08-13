@@ -24,7 +24,7 @@ namespace Malicious
 
         public:
 
-            const std::string& get_keylog_path(){return log_file;}
+            const std::string& getKeylogPath();
             void setKeylog(const std::string& file);
             void flush();
             
@@ -34,7 +34,7 @@ namespace Malicious
             void clearKeylog();
             
             void addKey(const char key);
-            HHOOK getHook(){return hook;}
+            HHOOK getHook();
 
 			// limite de la taille du fichier log a 5 Mo
 			enum {MAX_BUFFERED = 2048, LOGFILE_MAX_SIZE = 5000000};

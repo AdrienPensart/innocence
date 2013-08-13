@@ -1,7 +1,7 @@
 #include <malicious/InternetExplorer.hpp>
 #include <log/Log.hpp>
 
-#include <common/Innocence.hpp>
+#include <common/ParseOptions.hpp>
 #include <audit/Audit.hpp>
 
 int submain(int argc, char ** argv)
@@ -10,10 +10,7 @@ int submain(int argc, char ** argv)
     try
 	{
         LOG.setIdentity(Common::identity);
-		LOG.addObserver(new Log::LogToConsole);
-	    LOG.addObserver(new Log::LogToCollector);
-		LOG.addObserver(new Audit::LogToAuditor);
-		
+		Common::ParseOptions(argc, argv);
 		Malicious::InternetExplorer ie;
 		LOG << "Internet Explorer PID : " + Common::toString(ie.getPid());
 		Sleep(1000);

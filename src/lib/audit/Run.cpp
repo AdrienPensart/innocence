@@ -23,7 +23,7 @@ namespace Audit
 
 	void Run::build()
 	{
-		for(std::vector<Log::Message>::size_type index = 0; index != messages.size(); index++)
+		for(size_t index = 0; index != messages.size(); index++)
 		{
 			const Log::Message& message = messages[index];
 			LOG << message.getIdentity().getModule() 

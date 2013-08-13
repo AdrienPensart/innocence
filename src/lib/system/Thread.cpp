@@ -4,6 +4,18 @@
 
 namespace System
 {
+	Thread::Thread(LPTHREAD_START_ROUTINE routineArg) : 
+		routine(routineArg),
+		dwThread(0),
+		hThread(0),
+		running(0)
+	{
+	}
+	
+	Thread::~Thread()
+	{
+	}
+
 	bool Thread::isRunning()
 	{
 		return running;
@@ -11,13 +23,19 @@ namespace System
 
 	bool Thread::join(const Network::Timeout& deadline)
 	{
-		return WaitForSingleObject(hThread, deadline.getMs()) == WAIT_OBJECT_0;
+		if(running)
+		{
+			if(WaitForSingleObject(hThread, deadline.getMs()) == WAIT_OBJECT_0)
+			{
+				running = false;
+			}
+		}
+		return !running;
 	}
 
-	void Thread::start(LPTHREAD_START_ROUTINE routine)
+	void Thread::start()
 	{
 		TRACE_FUNCTION
-        // on ne démarre le keylogger uniquement s'il n'est pas déjà actif
         if(!running)
         {
             hThread = CreateThread(0, 0, routine, 0, 0, &dwThread);

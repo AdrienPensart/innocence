@@ -22,7 +22,7 @@ namespace Log
 				try
 				{
 					SocketSet out = SelectSet::SelectOnRead(in, deadline);
-					for(SocketSet::size_type index = 0; index != out.size(); index++)
+					for(size_t index = 0; index < out.size(); index++)
 					{
 						if(out[index] == server)
 						{
@@ -47,7 +47,7 @@ namespace Log
 				}
 				catch(Deconnection& d)
 				{
-					for(SocketSet::size_type index = 0; index != in.size(); index++)
+					for(size_t index = 0; index < in.size(); index++)
 					{
 						if(d.getValue() == in[index]->getDescriptor())
 						{
@@ -59,7 +59,7 @@ namespace Log
 				}
 			}
 
-			for(SocketSet::size_type index = 0; index != in.size(); index++)
+			for(size_t index = 0; index < in.size(); index++)
 			{
 				delete in[index];
 			}

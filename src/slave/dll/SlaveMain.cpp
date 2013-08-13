@@ -1,6 +1,4 @@
 #include <windows.h>
-HANDLE threadHandle;
-
 #include <common/Innocence.hpp>
 #include <log/Log.hpp>
 #include <system/Uac.hpp>

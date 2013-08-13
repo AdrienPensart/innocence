@@ -18,6 +18,8 @@ namespace Audit
 
 	class AuditServer : public Common::Singleton<AuditServer>, public System::Thread
 	{
+		friend class Common::Singleton<AuditServer>;
+
 		public:
 
 			virtual void start();
@@ -25,6 +27,10 @@ namespace Audit
 
 			static void run();
 			static void setLogServer(Log::LogServer * logServer);
+
+		protected:
+				
+			AuditServer();
 
 		private:
 

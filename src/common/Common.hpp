@@ -19,6 +19,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #define INNOCENCE_DLL \
+HANDLE threadHandle; \
 extern "C" BOOL APIENTRY DllMain (HINSTANCE hModule, DWORD dwMsg, LPVOID lpReserved) \
 { \
     UNREFERENCED_PARAMETER( hModule ); \

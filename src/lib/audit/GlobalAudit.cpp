@@ -1,6 +1,8 @@
 #include "GlobalAudit.hpp"
 #include "Run.hpp"
 
+#include <log/Log.hpp>
+
 namespace Audit
 {
 	GlobalAudit::GlobalAudit()
@@ -9,7 +11,7 @@ namespace Audit
 
 	GlobalAudit::~GlobalAudit()
 	{
-		for(std::vector<Run*>::size_type index = 0; index != audits.size(); index++)
+		for(size_t index = 0; index < audits.size(); index++)
 		{
 			delete audits[index];
 		}
@@ -22,7 +24,7 @@ namespace Audit
 
 	void GlobalAudit::addMessage(const Log::Message& msg)
 	{
-		for(std::vector<Run*>::size_type index = 0; index != audits.size(); index++)
+		for(size_t index = 0; index < audits.size(); index++)
 		{
 			if(audits[index]->getModule() == msg.getIdentity().getModule())
 			{
@@ -35,7 +37,7 @@ namespace Audit
 
 	void GlobalAudit::run()
 	{
-		for(std::vector<Run*>::size_type index = 0; index != audits.size(); index++)
+		for(size_t index = 0; index < audits.size(); index++)
 		{
 			audits[index]->run();
 		}
@@ -43,11 +45,9 @@ namespace Audit
 
 	void GlobalAudit::build()
 	{
-		for(std::vector<Run*>::size_type index = 0; index != audits.size(); index++)
+		for(size_t index = 0; index < audits.size(); index++)
 		{
 			audits[index]->build();
 		}
-
-
 	}
 } // Audit

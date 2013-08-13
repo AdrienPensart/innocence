@@ -1,16 +1,9 @@
 #include <log/Log.hpp>
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
-
 #include <network/Pipe.hpp>
-using namespace Network;
-
 #include <common/Innocence.hpp>
-
-#include <windows.h>
 #include <audit/Audit.hpp>
-
-HANDLE threadHandle;
 
 DWORD WINAPI subdll(void)
 {

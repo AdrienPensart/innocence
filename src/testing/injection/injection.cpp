@@ -1,14 +1,10 @@
-#include <common/Innocence.hpp>
 #include <common/ParseOptions.hpp>
-
 #include <audit/Audit.hpp>
 #include <log/Log.hpp>
-
 #include <malicious/InternetExplorer.hpp>
 #include <malicious/Injector.hpp>
 #include <system/Process.hpp>
 #include <network/Pipe.hpp>
-using namespace Network;
 
 int submain(int argc, char ** argv)
 {
@@ -16,7 +12,6 @@ int submain(int argc, char ** argv)
 	try
 	{
 		LOG.setIdentity(Common::identity);
-
 		Common::ParseOptions(argc, argv);
 
 		System::Process::This thisProcess;		
@@ -63,7 +58,7 @@ int submain(int argc, char ** argv)
     catch(Common::Exception&)
     {
     }
-	//CATCH_UNKNOWN_EXCEPTION
+	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }
 

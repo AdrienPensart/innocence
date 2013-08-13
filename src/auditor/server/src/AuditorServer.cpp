@@ -1,6 +1,17 @@
+#include <common/ParseOptions.hpp>
 
-
-int main(int argc, char * argv[])
+int submain(int argc, char ** argv)
 {
-	return 0;
+	try
+	{
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
+	}
+	catch(Common::Exception&)
+	{
+	}
+	CATCH_UNKNOWN_EXCEPTION
+	return EXIT_SUCCESS;
 }
+
+INNOCENCE_MAIN

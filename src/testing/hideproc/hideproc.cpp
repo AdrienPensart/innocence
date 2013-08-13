@@ -1,13 +1,9 @@
 #include <malicious/ProcessHider.hpp>
-
 #include <system/Uac.hpp>
 #include <system/Process.hpp>
-
 #include <log/Log.hpp>
-
 #include <audit/Audit.hpp>
-
-#include <common/Innocence.hpp>
+#include <common/ParseOptions.hpp>
 
 int submain(int argc, char ** argv)
 {
@@ -15,9 +11,7 @@ int submain(int argc, char ** argv)
     try
 	{
         LOG.setIdentity(Common::identity);
-		LOG.addObserver(new Log::LogToConsole);
-	    LOG.addObserver(new Log::LogToCollector);
-		LOG.addObserver(new Audit::LogToAuditor);
+		Common::ParseOptions(argc, argv);
 
 		System::Process::This thisProcess;
 		if(!thisProcess.runAsAdmin())

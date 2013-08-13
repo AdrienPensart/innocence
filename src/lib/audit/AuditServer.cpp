@@ -15,6 +15,11 @@ namespace Audit
 
 	Log::LogServer * AuditServer::logServer = 0;
 
+	AuditServer::AuditServer() : 
+		Thread((LPTHREAD_START_ROUTINE)LogLoop)
+	{
+	}
+
 	void AuditServer::setLogServer(Log::LogServer * logServerArg)
 	{
 		logServer = logServerArg;
@@ -25,7 +30,7 @@ namespace Audit
 		TRACE_FUNCTION
 		if(logServer)
 		{
-			Thread::start((LPTHREAD_START_ROUTINE)LogLoop);
+			Thread::start();
 			LOG << "AuditServer started";
 		}
 	}
@@ -33,18 +38,23 @@ namespace Audit
     void AuditServer::stop()
 	{
 		TRACE_FUNCTION
-        if(isRunning())
-        {
-			AuditServer::instance().logServer->stop();
-            join();
-			LOG << "AuditServer stopped";
+		if(logServer)
+		{
+			logServer->stop();
+			if(join())
+			{
+				LOG << "AuditServer stopped";
+			}
 		}
 	}
 
 	DWORD WINAPI AuditServer::LogLoop(LPVOID lpParameter)
 	{
 		TRACE_FUNCTION
-		logServer->run();
+		if(logServer)
+		{
+			logServer->run();
+		}
 		return 0;
 	}
 } // Audit

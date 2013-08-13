@@ -3,7 +3,7 @@ using namespace Common;
 
 #include <system/Process.hpp>
 #include <common/Innocence.hpp>
-
+#include <common/ParseOptions.hpp>
 #include <malicious/Elevator.hpp>
 
 #include <audit/Audit.hpp>
@@ -13,9 +13,7 @@ int submain(int argc, char **argv)
 	try
 	{
 		LOG.setIdentity(Common::identity);
-		LOG.addObserver(new Log::LogToConsole);
-		LOG.addObserver(new Log::LogToCollector);
-		LOG.addObserver(new Audit::LogToAuditor);
+		Common::ParseOptions(argc, argv);
 
 		System::Process::This thisProcess;
 		return Malicious::elevate(thisProcess.getProgramDir()+"\\isadmin.exe");
