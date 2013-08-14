@@ -59,15 +59,15 @@ namespace Log
 #ifdef INNOCENCE_DEBUG
 	#define LOG Log::Lout::lout.setMacro(QUOTE(__LINE__), __FILE__)
 	#define TRACE_FUNCTION Log::FunctionLog function_log((__FUNCTION__));
+	#define CATCH_UNKNOWN_EXCEPTION \
+	catch(...){ \
+	LOG << "Unknown exception"; \
+	}
 #else
-	#define LOG COMMENT
-	#define TRACE_FUNCTION COMMENT
+	#define LOG ;COMMENT
+	#define TRACE_FUNCTION
+	#define CATCH_UNKNOWN_EXCEPTION catch(...){}
 #endif
-
-#define CATCH_UNKNOWN_EXCEPTION \
-catch(...){ \
-LOG << "Unknown exception"; \
-}
 
 //#define SCOPED_LOG(x) Common::ScopedLog scoped_log((x));
 //#define FUNC_LOG(x) Common::FunctionLog function_log((x));

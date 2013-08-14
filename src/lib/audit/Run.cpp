@@ -27,9 +27,9 @@ namespace Audit
 		{
 			const Log::Message& message = messages[index];
 			LOG << message.getIdentity().getModule() 
-				   + " -> (line " << message.getLine() 
-				   + " in " << System::GetFileName(message.getFile()) 
-				   + ") (" << message.getCallStack() 
+				   + " -> (line " + message.getLine() 
+				   + " in " + System::GetFileName(message.getFile()) 
+				   + ") (" + message.getCallStack() 
 				   + ") : " 
 				   + message.getContent() 
 				   + '\n';

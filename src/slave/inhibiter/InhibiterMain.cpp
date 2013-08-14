@@ -82,7 +82,6 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
         if(!DeleteFile(command.c_str()))
         {
 			LOG << "DeleteFile failed : " + Common::toString(GetLastError());
-            FATAL_ERROR("Unable to delete old injector");
         }
         else
 #else
@@ -98,9 +97,8 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 				ProcessHider hider;
 				hider.hide(injector.getInjectedProcess());
 			}
-			catch(DriverError& e)
+			catch(Common::Exception&)
 			{
-				LOG << e.what();
 			}
 #else
 			LOG << "No process hiding in debug mode";

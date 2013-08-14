@@ -1,2 +1,2 @@
-cd ../../src/utils
-upx.exe -9 ../../bin/inhibitor.exe
+cd src/utils
+upx.exe -9 ../../bin/inhibiter.exe

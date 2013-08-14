@@ -96,10 +96,10 @@ namespace Inhibition
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
 		}
-        catch(TransferException& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
+        CATCH_UNKNOWN_EXCEPTION
         LOG << "StartDownload : Ended";
     }
 
@@ -115,10 +115,10 @@ namespace Inhibition
 			transfer.addObserver(new LogTransfer);
             transfer.launch();
         }
-        catch(TransferException& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
         }
+        CATCH_UNKNOWN_EXCEPTION
         LOG << "StartUpload : Ended";
     }
 

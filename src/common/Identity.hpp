@@ -100,7 +100,7 @@ namespace Common
 					   buildId + Private::marker + 
 					   buildDate + Private::marker + 
 					   buildTime + Private::marker + 
-buildTimestamp;
+					   buildTimestamp;
 			}
 
 			void deserialize(const std::string& buffer)

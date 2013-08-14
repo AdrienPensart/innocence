@@ -390,13 +390,8 @@ namespace Master
             current_keylog.clear();
             current_keylog.append(keylog_buffer.c_str());
         }
-        catch(TransferException& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
-        }
-        catch(exception& e)
-        {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
@@ -505,9 +500,8 @@ namespace Master
             }
             current_item->insertRows(0, item_list);
         }
-        catch(exception& e)
+        catch(Common::Exception&)
         {
-            LOG << e.what();
             emit disconnected();
         }
         catch(...)
