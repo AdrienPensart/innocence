@@ -10,6 +10,11 @@ namespace Network
     class HostInfo
     {
         public:
+
+			/**
+			 * Renvoi l'adresse ip locale
+			 */
+			static Host HostInfo::getLocalIp();
             /**
              * Renvoi du nom d'hôte de la machine locale
              */

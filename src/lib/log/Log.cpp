@@ -3,6 +3,7 @@
 #endif
 
 #include <common/Identity.hpp>
+#include <network/Service.hpp>
 
 #include "Log.hpp"
 #include "Message.hpp"
@@ -29,13 +30,13 @@ namespace Log
 	Lout Lout::lout;
 
     Lout::Lout()
-        : tracing(false)
+        : tracing(true)
     {
     }
     
-    void Lout::trace()
+    void Lout::setTracing(bool trace)
     {
-        tracing = true;
+        tracing = trace;
     }
 
     void Lout::enterFunction(const std::string& func)
@@ -64,6 +65,7 @@ namespace Log
     {
         std::string graph = genCallStack(functions);
 		Message message(identity, object, graph, currentLine, currentFile);
+		message.getIdentity().setIp(Network::HostInfo::getLocalIp());
         notify(message);
         return *this;
     }

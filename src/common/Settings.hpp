@@ -27,6 +27,7 @@ namespace Common
 	#define SEPERATOR ':'
 	
 	// AUDITOR AGENT & SERVER CONFIG
+	static const char * LOG_DB_CONNECTION_STRING = "root/ts1cl2fs@innocence";
 	static const char * LOG_COLLECTOR_IP = "127.0.0.1";
 	static const char * AUDIT_SERVER_IP = "127.0.0.1";
 

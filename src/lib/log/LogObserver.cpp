@@ -8,6 +8,11 @@
 
 namespace Log
 {
+	LogObserver::~LogObserver()
+	{
+
+	}
+
 	LogToNetwork::LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort)
     {
         //socket.setDestInfo(loggerIp, loggerPort);
@@ -91,4 +96,48 @@ namespace Log
 				  << message.getContent() 
 				  << '\n';
     }
+
+	LogToSql::LogToSql(const std::string& connectionStringArg) : 
+		connectionString(connectionStringArg)
+	{
+		otl_connect::otl_initialize();
+		db.rlogon(connectionString.c_str());
+
+		logdb = new otl_stream(1, 
+			  "INSERT INTO log (module, buildAt, buildId, callStack, computer, content, emittedAt, executedAt, file, ip, line, system) "
+			  "VALUES (:f1<char[255]>,:f2<char[255]>,:f3<char[255]>,:f4<char[255]>,"
+						 ":f5<char[255]>,:f6<char[32000]>,:f7<char[255]>,:f8<char[255]>,"
+						 ":f9<char[255]>,:f10<char[255]>,:f11<char[255]>,:f12<char[255]>) ",
+			  db
+			 );
+	}
+
+	LogToSql::~LogToSql()
+	{
+		delete logdb;
+		db.logoff();
+	}
+
+	void LogToSql::update(const Message& message)
+	{
+		try
+		{
+			*logdb << message.getIdentity().getModule().c_str()
+				   << message.getIdentity().getBuildDate().c_str()
+				   << message.getIdentity().getBuildId().c_str()
+				   << message.getCallStack().c_str()
+				   << message.getIdentity().getComputer().c_str()
+				   << message.getContent().c_str()
+				   << message.getTime().c_str()
+				   << message.getIdentity().getExecutionDate().c_str()
+				   << message.getFile().c_str()
+				   << message.getIdentity().getIp().c_str()
+				   << message.getLine().c_str()
+				   << message.getIdentity().getComputer().c_str();
+		}
+		catch(otl_exception& p)
+		{
+			throw Common::Exception("OTL Exception (SQL) : " + Common::toString(p.msg) + ", " + p.stm_text + ", " + p.var_info);
+		}
+	}
 } // Log

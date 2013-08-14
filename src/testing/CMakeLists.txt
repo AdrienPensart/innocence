@@ -102,5 +102,5 @@ set_target_properties(${TRANSFER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_
 set(OTLSQL_TARGET "otlsql")
 file(GLOB_RECURSE ${OTLSQL_TARGET}_source_files ${OTLSQL_TARGET}/*)
 add_executable(${OTLSQL_TARGET} ${GUI_TYPE} ${otlsql_source_files})
-target_link_libraries(${OTLSQL_TARGET} system blaspheme log network odbc32.lib)
+target_link_libraries(${OTLSQL_TARGET} system blaspheme log network)
 set_target_properties(${OTLSQL_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${OTLSQL_TARGET}")

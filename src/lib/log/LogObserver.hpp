@@ -3,6 +3,14 @@
 #include <network/TcpClient.hpp>
 #include <fstream>
 
+#define OTL_ODBC
+#define OTL_ODBC_SELECT_STM_EXECUTE_BEFORE_DESCRIBE
+
+#include <windows.h>
+#include <sql.h>
+#include <sqlext.h>
+#include <otlv4.h>
+
 namespace Log
 {
 	class Message;
@@ -11,6 +19,7 @@ namespace Log
     {
         public:
 
+			virtual ~LogObserver();
             virtual void update(const Message& message)=0;
     };
 
@@ -64,7 +73,13 @@ namespace Log
 	class LogToSql : public LogObserver
 	{
 		public:
+			LogToSql(const std::string& connectionString);
+			~LogToSql();
 			virtual void update(const Message& message);
+		private:
+			otl_connect db;
+			std::string connectionString;
+			otl_stream * logdb;
 	};
 
 } // Log

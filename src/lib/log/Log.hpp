@@ -22,7 +22,7 @@ namespace Log
     {
         public:
             
-            void trace();
+            void setTracing(bool trace);
 			static void setIdentity(const Common::Identity& identity);
             void enterFunction(const std::string& func);
             void leaveFunction();
