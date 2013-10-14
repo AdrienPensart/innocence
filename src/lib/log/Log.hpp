@@ -34,6 +34,7 @@ namespace Log
             
 			Lout();
             bool tracing;
+			bool warningMessage;
 			static std::string currentLine;
 			static std::string currentFile;
 

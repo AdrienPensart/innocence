@@ -130,6 +130,19 @@ namespace System
 		return size ;
 	}
 
+	std::streamsize Size(std::wfstream& handle)
+	{
+		// sauvegarder la position courante
+		std::streamoff pos = handle.tellg();
+		// se placer en fin de fichier
+		handle.seekg( 0 , std::ios_base::end );
+		// récupérer la nouvelle position = la taille du fichier
+		std::streamoff size = handle.tellg();
+		// restaurer la position initiale du fichier
+		handle.seekg( pos,  std::ios_base::beg ) ;
+		return size ;
+	}
+
 	std::streamsize Size(const std::string& file)
     {
         std::ifstream fichier(file.c_str());

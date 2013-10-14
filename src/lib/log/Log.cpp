@@ -4,7 +4,7 @@
 
 #include <common/Identity.hpp>
 #include <network/Service.hpp>
-
+#include <iostream>
 #include "Log.hpp"
 #include "Message.hpp"
 
@@ -29,8 +29,9 @@ namespace Log
 	std::string Lout::currentFile = __FILE__;
 	Lout Lout::lout;
 
-    Lout::Lout()
-        : tracing(true)
+    Lout::Lout() : 
+		tracing(true),
+		warningMessage(true)
     {
     }
     
@@ -66,6 +67,11 @@ namespace Log
         std::string graph = genCallStack(functions);
 		Message message(identity, object, graph, currentLine, currentFile);
 		message.getIdentity().setIp(Network::HostInfo::getLocalIp());
+		if(!isObserved() && warningMessage)
+		{
+			std::cout << "Warning : no output observer registered.\n";
+			warningMessage = false;
+		}
         notify(message);
         return *this;
     }

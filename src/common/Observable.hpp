@@ -27,10 +27,15 @@ namespace Common
                 }
             }
 
-            void addObserver(Observer * observer)
+			void addObserver(Observer * observer)
             {
                 observers.push_back(observer);
             }
+
+			bool isObserved()
+			{
+				return !observers.empty();
+			}
     };
 	
 } // Common

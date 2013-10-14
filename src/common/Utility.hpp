@@ -24,6 +24,11 @@ namespace Common
 		return oss.str();
 	}
 
+	inline std::string toString( const std::wstring & Value )
+	{
+		return std::string( Value.begin(), Value.end() );
+	}
+
 	template<typename T>
 	bool fromString( const std::string & Str, T & Dest )
 	{

@@ -31,10 +31,10 @@ elseif( CMAKE_BUILD_TYPE MATCHES Release)
 endif ()
 
 # hack to get around the "Debug" and "Release" directories cmake tries to add on Windows
-if (MSVC_IDE)
-	message(STATUS "IDE Visual Studio detected")
-    set_target_properties (${NAME} PROPERTIES PREFIX "../")
-endif()
+# if (MSVC_IDE)
+	# message(STATUS "IDE Visual Studio detected")
+    # set_target_properties (${NAME} PROPERTIES PREFIX "../")
+# endif()
 
 # we separate source, build and binaries
 set(BINARY_OUTPUT "${CMAKE_SOURCE_DIR}/../bin")
@@ -112,6 +112,7 @@ add_custom_target(
 add_subdirectory(lib/network)
 add_subdirectory(lib/log)
 add_subdirectory(lib/system)
+add_subdirectory(lib/keyboard)
 if(WIN32)
 	add_subdirectory(lib/malicious)
 	add_subdirectory(slave)
@@ -127,6 +128,13 @@ add_subdirectory(master)
 if ( CMAKE_BUILD_TYPE MATCHES Debug)
 	add_subdirectory(testing)
 endif()
+
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BINARY_OUTPUT} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BINARY_OUTPUT} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BINARY_OUTPUT} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 # Package generation
 #include(InstallRequiredSystemLibraries)

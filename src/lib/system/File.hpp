@@ -23,6 +23,7 @@ namespace System
     
 	std::streamsize Size(std::ifstream& handle);
 	std::streamsize Size(std::fstream& handle);
+	std::streamsize Size(std::wfstream& handle);
 	std::streamsize Size(const std::string& file);
 
 } // System

