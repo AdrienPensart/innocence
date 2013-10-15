@@ -15,11 +15,9 @@ int submain(int argc, char ** argv)
 		//HMODULE hModule = LoadLibrary("isinjected.dll");
 		Sleep(INFINITE);
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 INNOCENCE_MAIN

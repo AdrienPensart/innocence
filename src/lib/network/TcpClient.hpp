@@ -16,7 +16,7 @@ namespace Network
 		    bool connect(const Host& argIp, const Port& argPort);
 
 		    #ifdef _WINDOWS_
-			    bool connect(const std::string& argIp, const Port argPort, Timeout to);
+			    bool connect(const Host& argIp, const Port argPort, Timeout to);
 		    #endif
 
             void reset();

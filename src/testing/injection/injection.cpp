@@ -55,9 +55,7 @@ int submain(int argc, char ** argv)
 			LOG << "IE well killed from DLL";
 		}
     }
-    catch(Common::Exception&)
-    {
-    }
+    CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }

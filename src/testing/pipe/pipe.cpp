@@ -56,9 +56,7 @@ int submain(int argc, char ** argv)
 			LOG << "Incorrect parameter";
 		}
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

@@ -65,6 +65,7 @@ int submain(int argc, char ** argv)
         }
         */
 	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

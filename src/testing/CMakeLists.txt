@@ -78,6 +78,12 @@ if(WIN32)
 	add_executable(${LOADSLAVE_TARGET} ${GUI_TYPE} ${loadslave_source_files})
 	target_link_libraries(${LOADSLAVE_TARGET} system log network)
 	set_target_properties(${LOADSLAVE_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${LOADSLAVE_TARGET}")
+	
+	set(NETSCAN_TARGET "netscan")
+	file(GLOB_RECURSE ${NETSCAN_TARGET}_source_files ${NETSCAN_TARGET}/*)
+	add_executable(${NETSCAN_TARGET} ${GUI_TYPE} ${netscan_source_files})
+	target_link_libraries(${NETSCAN_TARGET} malicious system log network)
+	set_target_properties(${NETSCAN_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${NETSCAN_TARGET}")
 endif ()
 
 # Portable tests

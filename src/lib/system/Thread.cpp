@@ -4,8 +4,9 @@
 
 namespace System
 {
-	Thread::Thread(LPTHREAD_START_ROUTINE routineArg) : 
+	Thread::Thread(LPTHREAD_START_ROUTINE routineArg, LPVOID parameterArg) : 
 		routine(routineArg),
+		parameter(parameterArg),
 		dwThread(0),
 		hThread(0),
 		running(0)
@@ -38,7 +39,7 @@ namespace System
 		TRACE_FUNCTION
         if(!running)
         {
-            hThread = CreateThread(0, 0, routine, 0, 0, &dwThread);
+            hThread = CreateThread(0, 0, routine, parameter, 0, &dwThread);
 		    if(hThread == NULL)
 		    {
 				throw Common::Exception("CreateThreadfailed : " + Common::toString(GetLastError()));

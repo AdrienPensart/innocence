@@ -60,6 +60,10 @@ namespace Log
 #ifdef INNOCENCE_DEBUG
 	#define LOG Log::Lout::lout.setMacro(QUOTE(__LINE__), __FILE__)
 	#define TRACE_FUNCTION Log::FunctionLog function_log((__FUNCTION__));
+	#define CATCH_COMMON_EXCEPTION \
+	catch(Common::Exception& e){ \
+	LOG << e.what(); \
+	}
 	#define CATCH_UNKNOWN_EXCEPTION \
 	catch(...){ \
 	LOG << "Unknown exception"; \
@@ -67,6 +71,7 @@ namespace Log
 #else
 	#define LOG ;COMMENT
 	#define TRACE_FUNCTION
+	#define CATCH_COMMON_EXCEPTION
 	#define CATCH_UNKNOWN_EXCEPTION catch(...){}
 #endif
 

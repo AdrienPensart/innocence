@@ -16,6 +16,7 @@ int submain(int argc, char ** argv)
 		Sleep(1000);
 		ie.kill();
 	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return exitCode;
 }

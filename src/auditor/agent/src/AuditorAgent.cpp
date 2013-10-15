@@ -46,9 +46,7 @@ int submain(int argc, char ** argv)
 
 		//system("pause");
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

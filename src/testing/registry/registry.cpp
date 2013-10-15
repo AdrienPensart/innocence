@@ -1,16 +1,15 @@
 #include <log/Log.hpp>
 #include <system/Registry.hpp>
+#include <common/ParseOptions.hpp>
 #include <common/Innocence.hpp>
 #include <audit/Audit.hpp>
 
 int submain(int argc, char ** argv)
 {
-	LOG.setIdentity(Common::identity);
-    LOG.addObserver(new Log::LogToConsole);
-	LOG.addObserver(new Log::LogToCollector);
-	LOG.addObserver(new Audit::LogToAuditor);
 	try
 	{
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
         LOG << "Program dir : " + Common::toString(argv[0]);
 		System::Registry::Key startKey(System::Registry::localMachine, Common::RUN_KEY_PATH);
         startKey.createValue("test", argv[0]);
@@ -19,9 +18,7 @@ int submain(int argc, char ** argv)
 
         startKey.removeValue("test");
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

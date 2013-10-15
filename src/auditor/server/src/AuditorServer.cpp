@@ -7,9 +7,7 @@ int submain(int argc, char ** argv)
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

@@ -31,9 +31,7 @@ DWORD WINAPI subdll(void)
 		
 		thisProcess.killHierarchy();
     }
-    catch(Common::Exception&)
-    {
-    }
+    CATCH_COMMON_EXCEPTION
     CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

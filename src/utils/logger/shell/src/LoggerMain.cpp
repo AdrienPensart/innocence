@@ -14,9 +14,7 @@ int submain(int argc, char ** argv)
 		logserver.addObserver(new Log::LogToConsole);
 		logserver.run();
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

@@ -11,7 +11,7 @@ namespace System
 	{
 		public:
 
-			Thread(LPTHREAD_START_ROUTINE routine);
+			Thread(LPTHREAD_START_ROUTINE routine, LPVOID parameter=0);
 			virtual ~Thread();
 			virtual void start();
             virtual void stop();
@@ -25,6 +25,7 @@ namespace System
 		private:
 
 			LPTHREAD_START_ROUTINE routine;
+			LPVOID parameter;
 			DWORD dwThread;
             HANDLE hThread;
 			bool running;

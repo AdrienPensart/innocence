@@ -1,5 +1,6 @@
 #include <log/Log.hpp>
 #include <blaspheme/protocol/Session.hpp>
+#include <common/ParseOptions.hpp>
 #include <audit/Audit.hpp>
 #include <common/Innocence.hpp>
 
@@ -9,67 +10,70 @@ using namespace Blaspheme;
 
 int submain(int argc, char ** argv)
 {
-	LOG.setIdentity(Common::identity);
-	LOG.addObserver(new Log::LogToConsole);
-	LOG.addObserver(new Log::LogToCollector);
-	LOG.addObserver(new Audit::LogToAuditor);
+	try
+	{
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
 
-	if(argc != 2)
-	{
-		LOG << "Usage : session connect|listen\n";
-		return EXIT_SUCCESS;
-	}
-	std::string arg = argv[1];
-	/*
-	if(arg == "connect")
-	{
-		LOG.setHeader("CONNECT");
-	}
-	else if(arg == "listen")
-	{
-		LOG.setHeader("LISTEN");
-	}
-	*/
-	Common::ConnectionInfo info;
-	info.ip = "127.0.0.1";
-	info.port = 80;
-	info.password = "crunch";
-	Session session(info);
-
-	if(arg == "connect")
-	{
-		//while(true)
+		if(argc != 2)
 		{
-			if(session.connect())
+			LOG << "Usage : session connect|listen\n";
+			return EXIT_SUCCESS;
+		}
+		std::string arg = argv[1];
+		/*
+		if(arg == "connect")
+		{
+			LOG.setHeader("CONNECT");
+		}
+		else if(arg == "listen")
+		{
+			LOG.setHeader("LISTEN");
+		}
+		*/
+		Common::ConnectionInfo info;
+		info.ip = "127.0.0.1";
+		info.port = 80;
+		info.password = "crunch";
+		Session session(info);
+
+		if(arg == "connect")
+		{
+			//while(true)
 			{
-				LOG << "Connect ok.\n";
-				session.setId(0);
-				session.reset();
-				LOG << "Deconnexion.\n";
+				if(session.connect())
+				{
+					LOG << "Connect ok.\n";
+					session.setId(0);
+					session.reset();
+					LOG << "Deconnexion.\n";
+				}
 			}
 		}
-	}
-	else if(arg == "listen")
-	{
-		while(true)
+		else if(arg == "listen")
 		{
-			if(session.waitConnect())
+			while(true)
 			{
-				LOG << "WaitConnect ok.\n";
-				session.setId(0);
-				session.reset();
-				LOG << "Deconnexion.\n";
-			}
-			else
-			{
-				LOG << "Aucune connexion de client.\n";
+				if(session.waitConnect())
+				{
+					LOG << "WaitConnect ok.\n";
+					session.setId(0);
+					session.reset();
+					LOG << "Deconnexion.\n";
+				}
+				else
+				{
+					LOG << "Aucune connexion de client.\n";
+				}
 			}
 		}
+		else
+		{
+			LOG << "Usage : session connect|listen\n";
+		}
 	}
-	else
-	{
-		LOG << "Usage : session connect|listen\n";
-	}
+	CATCH_COMMON_EXCEPTION
+	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }
 

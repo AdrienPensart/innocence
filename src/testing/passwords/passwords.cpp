@@ -11,9 +11,7 @@ int submain(int argc, char ** argv)
 		Common::ParseOptions(argc, argv);
 		LOG << Malicious::decodeAllPasswords(',');
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

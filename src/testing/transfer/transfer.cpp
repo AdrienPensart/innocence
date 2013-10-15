@@ -1,5 +1,6 @@
 #include <log/Log.hpp>
 #include <network/TcpServer.hpp>
+#include <common/ParseOptions.hpp>
 #include <blaspheme/transfer/GenericTransfer.hpp>
 #include <blaspheme/hash/Hash.hpp>
 #include <audit/Audit.hpp>
@@ -20,13 +21,10 @@ class TransferShow : public TransferObserver
 
 int submain(int argc, char ** argv)
 {
-	LOG.setIdentity(Common::identity);
-	LOG.addObserver(new Log::LogToConsole);
-    LOG.addObserver(new Log::LogToCollector);
-	LOG.addObserver(new Audit::LogToAuditor);
-
 	try
 	{
+		LOG.setIdentity(Common::identity);
+		Common::ParseOptions(argc, argv);
 		if(argc != 3)
 		{
 			LOG << "Bad argument number";
@@ -83,9 +81,7 @@ int submain(int argc, char ** argv)
 			LOG << "Usage : transfer -[u|d|s] file";
 		}
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;
 }

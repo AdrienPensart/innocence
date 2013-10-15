@@ -15,9 +15,7 @@ int submain(int argc, char ** argv)
 		window.show();
 		returnValue = app.exec();
     }
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
     CATCH_UNKNOWN_EXCEPTION
     return returnValue;
 }

