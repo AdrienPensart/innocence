@@ -2,6 +2,8 @@
 #include <algorithm>
 using namespace std;
 
+#include <common/WindowsWrapper.hpp>
+
 #include <QtGui>
 #include <QtWidgets/QMessageBox>
 #include <QFileDialog>

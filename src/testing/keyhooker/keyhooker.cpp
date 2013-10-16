@@ -9,7 +9,6 @@ using namespace Keyboard;
 #include <audit/Audit.hpp>
 
 #include <cstdio>
-#include <windows.h>
 
 int submain(int argc, char ** argv)
 {

@@ -3,7 +3,7 @@
 #include <common/Exception.hpp>
 
 #include <string>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <winioctl.h>
 
 namespace Malicious

@@ -4,8 +4,6 @@
 #include <common/Exception.hpp>
 #include <log/Log.hpp>
 
-#include <objbase.h>
-
 namespace Malicious
 {
 	#pragma pack(push, 1)
@@ -114,7 +112,7 @@ namespace Malicious
 		}
 	}
 
-	DWORD InternetExplorer::getPid()
+	DWORD InternetExplorer::getPid() const
 	{
 		return pid;
 	}

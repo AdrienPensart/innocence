@@ -2,6 +2,7 @@
 #include <log/Log.hpp>
 
 #include <winnt.h>
+#include <shellapi.h>
 
 namespace System
 {

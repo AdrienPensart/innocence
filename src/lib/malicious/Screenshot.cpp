@@ -1,7 +1,7 @@
 #include "Screenshot.hpp"
 
 #include <cstdio>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 
 #define HAVE_BOOLEAN
 #include <jpeg/jpeglib.h>

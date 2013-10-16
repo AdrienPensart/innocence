@@ -84,6 +84,12 @@ if(WIN32)
 	add_executable(${NETSCAN_TARGET} ${GUI_TYPE} ${netscan_source_files})
 	target_link_libraries(${NETSCAN_TARGET} malicious system log network)
 	set_target_properties(${NETSCAN_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${NETSCAN_TARGET}")
+	
+	set(RAWSEND_TARGET "rawsend")
+	file(GLOB_RECURSE ${RAWSEND_TARGET}_source_files ${RAWSEND_TARGET}/*)
+	add_executable(${RAWSEND_TARGET} ${GUI_TYPE} ${rawsend_source_files})
+	target_link_libraries(${RAWSEND_TARGET} log network)
+	set_target_properties(${RAWSEND_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT} COMPILE_DEFINITIONS PROJECT_MODULE="${RAWSEND_TARGET}")
 endif ()
 
 # Portable tests

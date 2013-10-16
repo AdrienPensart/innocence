@@ -3,7 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <cstdlib>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 
 namespace Common
 {

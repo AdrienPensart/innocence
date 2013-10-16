@@ -1,4 +1,4 @@
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <common/Innocence.hpp>
 #include <log/Log.hpp>
 #include <system/Uac.hpp>

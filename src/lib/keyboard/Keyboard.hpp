@@ -1,7 +1,6 @@
-#ifndef _KBD_EXT_
-#define _KBD_EXT_
+#pragma once
 
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <climits>
 
 namespace Keyboard
@@ -136,5 +135,3 @@ namespace Keyboard
 	} KBDNLSTABLES, *KBD_LONG_POINTER PKBDNLSTABLES;
 
 } // Keyboard
-
-#endif // _KBD_EXT_

@@ -6,7 +6,7 @@
 #define OTL_ODBC
 #define OTL_ODBC_SELECT_STM_EXECUTE_BEFORE_DESCRIBE
 
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <sql.h>
 #include <sqlext.h>
 #include <otlv4.h>

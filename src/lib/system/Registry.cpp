@@ -1,5 +1,5 @@
 #include "Registry.hpp"
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <winerror.h>
 #include <tchar.h>
 #include <strsafe.h>

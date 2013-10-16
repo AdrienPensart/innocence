@@ -1,8 +1,8 @@
 #include "System.hpp"
 
 #include <common/Utility.hpp>
+#include <common/WindowsWrapper.hpp>
 #include <string>
-#include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
 #include <strsafe.h>

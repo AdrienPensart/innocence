@@ -1,6 +1,6 @@
 #include "Passwords.hpp"
 #include <log/Log.hpp>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <wincrypt.h>
 #include <wincred.h>
 #include <string>

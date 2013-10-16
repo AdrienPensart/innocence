@@ -1,6 +1,8 @@
-#include <common/ParseOptions.hpp>
 #include <log/Log.hpp>
+#include <common/Innocence.hpp>
+#include <common/ParseOptions.hpp>
 #include <audit/Audit.hpp>
+#include <network/RawSocket.hpp>
 
 int submain(int argc, char ** argv)
 {
@@ -9,10 +11,7 @@ int submain(int argc, char ** argv)
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 
-		// Chargement normal de la DLL
-		HMODULE hModule = LoadLibrary("slave_dll.dll");
-		//HMODULE hModule = LoadLibrary("isinjected.dll");
-		Sleep(INFINITE);
+		
 	}
 	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION

@@ -16,7 +16,7 @@ using namespace Malicious;
 #include <system/File.hpp>
 using namespace System;
 
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <string>
 #include <cstdlib>
 using namespace std;

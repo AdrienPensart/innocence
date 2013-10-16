@@ -1,6 +1,9 @@
 #pragma once
 
 #include <list>
+#include <log/Log.hpp>
+#include <blaspheme/protocol/Session.hpp>
+#include <network/TcpClient.hpp>
 
 #include <QStringListModel>
 //#include <QDirModel>
@@ -11,10 +14,6 @@
 #include "SlaveTableModel.hpp"
 #include "PasswordsDialog.hpp"
 #include "EditSlaveDialog.hpp"
-
-#include <log/Log.hpp>
-#include <blaspheme/protocol/Session.hpp>
-#include <network/TcpClient.hpp>
 
 namespace Master
 {

@@ -3,7 +3,7 @@
 #ifdef WIN32
 
 #include <network/Timeout.hpp>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 
 namespace System
 {

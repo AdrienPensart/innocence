@@ -2,7 +2,7 @@
 
 #include <log/Log.hpp>
 #include <common/Exception.hpp>
-#include <Windows.h>
+#include <common/WindowsWrapper.hpp>
 
 namespace Malicious
 {

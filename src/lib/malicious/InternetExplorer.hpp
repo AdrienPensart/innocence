@@ -1,7 +1,7 @@
 #pragma once
 
+#include <common/WindowsWrapper.hpp>
 #include <exdisp.h>
-#include <windows.h>
 
 namespace Malicious
 {
@@ -12,7 +12,7 @@ namespace Malicious
 			InternetExplorer(bool killOnDestroy=false);
 			~InternetExplorer();
 
-			DWORD getPid();
+			DWORD getPid()const;
 			void kill();
 
 		private:

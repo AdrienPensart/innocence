@@ -8,7 +8,6 @@
 #ifdef WIN32
 
 #include <string>
-#include <windows.h>
 
 namespace Network
 {

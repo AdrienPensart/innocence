@@ -3,9 +3,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include <common/WindowsWrapper.hpp>
 using namespace std;
 
 namespace System

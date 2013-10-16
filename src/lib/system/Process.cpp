@@ -4,6 +4,7 @@
 
 #include <tchar.h>
 #include <tlhelp32.h>
+#include <shellapi.h>
 #include <cstdlib>
 #include <cstdio>
 #include <algorithm>

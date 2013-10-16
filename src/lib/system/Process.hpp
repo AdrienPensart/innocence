@@ -2,7 +2,7 @@
 
 #include <map>
 #include <string>
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 
 namespace System
 {

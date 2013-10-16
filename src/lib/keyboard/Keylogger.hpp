@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <common/Observable.hpp>
 #include <common/Singleton.hpp>
 #include <system/Thread.hpp>

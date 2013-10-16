@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <common/WindowsWrapper.hpp>
 #include <map>
 #include <string>
 #include <fstream>

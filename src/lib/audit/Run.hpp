@@ -3,7 +3,7 @@
 #include <log/Message.hpp>
 #include <string>
 #include <vector>
-#include <Windows.h>
+#include <common/WindowsWrapper.hpp>
 
 namespace Audit
 {

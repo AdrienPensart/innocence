@@ -1,7 +1,4 @@
-#ifdef WIN32
-	#include <windows.h>
-#endif
-
+#include <common/WindowsWrapper.hpp>
 #include <common/Identity.hpp>
 #include <network/Service.hpp>
 #include <iostream>
