@@ -83,7 +83,7 @@ namespace Network
     int UdpSocket::recv(char * object, int sizeOfObject)
     {
         acquire();
-    
+
         socklen_t sin_size = sizeof(AddrIn);
         int returnChar = recvfrom(sockethandle, object, sizeOfObject, 0,(Addr *)&attachedAddr, &sin_size);
         if(returnChar == SOCK_ERROR)

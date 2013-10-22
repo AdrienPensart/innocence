@@ -77,6 +77,8 @@ namespace Network
 			 */
 			void setAddr(const AddrIn& Info);
 			
+			const AddrIn& getAddr() const;
+
 			/**
 			 * Fermeture explicite de la socket
 			 */

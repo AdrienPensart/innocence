@@ -4,7 +4,8 @@
 namespace Network
 {
     // Constructeurs et destructeur
-    Socket::Socket():blocking_status(true)
+    Socket::Socket() : 
+		blocking_status(true)
     {
         // initialisation a zero de la structure d'adresse
         memset(&attachedAddr,0,sizeof(AddrIn));
@@ -22,54 +23,49 @@ namespace Network
     {
         return getsockopt(sockethandle, level, option_name, option_value, option_len);
     }
-			
-    // Acces aux parametres
-    // ip attachee a la socket
+	
     const Host Socket::getIp(void)
     {
         return inet_ntoa(attachedAddr.sin_addr);
     }
     
-    // donne le port associe a la socket
     const Port Socket::getPort(void)
     {
         return ntohs(attachedAddr.sin_port);
     }
-			
-    // Qui est de l'autre cote de la connexion ?
+	
     int Socket::getPeerName(AddrIn& addr)
     {
         socklen_t sizeAddr = sizeof(addr);
         return getpeername(sockethandle,(Addr *)&addr, &sizeAddr);
     }
 	
-    // Parametrage du socket :
-    // definit l'ip et le port de la connextion
     void Socket::setDestInfo(const Host& argIp, const Port& argPort)
     {
         setDestIp(argIp);
         setDestPort(argPort);
     }
     
-    // utilise la structure d'info standard pour completer les informations
     void Socket::setAddr(const AddrIn& Info)
     {
         attachedAddr = Info;
     }
-			
-    // on definit l'ip de la connexion
+	
+	const AddrIn& Socket::getAddr() const
+	{
+		return attachedAddr;
+	}
+
     void Socket::setDestIp(const Host& argIp)
     {
         attachedAddr.sin_addr.s_addr = inet_addr(argIp.c_str());
     }
     
-    // ainsi que le port
     void Socket::setDestPort(const Port& argPort)
     {
         attachedAddr.sin_port = htons(argPort);
     }
     
-    // Fermer la socket
     void Socket::close(void)
     {
         if(sockethandle != NOT_ACQUIRED)
