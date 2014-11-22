@@ -18,4 +18,4 @@ namespace Common
             ~Singleton(){}
     };
 
-} // Commin
+} // Common

