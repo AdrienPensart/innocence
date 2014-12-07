@@ -9,6 +9,8 @@ using namespace Network;
 
 #include <common/Innocence.hpp>
 
+#include <cstring>
+
 class TransferShow : public TransferObserver
 {
 	public:
@@ -38,15 +40,15 @@ int submain(int argc, char ** argv)
 			if(client.connect("127.0.0.1", 80))
 			{
 				LOG << "Connected to server";
-				
+
 				//Upload upload(argv[2], client);
 				//upload.addObserver(new TransferShow);
 				//upload.launch();
-                
-                File input(argv[2]);
-                NetworkStream output(client);
-                FileUpload upload(input, output);
-                upload.launch();
+
+				File input(argv[2]);
+				NetworkStream output(client);
+				FileUpload upload(input, output);
+				upload.launch();
 			}
 			else
 			{
@@ -61,15 +63,15 @@ int submain(int argc, char ** argv)
 			if(server.accept(client))
 			{
 				LOG << "Client connected";
-                
+
 				//Download download(argv[2], client);
 				//download.addObserver(new TransferShow);
 				//download.launch();
-                
-                NetworkStream input(client);
-                File output(argv[2]);
-                FileDownload download(input, output);
-                download.launch();
+
+				NetworkStream input(client);
+				File output(argv[2]);
+				FileDownload download(input, output);
+				download.launch();
 			}
 			else
 			{

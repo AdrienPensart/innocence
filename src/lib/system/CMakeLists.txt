@@ -5,10 +5,10 @@ else()
 endif()
 
 add_library(system STATIC ${system_source_files})
-add_library(system_md STATIC ${system_source_files})
-
-set_target_properties(system PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
-set_target_properties(system_md PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
-
+if(WIN32)
+    add_library(system_md STATIC ${system_source_files})
+    set_target_properties(system PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
+    set_target_properties(system_md PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MD})
+    target_link_libraries(system_md log_md network_md)
+endif()
 target_link_libraries(system log network)
-target_link_libraries(system_md log_md network_md)

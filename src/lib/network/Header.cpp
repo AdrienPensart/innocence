@@ -1,5 +1,6 @@
 #include "Header.hpp"
 #include <log/Log.hpp>
+#include <cstring>
 
 namespace Network
 {
@@ -15,7 +16,11 @@ namespace Network
 
 	void IPHeader::feed(const char * data, size_t length)
 	{
-		memcpy_s(&header, getSize(), data, length);
+		#ifdef WIN32
+			memcpy_s(&header, getSize(), data, length);
+		#else
+			memcpy(&header, data, length);
+		#endif
 	}
 
 	void IPHeader::computeChecksum()
@@ -24,25 +29,25 @@ namespace Network
 		unsigned long sum = 0;
 		size_t len = getSize();
 		unsigned short * ip = (unsigned short*)&header;
-        while(len > 1)
+		while(len > 1)
 		{
 			sum += *(ip)++;
-            if(sum & 0x80000000)
+			if(sum & 0x80000000)
 				sum = (sum & 0xFFFF) + (sum >> 16);
-            len -= 2;
-        }
-        if(len)
-		{
-            sum += (unsigned short)*(unsigned char *)ip;
+			len -= 2;
 		}
-        
+		if(len)
+		{
+			sum += (unsigned short)*(unsigned char *)ip;
+		}
+
 		while(sum >> 16)
-        {
+		{
 			sum = (sum & 0xFFFF) + (sum >> 16);
 		}
 		header.checksum = (unsigned short)~sum;
 	}
-	
+
 	size_t IPHeader::getSize()
 	{
 		return sizeof(Impl);
@@ -53,7 +58,7 @@ namespace Network
 		return &header;
 	}
 
-	UDPHeader::UDPHeader(const IPHeader& ipArg, const std::string& dataArg) : 
+	UDPHeader::UDPHeader(const IPHeader& ipArg, const std::string& dataArg) :
 		ip(ipArg),
 		data(dataArg)
 	{
@@ -61,7 +66,11 @@ namespace Network
 
 	void UDPHeader::feed(const char * data, size_t length)
 	{
-		memcpy_s(&header, getSize(), data, length);
+		#ifdef WIN32
+			memcpy_s(&header, getSize(), data, length);
+		#else
+			memcpy(&header, data, length);
+		#endif
 	}
 
 	void * UDPHeader::getImpl()
@@ -83,54 +92,54 @@ namespace Network
 		unsigned int sum = 0;
 		sum += header.sport;
 		if (sum & 0x80000000)
-            sum = (sum & 0xFFFF) + (sum >> 16);
+			sum = (sum & 0xFFFF) + (sum >> 16);
 
 		sum += header.dport;
 		if (sum & 0x80000000)
-            sum = (sum & 0xFFFF) + (sum >> 16);
+			sum = (sum & 0xFFFF) + (sum >> 16);
 
 		header.length = htons(getSize() + data.size());
 		sum += header.length;
 		if (sum & 0x80000000)
-            sum = (sum & 0xFFFF) + (sum >> 16);
+			sum = (sum & 0xFFFF) + (sum >> 16);
 
 		// data
 		const unsigned short * buf = (unsigned short*)data.c_str();
 		size_t len = data.size();
-        while(len > 1)
-        {
-            sum += *buf++;
-            if (sum & 0x80000000)
-                sum = (sum & 0xFFFF) + (sum >> 16);
-            len -= 2;
-        }
-		// data padding
-        if ( len & 1 )
+		while(len > 1)
 		{
-            sum += *(buf);
+			sum += *buf++;
+			if (sum & 0x80000000)
+				sum = (sum & 0xFFFF) + (sum >> 16);
+			len -= 2;
+		}
+		// data padding
+		if ( len & 1 )
+		{
+			sum += *(buf);
 		}
 
 		// pseudo header source ip
 		unsigned short * ip_src = (unsigned short *)&ip.header.saddr;
-        sum += *(ip_src++);
-        sum += *ip_src;
+		sum += *(ip_src++);
+		sum += *ip_src;
 		// pseudo header destination ip
 		unsigned short * ip_dst = (unsigned short *)&ip.header.daddr;
-        sum += *(ip_dst++);
-        sum += *ip_dst;
+		sum += *(ip_dst++);
+		sum += *ip_dst;
 		// protocole
-        sum += htons(IPPROTO_UDP);
+		sum += htons(IPPROTO_UDP);
 		// UDP size
-        sum += htons(8 + data.size());
+		sum += htons(8 + data.size());
 
-        while (sum >> 16)
-        {
+		while (sum >> 16)
+		{
 			sum = (sum & 0xFFFF) + (sum >> 16);
 		}
 		header.checksum = (unsigned short)~sum;
 	}
 
-	ICMPHeader::ICMPHeader(const std::string& dataArg) : 
+	ICMPHeader::ICMPHeader(const std::string& dataArg) :
 		data(dataArg)
 	{
 	}
@@ -142,7 +151,11 @@ namespace Network
 
 	void ICMPHeader::feed(const char * data, size_t length)
 	{
-		memcpy_s(&header, getSize(), data, length);
+		#if WIN32
+			memcpy_s(&header, getSize(), data, length);
+		#else
+			memcpy(&header, data, length);
+		#endif
 	}
 
 	void ICMPHeader::computeChecksum()
@@ -156,12 +169,12 @@ namespace Network
 
 		unsigned short * buffer = (unsigned short*)data.c_str();
 		size_t size = data.size();
-		while(size > 1) 
+		while(size > 1)
 		{
 			cksum += *buffer++;
 			size -= sizeof(unsigned short);
 		}
-		if(size) 
+		if(size)
 		{
 			cksum += *buffer;
 		}
@@ -176,7 +189,7 @@ namespace Network
 		return sizeof(Impl);
 	}
 
-	TCPHeader::TCPHeader(const IPHeader& ipArg, const std::string& dataArg) : 
+	TCPHeader::TCPHeader(const IPHeader& ipArg, const std::string& dataArg) :
 		ip(ipArg),
 		data(dataArg)
 	{
@@ -184,7 +197,11 @@ namespace Network
 
 	void TCPHeader::feed(const char * data, size_t length)
 	{
-		memcpy_s(&header, getSize(), data, length);
+		#ifdef WIN32
+			memcpy_s(&header, getSize(), data, length);
+		#else
+			memcpy(&header, data, length);
+		#endif
 	}
 
 	void TCPHeader::computeChecksum()

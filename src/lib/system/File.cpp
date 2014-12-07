@@ -40,13 +40,13 @@ namespace System
 		buffer << handle.rdbuf();
 		return buffer.str();
 	}
-	
-	bool isReadable(const std::string& file) 
-    { 
-        std::ifstream fichier( file.c_str() ); 
-        return !fichier.fail(); 
-    }
-    
+
+	bool isReadable(const std::string& file)
+	{
+		std::ifstream fichier( file.c_str() );
+		return !fichier.fail();
+	}
+
 	#ifdef WIN32
 	std::string FileListing::getLogicalVolumes()
 	{
@@ -101,7 +101,7 @@ namespace System
 		return content;
 	}
 	#endif
-	
+
 	std::streamsize Size(std::ifstream& handle)
 	{
 		// sauvegarder la position courante
@@ -114,7 +114,7 @@ namespace System
 		handle.seekg( pos,  std::ios_base::beg ) ;
 		return size ;
 	}
-    
+
 	std::streamsize Size(std::fstream& handle)
 	{
 		// sauvegarder la position courante
@@ -142,20 +142,20 @@ namespace System
 	}
 
 	std::streamsize Size(const std::string& file)
-    {
-        std::ifstream fichier(file.c_str());
-        if(!fichier.fail())
-        {
-            // sauvegarder la position courante
-            std::streamoff pos = fichier.tellg();
-            // se placer en fin de fichier
-            fichier.seekg( 0 , std::ios_base::end );
-            // récupérer la nouvelle position = la taille du fichier
-            std::streamoff size = fichier.tellg() ;
-            // restaurer la position initiale du fichier
-            fichier.seekg( pos,  std::ios_base::beg ) ;
-            return size;
-        }
+	{
+		std::ifstream fichier(file.c_str());
+		if(!fichier.fail())
+		{
+			// sauvegarder la position courante
+			std::streamoff pos = fichier.tellg();
+			// se placer en fin de fichier
+			fichier.seekg( 0 , std::ios_base::end );
+			// récupérer la nouvelle position = la taille du fichier
+			std::streamoff size = fichier.tellg() ;
+			// restaurer la position initiale du fichier
+			fichier.seekg( pos,  std::ios_base::beg ) ;
+			return size;
+		}
 		return 0;
-    }
+	}
 } // System

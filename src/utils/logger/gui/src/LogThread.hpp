@@ -11,20 +11,20 @@ namespace LogGui
 	class LogThread : public QThread
 	{
 		Q_OBJECT
-       
+
 		public:
-       
+
 			LogThread();
 			~LogThread();
 			void run();
 			void addMessage(Message message);
 
 		signals:
-        
+
 			void newMessage(Message message);
-            
+
 		private:
-       
+
 			Log::LogServer logserver;
 	};
 
@@ -36,7 +36,7 @@ namespace LogGui
 			virtual void update(const Message& message);
 
 		private:
-	
+
 			LogThread * logThread;
 	};
 } // LogGui

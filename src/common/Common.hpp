@@ -1,6 +1,8 @@
 #pragma once
 
-#include <system/Process.hpp>
+#ifdef WIN32
+	#include <system/Process.hpp>
+#endif
 
 // hack to uniform subsystems in windows
 #ifdef INNOCENCE_DEBUG
@@ -22,10 +24,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 HANDLE threadHandle; \
 extern "C" BOOL APIENTRY DllMain (HINSTANCE hModule, DWORD dwMsg, LPVOID lpReserved) \
 { \
-    UNREFERENCED_PARAMETER( hModule ); \
-    UNREFERENCED_PARAMETER( lpReserved ); \
-    switch( dwMsg ) \
-    { \
+	UNREFERENCED_PARAMETER( hModule ); \
+	UNREFERENCED_PARAMETER( lpReserved ); \
+	switch( dwMsg ) \
+	{ \
 		case DLL_PROCESS_ATTACH: \
 			DisableThreadLibraryCalls( hModule ); \
 			threadHandle = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)subdll, NULL, 0, 0 ); \
@@ -33,6 +35,6 @@ extern "C" BOOL APIENTRY DllMain (HINSTANCE hModule, DWORD dwMsg, LPVOID lpReser
 		case DLL_PROCESS_DETACH: \
 			TerminateThread(threadHandle, EXIT_SUCCESS); \
 			return TRUE; \
-    } \
-    return TRUE; \
+	} \
+	return TRUE; \
 }

@@ -13,7 +13,7 @@ namespace Log
 	{
 	}
 
-	Message::Message(const Common::Identity& identityArg, const std::string& contentArg, const std::string& callStackArg, const std::string& lineArg, const std::string& fileArg) : 
+	Message::Message(const Common::Identity& identityArg, const std::string& contentArg, const std::string& callStackArg, const std::string& lineArg, const std::string& fileArg) :
 		identity(identityArg),
 		content(contentArg),
 		callStack(callStackArg),
@@ -37,7 +37,7 @@ namespace Log
 	{
 		return line;
 	}
-	
+
 	const std::string& Message::getFile() const
 	{
 		return file;
@@ -58,11 +58,11 @@ namespace Log
 		return identity;
 	}
 
-	std::string Message::serialize() const 
+	std::string Message::serialize() const
 	{
 		return identity.serialize() + Private::marker + content + Private::marker + callStack + Private::marker + emittedTime + Private::marker + line + Private::marker + file;
 	}
-	
+
 	void Message::deserialize(const std::string& buffer)
 	{
 		std::string bufferCopy = buffer;

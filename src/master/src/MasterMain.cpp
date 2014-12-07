@@ -2,15 +2,14 @@
 #include <QMessageBox>
 
 #include "MasterWindow.hpp"
-#include <system/Process.hpp>
 #include <system/Uac.hpp>
 #include <common/Build.hpp>
 
 int submain(int argc, char ** argv)
 {
 	int returnValue = EXIT_FAILURE;
-    try
-    {
+	try
+	{
 		LOG.setIdentity(Common::identity);
 		LOG.addObserver(new Log::LogToConsole);
 		LOG.addObserver(new Log::LogToCollector);
@@ -22,15 +21,15 @@ int submain(int argc, char ** argv)
 			return EXIT_SUCCESS;
 		}
 #endif
-			
-        QApplication app(argc, argv);
-        Master::MasterWindow master;
-        master.show();
-        returnValue = app.exec();
-    }
+
+		QApplication app(argc, argv);
+		Master::MasterWindow master;
+		master.show();
+		returnValue = app.exec();
+	}
 	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
-    return returnValue;
+	return returnValue;
 }
 
 INNOCENCE_MAIN

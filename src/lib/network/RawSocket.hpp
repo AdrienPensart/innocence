@@ -1,4 +1,5 @@
 #pragma once
+#ifdef WIN32
 
 #include "Socket.hpp"
 #include "Packet.hpp"
@@ -8,7 +9,7 @@ namespace Network
 	class RawSocket : public Socket
 	{
 		public:
-			
+
 			RawSocket(int protocol);
 			int send(const char * buffer, size_t length);
 			int send(Packet& packet);
@@ -23,3 +24,5 @@ namespace Network
 			virtual void acquire();
 	};
 } // Network
+
+#endif

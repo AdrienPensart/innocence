@@ -1,6 +1,8 @@
 #include "Packet.hpp"
 #include <log/Log.hpp>
 
+#include <cstring>
+
 namespace Network
 {
 	size_t Packet::size()
@@ -10,12 +12,12 @@ namespace Network
 			s += headers[index]->getSize();
 		return s;
 	}
-	
+
 	std::vector<Header *> Packet::getHeaders()
 	{
 		return headers;
 	}
-	
+
 	void Packet::addHeader(Header * header)
 	{
 		headers.push_back(header);
@@ -25,7 +27,7 @@ namespace Network
 	{
 		return data;
 	}
-	
+
 	void Packet::setData(const std::string& dataArg)
 	{
 		data = dataArg;
@@ -51,10 +53,18 @@ namespace Network
 		for(size_t index = 0; index < headers.size(); index++)
 		{
 			Header * current = headers[index];
-			memcpy_s(&buffer[0]+offset, current->getSize(), current->getImpl(), current->getSize());
+			#if WIN32
+				memcpy_s(&buffer[0]+offset, current->getSize(), current->getImpl(), current->getSize());
+			#else
+				memcpy(&buffer[0]+offset, current->getImpl(), current->getSize());
+			#endif
 			offset += current->getSize();
 		}
-		memcpy_s(&buffer[0] + offset, getMaxDataLength(), getData().c_str(), getData().size());
+		#if WIN32
+			memcpy_s(&buffer[0] + offset, getMaxDataLength(), getData().c_str(), getData().size());
+		#else
+			memcpy(&buffer[0] + offset, getData().c_str(), getData().size());
+		#endif
 	}
 
 	UDPPacket::UDPPacket()
@@ -73,7 +83,7 @@ namespace Network
 
 		ip->header.tlength = size();
 		ip->computeChecksum();
-		
+
 		udp->computeChecksum();
 		LOG << "IP Checksum : " + Common::toString(ip->header.checksum);
 		LOG << "UDP Checksum : " + Common::toString(udp->header.checksum);
@@ -93,12 +103,12 @@ namespace Network
 		addHeader(ip);
 		addHeader(icmp);
 	}
-	
+
 	size_t ICMPPacket::getMaxDataLength()
 	{
 		return MAX_ICMP_PACKET_LENGTH - (ip->getSize() + icmp->getSize());
 	}
-	
+
 	void ICMPPacket::setData(const std::string& dataArg)
 	{
 		Packet::setData(dataArg);

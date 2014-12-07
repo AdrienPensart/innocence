@@ -20,23 +20,28 @@ namespace Common
 
 			Identity
 				(
-					const std::string& moduleArg="", 
-					const std::string& buildIdArg="", 
-					const std::string& buildDateArg="", 
-					const std::string& buildTimeArg="", 
+					const std::string& moduleArg="",
+					const std::string& buildIdArg="",
+					const std::string& buildDateArg="",
+					const std::string& buildTimeArg="",
 					const std::string& buildTimestampArg=""
-				) : 
+				) :
 				module(moduleArg),
 				buildId(buildIdArg),
 				buildDate(buildDateArg),
 				buildTime(buildTimeArg),
 				buildTimestamp(buildTimestampArg),
 				executionDate(currentDate()),
-				os(System::getSystemVersionString()),
-				computer(System::getCompleteComputerName())
+				#ifdef WIN32
+					os(System::getSystemVersionString()),
+					computer(System::getCompleteComputerName())
+				#else
+					os("linux"),
+					computer("linux")
+				#endif
 			{
 			}
-			
+
 			const std::string& getModule() const
 			{
 				return module;
@@ -94,12 +99,12 @@ namespace Common
 
 			std::string serialize() const
 			{
-				return module + Private::marker + 
-					   computer + Private::marker + 
-					   os + Private::marker + 
-					   buildId + Private::marker + 
-					   buildDate + Private::marker + 
-					   buildTime + Private::marker + 
+				return module + Private::marker +
+					   computer + Private::marker +
+					   os + Private::marker +
+					   buildId + Private::marker +
+					   buildDate + Private::marker +
+					   buildTime + Private::marker +
 					   buildTimestamp;
 			}
 

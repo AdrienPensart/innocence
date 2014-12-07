@@ -1,5 +1,7 @@
 set(LOGGER_TARGET "logger")
 file(GLOB_RECURSE ${LOGGER_TARGET}_source_files src/*)
 add_executable(${LOGGER_TARGET} ${GUI_TYPE} ${logger_source_files})
+if(WIN32)
+    set_target_properties(${LOGGER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})
+endif()
 target_link_libraries(${LOGGER_TARGET} system network log)
-set_target_properties(${LOGGER_TARGET} PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS_MT})

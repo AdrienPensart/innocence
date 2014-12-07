@@ -61,7 +61,7 @@ namespace Common
 				{
 					throw ParseError("Value missing");
 				}
-				
+
 				std::string next = argv[index+1];
 				if(next == "-console" || next == "-auditor" || next == "-collector" || next == "-sql" || next == "-file")
 				{
@@ -106,13 +106,14 @@ namespace Common
 					LOG.addObserver(new Log::LogToFile(Common::identity.getLogFile()));
 				}
 			}
+			#ifdef WIN32
 			else if(arg == "-sql")
 			{
 				if(index+1 > argc)
 				{
 					throw ParseError("Connection string missing");
 				}
-				
+
 				std::string next = argv[index+1];
 				if(next == "-console" || next == "-auditor" || next == "-collector" || next == "-sql" || next == "-file")
 				{
@@ -121,6 +122,7 @@ namespace Common
 				LOG.addObserver(new Log::LogToSql(next));
 				index++;
 			}
+			#endif
 			else
 			{
 				throw ParseError("Bad argument");

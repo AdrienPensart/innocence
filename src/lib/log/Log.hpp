@@ -18,42 +18,42 @@ namespace Log
 
 	std::string genCallStack(const CallStack& callStack);
 
-    class Lout : public Common::Observable<LogObserver, Message>, public Common::NonCopyable
-    {
-        public:
-            
-            void setTracing(bool trace);
+	class Lout : public Common::Observable<LogObserver, Message>, public Common::NonCopyable
+	{
+		public:
+
+			void setTracing(bool trace);
 			static void setIdentity(const Common::Identity& identity);
-            void enterFunction(const std::string& func);
-            void leaveFunction();
-            Lout& operator << (const std::string& object);
+			void enterFunction(const std::string& func);
+			void leaveFunction();
+			Lout& operator << (const std::string& object);
 			static Lout lout;
 			static Lout& setMacro(const std::string& currentLine, const std::string& currentFile);
 
-        private:
-            
+		private:
+
 			Lout();
-            bool tracing;
+			bool tracing;
 			bool warningMessage;
 			static std::string currentLine;
 			static std::string currentFile;
 
 			static Common::Identity identity;
-            CallStack functions;
-    };
-    
+			CallStack functions;
+	};
+
 	struct ScopedLog
-    {
-        ScopedLog(const std::string& log);
-        ~ScopedLog();
-        const std::string& msg;
-    };
-    
-    struct FunctionLog
-    {
-        FunctionLog(const std::string& functionName);
-        ~FunctionLog();
-    };
+	{
+		ScopedLog(const std::string& log);
+		~ScopedLog();
+		const std::string& msg;
+	};
+
+	struct FunctionLog
+	{
+		FunctionLog(const std::string& functionName);
+		~FunctionLog();
+	};
 
 } // Log
 

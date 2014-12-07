@@ -4,28 +4,28 @@
 
 namespace Common
 {
-    enum
+	enum
 	{
 		CONNECTION_INFO_SIZE = 256,
 		INNOCENCE_PORT = 80,
 		LOG_COLLECTOR_PORT = 81,
 		AUDIT_SERVER_PORT = 82
 	};
-    
-    struct ConnectionInfo
-    {
-        std::string name;
-        std::string ip;
-        unsigned short port;
-        std::string password;
-    };
-    
+
+	struct ConnectionInfo
+	{
+		std::string name;
+		std::string ip;
+		unsigned short port;
+		std::string password;
+	};
+
 	const static char blaspheme [CONNECTION_INFO_SIZE] = "*#+127.0.0.1:80:default:crunch*#+";
-	
+
 	#define MARKER_SIZE 3
 	#define MARKER "*#+"
 	#define SEPERATOR ':'
-	
+
 	// AUDITOR AGENT & SERVER CONFIG
 	static const char * LOG_DB_CONNECTION_STRING = "root/ts1cl2fs@innocence";
 	static const char * LOG_COLLECTOR_IP = "127.0.0.1";
@@ -34,7 +34,7 @@ namespace Common
 	static const char * PIPE_AUDIT_PIPE_NAME = "\\\\.\\pipe\\audit_pipe";
 	static const char * ISINJECTED_AUDIT_PIPENAME = "\\\\.\\pipe\\audit_injection";
 	static const char * ISINJECTED_PROOF = "INJECTED";
-	
+
 	// MASTER & SLAVE PROTOCOL CONFIG
 	#define HIBERNATE           "hibernate"
 	#define SHUTDOWN            "shutdown"
@@ -76,5 +76,5 @@ namespace Common
 	static const char * SELF_DELETE_CMD = "self_delete";
 	static const char * PIPE_NAME = "\\\\.\\pipe\\innocence";
 	static const bool   INJECT_DEFAULT_BROWSER = false;
-	
+
 } // Common

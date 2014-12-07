@@ -3,73 +3,75 @@
 #include <network/TcpClient.hpp>
 #include <fstream>
 
-#define OTL_ODBC
-#define OTL_ODBC_SELECT_STM_EXECUTE_BEFORE_DESCRIBE
-
-#include <common/WindowsWrapper.hpp>
-#include <sql.h>
-#include <sqlext.h>
-#include <otlv4.h>
+#ifdef WIN32
+	#define OTL_ODBC
+	#define OTL_ODBC_SELECT_STM_EXECUTE_BEFORE_DESCRIBE
+	#include <common/WindowsWrapper.hpp>
+	#include <sql.h>
+	#include <sqlext.h>
+	#include <otlv4.h>
+#endif
 
 namespace Log
 {
 	class Message;
 
 	class LogObserver
-    {
-        public:
+	{
+		public:
 
 			virtual ~LogObserver();
-            virtual void update(const Message& message)=0;
-    };
+			virtual void update(const Message& message)=0;
+	};
 
-    class LogToFile : public LogObserver
-    {
-        public:
+	class LogToFile : public LogObserver
+	{
+		public:
 
-            LogToFile(const std::string& filepath);
-            virtual void update(const Message& message);
+			LogToFile(const std::string& filepath);
+			virtual void update(const Message& message);
 
-        private:
+		private:
 
 			bool disabled;
 			const std::string filepath;
-            std::ofstream file;
-    };
+			std::ofstream file;
+	};
 
-    class LogToNetwork : public LogObserver
-    {
-        public:
+	class LogToNetwork : public LogObserver
+	{
+		public:
 
-            LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort);
-            virtual void update(const Message& message);
+			LogToNetwork(const Network::Host& loggerIp, const Network::Port& loggerPort);
+			virtual void update(const Message& message);
 			Network::Stream& getStream();
 
-        private:
+		private:
 
 			bool connected;
-            Network::TcpClient socket;
-    };
+			Network::TcpClient socket;
+	};
 
 	class LogToCollector : public LogToNetwork
 	{
 		public:
 			LogToCollector(const Network::Host& loggerIp, const Network::Port& loggerPort);
-            LogToCollector();
+			LogToCollector();
 	};
 
 	class LogToConsole : public LogObserver
-    {
-        public:
+	{
+		public:
 
-            LogToConsole(const std::string& title="");
-            virtual void update(const Message& message);
+			LogToConsole(const std::string& title="");
+			virtual void update(const Message& message);
 
-        private:
+		private:
 
-            const std::string title;
-    };
+			const std::string title;
+	};
 
+	#ifdef WIN32
 	class LogToSql : public LogObserver
 	{
 		public:
@@ -81,5 +83,5 @@ namespace Log
 			std::string connectionString;
 			otl_stream * logdb;
 	};
-
+	#endif
 } // Log
