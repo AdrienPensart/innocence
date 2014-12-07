@@ -10,3 +10,6 @@
 [submodule "src/lib/keyboard"]
 	path = src/lib/keyboard
 	url = git@bitbucket.org:crunchengine/keyboard.git
+[submodule "src/common"]
+	path = src/common
+	url = git@bitbucket.org:crunchengine/common.git
