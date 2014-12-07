@@ -4,3 +4,6 @@
 [submodule "src/lib/network"]
 	path = src/lib/network
 	url = git@bitbucket.org:crunchengine/network.git
+[submodule "src/lib/system"]
+	path = src/lib/system
+	url = git@bitbucket.org:crunchengine/system.git
