@@ -1,3 +1,6 @@
 [submodule "src/lib/log"]
 	path = src/lib/log
 	url = git@bitbucket.org:crunchengine/log.git
+[submodule "src/lib/network"]
+	path = src/lib/network
+	url = git@bitbucket.org:crunchengine/network.git
