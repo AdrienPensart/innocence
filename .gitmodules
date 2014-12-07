@@ -7,3 +7,6 @@
 [submodule "src/lib/system"]
 	path = src/lib/system
 	url = git@bitbucket.org:crunchengine/system.git
+[submodule "src/lib/keyboard"]
+	path = src/lib/keyboard
+	url = git@bitbucket.org:crunchengine/keyboard.git
