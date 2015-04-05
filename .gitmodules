@@ -1,15 +1,15 @@
 [submodule "src/lib/log"]
 	path = src/lib/log
-	url = git@bitbucket.org:crunchengine/log.git
+	url = git@github.com:AdrienPensart/log.git
 [submodule "src/lib/network"]
 	path = src/lib/network
-	url = git@bitbucket.org:crunchengine/network.git
+	url = git@github.com:AdrienPensart/network.git
 [submodule "src/lib/system"]
 	path = src/lib/system
-	url = git@bitbucket.org:crunchengine/system.git
+	url = git@github.com:AdrienPensart/system.git
 [submodule "src/lib/keyboard"]
 	path = src/lib/keyboard
-	url = git@bitbucket.org:crunchengine/keyboard.git
+	url = git@github.com:AdrienPensart/keyboard.git
 [submodule "src/common"]
 	path = src/common
-	url = git@bitbucket.org:crunchengine/common.git
+	url = git@github.com:AdrienPensart/common.git
