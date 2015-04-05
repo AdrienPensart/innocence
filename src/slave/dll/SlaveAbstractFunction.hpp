@@ -2,15 +2,13 @@
 
 #include <blaspheme/protocol/Session.hpp>
 
-namespace Inhibition
-{
+namespace Inhibition {
 	class SlaveCore;
 
 	// le serveur possede une liste de fonctions appelables par le client
 	// certains modules sont interdependants, ils conservent donc des liens
 	// vers ces modules
-	class SlaveAbstractFunction
-	{
+	class SlaveAbstractFunction {
 		public:
 
 			virtual ~SlaveAbstractFunction();

@@ -11,31 +11,28 @@
 #include <audit/Run.hpp>
 #include <audit/AuditServer.hpp>
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
-	
+
 		System::Process::This thisProcess;
-		if(!System::isAdministrator())
-		{
+		if(!System::isAdministrator()) {
 			LOG << "Trying to run as administrator";
 			System::RunAsAdministrator(thisProcess.getProgramName(), thisProcess.getProgramDir());
 			return EXIT_SUCCESS;
 		}
-	
+
 		Log::LogServer logServer(Common::AUDIT_SERVER_PORT);
 		logServer.addObserver(new Log::LogToConsole);
-		
+
 		Audit::GlobalAudit globalAudit;
 		logServer.addObserver(new Audit::DispatchAudit(globalAudit));
-	
+
 		Audit::AuditServer::instance().setLogServer(&logServer);
 		Audit::AuditServer::instance().start();
 
-		
+
 		//globalAudit.addRun(new Audit::Run("elevator.exe"));
 		globalAudit.addRun(new Audit::Run("injection.exe"));
 		//globalAudit.addRun(new Audit::Run("hideproc.exe"));

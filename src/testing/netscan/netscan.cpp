@@ -4,10 +4,8 @@
 #include <audit/Audit.hpp>
 #include <malicious/NetScan.hpp>
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 
@@ -20,7 +18,7 @@ int submain(int argc, char ** argv)
 		portList.push_back(80);
 		portList.push_back(81);
 		portList.push_back(82);
-		
+
 		Malicious::NetScan ns(hostList, portList, true);
 		ns.start();
 		ns.join();

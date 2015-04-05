@@ -8,17 +8,15 @@ using namespace Common;
 
 #include <audit/Audit.hpp>
 
-int submain(int argc, char **argv)
-{
-	try
-	{
+int submain(int argc, char **argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 
 		System::Process::This thisProcess;
 		return Malicious::elevate(thisProcess.getProgramDir()+"\\isadmin.exe");
-    }
-    CATCH_COMMON_EXCEPTION
+	}
+	CATCH_COMMON_EXCEPTION
 	CATCH_UNKNOWN_EXCEPTION
 	return EXIT_FAILURE;
 }

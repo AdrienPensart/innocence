@@ -5,10 +5,8 @@
 #include <string>
 #include <network/UdpSocket.hpp>
 
-namespace Common
-{
-	class LogServer
-	{
+namespace Common {
+	class LogServer {
 		public:
 
 			LogServer(Network::Port port, const std::string& onProof);
@@ -20,7 +18,7 @@ namespace Common
 			Network::Port getPort();
 
 		private:
-			
+
 			static DWORD WINAPI MsgLoop(LPVOID lpParameter);
 
 			Network::Port port;

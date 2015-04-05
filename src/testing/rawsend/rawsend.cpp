@@ -7,20 +7,18 @@
 #include <iostream>
 using namespace std;
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 		/*
 		Network::RawSocket rs(IPPROTO_UDP);
 		rs.setDestInfo("192.168.0.1", 8001);
-		
+
 		Network::UDPPacket packet;
 		packet.ip->header.saddr = inet_addr("192.168.0.219");
 		packet.ip->header.daddr = rs.getAddr().sin_addr.s_addr;
-		
+
 		packet.udp->header.sport = htons(atoi("8000"));
 		packet.udp->header.dport = rs.getAddr().sin_port;
 
@@ -32,19 +30,16 @@ int submain(int argc, char ** argv)
 		Network::TCPPacket packet;
 		packet.ip->header.saddr = inet_addr("192.168.0.219");
 		packet.ip->header.daddr = rs.getAddr().sin_addr.s_addr;
-		
+
 		packet.tcp->header.sport = htons(atoi("8000"));
 		packet.tcp->header.dport = rs.getAddr().sin_port;
 
 		packet.setData("helloworld");
 
 		int bytesSent = rs.send(packet);
-		if(bytesSent < 0)
-		{
+		if(bytesSent < 0) {
 			LOG << "Error : " + Network::SocketException::getLastError();
-		}
-		else
-		{
+		} else {
 			LOG << "Bytes sent : " + Common::toString(bytesSent);
 		}
 		/*
@@ -59,7 +54,7 @@ int submain(int argc, char ** argv)
 		echo.icmp->header.code = 0;
 		echo.icmp->header.id = 0;
 		echo.icmp->header.seq = 1;
-		
+
 		echo.setData("helloworld");
 
 		Network::RawSocket server(IPPROTO_ICMP);

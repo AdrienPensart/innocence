@@ -11,34 +11,27 @@ using namespace Network;
 
 #include <cstring>
 
-class TransferShow : public TransferObserver
-{
+class TransferShow : public TransferObserver {
 	public:
 
-		void update(const TransferDescriptor& td)
-		{
+		void update(const TransferDescriptor& td) {
 			LOG << Common::toString(td.percentage);
 		}
 };
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
-		if(argc != 3)
-		{
+		if(argc != 3) {
 			LOG << "Bad argument number";
 			return EXIT_SUCCESS;
 		}
 
-		if(strcmp(argv[1], "-u") == 0)
-		{
+		if(strcmp(argv[1], "-u") == 0) {
 			// c'est un upload (mode client)
 			TcpClient client;
-			if(client.connect("127.0.0.1", 80))
-			{
+			if(client.connect("127.0.0.1", 80)) {
 				LOG << "Connected to server";
 
 				//Upload upload(argv[2], client);
@@ -49,19 +42,14 @@ int submain(int argc, char ** argv)
 				NetworkStream output(client);
 				FileUpload upload(input, output);
 				upload.launch();
-			}
-			else
-			{
+			} else {
 				LOG << "Connected to server";
 			}
-		}
-		else if(strcmp(argv[1], "-d") == 0)
-		{
+		} else if(strcmp(argv[1], "-d") == 0) {
 			// c'est un download (mode serveur)
 			TcpServer server(80);
 			TcpClient client;
-			if(server.accept(client))
-			{
+			if(server.accept(client)) {
 				LOG << "Client connected";
 
 				//Download download(argv[2], client);
@@ -72,14 +60,10 @@ int submain(int argc, char ** argv)
 				File output(argv[2]);
 				FileDownload download(input, output);
 				download.launch();
-			}
-			else
-			{
+			} else {
 				LOG << "No client";
 			}
-		}
-		else
-		{
+		} else {
 			LOG << "Usage : transfer -[u|d|s] file";
 		}
 	}

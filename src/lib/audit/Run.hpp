@@ -5,12 +5,10 @@
 #include <vector>
 #include <common/WindowsWrapper.hpp>
 
-namespace Audit
-{
-	class Run
-	{
+namespace Audit {
+	class Run {
 		public:
-			
+
 			Run(const std::string& executable);
 			void run();
 			void build();

@@ -6,18 +6,16 @@
 #include <log/Message.hpp>
 using Log::Message;
 
-namespace LogGui
-{
-	class LogGuiWindow : public QDialog, public Ui::DebuggingDialog
-	{
-		Q_OBJECT
-       
+namespace LogGui {
+	class LogGuiWindow : public QDialog, public Ui::DebuggingDialog {
+			Q_OBJECT
+
 		public:
-       
+
 			LogGuiWindow(QWidget * parent = 0);
-           
+
 		public slots:
-       
+
 			void addMessage(Message message);
 			void saveLog();
 

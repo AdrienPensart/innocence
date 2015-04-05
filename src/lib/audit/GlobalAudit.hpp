@@ -7,14 +7,12 @@
 #include <system/Thread.hpp>
 #include <vector>
 
-namespace Audit
-{
+namespace Audit {
 	class Run;
 
-	class GlobalAudit
-	{
+	class GlobalAudit {
 		public:
-			
+
 			GlobalAudit();
 			virtual ~GlobalAudit();
 			void addRun(Run *run);

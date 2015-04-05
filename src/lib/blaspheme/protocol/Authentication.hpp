@@ -3,12 +3,10 @@
 #include <string>
 #include <common/Settings.hpp>
 
-namespace Blaspheme
-{
+namespace Blaspheme {
 	class Session;
 
-	class AuthenticationMethod
-	{
+	class AuthenticationMethod {
 		public:
 
 			AuthenticationMethod(const Common::ConnectionInfo& info);
@@ -21,8 +19,7 @@ namespace Blaspheme
 			const Common::ConnectionInfo& info;
 	};
 
-	class NoAuthentication : public AuthenticationMethod
-	{
+	class NoAuthentication : public AuthenticationMethod {
 		public:
 
 			NoAuthentication(const Common::ConnectionInfo& info);
@@ -30,8 +27,7 @@ namespace Blaspheme
 			virtual bool recvAuth(Session&);
 	};
 
-	class StringBasedAuth : public AuthenticationMethod
-	{
+	class StringBasedAuth : public AuthenticationMethod {
 		public:
 
 			StringBasedAuth(const Common::ConnectionInfo& info);
@@ -39,8 +35,7 @@ namespace Blaspheme
 			virtual bool recvAuth(Session&);
 	};
 
-	class ChallengedBasedAuth : public AuthenticationMethod
-	{
+	class ChallengedBasedAuth : public AuthenticationMethod {
 		public:
 
 			ChallengedBasedAuth(const Common::ConnectionInfo& info);

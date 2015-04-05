@@ -12,10 +12,8 @@
 
 #include "CommandDispatcher.hpp"
 
-namespace Inhibition
-{
-	class SlaveCore : public Common::NonCopyable
-	{
+namespace Inhibition {
+	class SlaveCore : public Common::NonCopyable {
 		public:
 
 			SlaveCore(Common::ConnectionInfo info);

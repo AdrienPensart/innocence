@@ -4,10 +4,8 @@
 #include <common/Innocence.hpp>
 #include <audit/Audit.hpp>
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 		Malicious::Screenshot sc;

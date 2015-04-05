@@ -3,11 +3,9 @@
 #include <map>
 #include "SlaveAbstractFunction.hpp"
 
-namespace Inhibition
-{
-	class CommandDispatch
-	{
-		typedef std::map<std::string, SlaveAbstractFunction *> Functions;
+namespace Inhibition {
+	class CommandDispatch {
+			typedef std::map<std::string, SlaveAbstractFunction *> Functions;
 
 		public:
 

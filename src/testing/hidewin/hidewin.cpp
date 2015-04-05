@@ -4,12 +4,10 @@
 #include <common/ParseOptions.hpp>
 #include <audit/Audit.hpp>
 
-int submain(int argc, char ** argv)
-{
+int submain(int argc, char ** argv) {
 	int exitCode = EXIT_FAILURE;
-    try
-	{
-        LOG.setIdentity(Common::identity);
+	try {
+		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 		Malicious::InternetExplorer ie;
 		LOG << "Internet Explorer PID : " + Common::toString(ie.getPid());

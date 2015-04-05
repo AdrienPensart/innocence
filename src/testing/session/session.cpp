@@ -8,15 +8,12 @@ using namespace Common;
 using namespace Network;
 using namespace Blaspheme;
 
-int submain(int argc, char ** argv)
-{
-	try
-	{
+int submain(int argc, char ** argv) {
+	try {
 		LOG.setIdentity(Common::identity);
 		Common::ParseOptions(argc, argv);
 
-		if(argc != 2)
-		{
+		if(argc != 2) {
 			LOG << "Usage : session connect|listen\n";
 			return EXIT_SUCCESS;
 		}
@@ -37,38 +34,28 @@ int submain(int argc, char ** argv)
 		info.password = "crunch";
 		Session session(info);
 
-		if(arg == "connect")
-		{
+		if(arg == "connect") {
 			//while(true)
 			{
-				if(session.connect())
-				{
+				if(session.connect()) {
 					LOG << "Connect ok.\n";
 					session.setId(0);
 					session.reset();
 					LOG << "Deconnexion.\n";
 				}
 			}
-		}
-		else if(arg == "listen")
-		{
-			while(true)
-			{
-				if(session.waitConnect())
-				{
+		} else if(arg == "listen") {
+			while(true) {
+				if(session.waitConnect()) {
 					LOG << "WaitConnect ok.\n";
 					session.setId(0);
 					session.reset();
 					LOG << "Deconnexion.\n";
-				}
-				else
-				{
+				} else {
 					LOG << "Aucune connexion de client.\n";
 				}
 			}
-		}
-		else
-		{
+		} else {
 			LOG << "Usage : session connect|listen\n";
 		}
 	}

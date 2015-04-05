@@ -5,12 +5,10 @@
 #include <log/Message.hpp>
 using Log::Message;
 
-namespace LogGui
-{
+namespace LogGui {
 
-	class LogThread : public QThread
-	{
-		Q_OBJECT
+	class LogThread : public QThread {
+			Q_OBJECT
 
 		public:
 
@@ -28,8 +26,7 @@ namespace LogGui
 			Log::LogServer logserver;
 	};
 
-	class LogToGui : public Log::LogObserver
-	{
+	class LogToGui : public Log::LogObserver {
 		public:
 
 			LogToGui(LogThread * logThread);

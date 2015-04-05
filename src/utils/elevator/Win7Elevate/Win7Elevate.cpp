@@ -4,8 +4,7 @@
 #include <string>
 using namespace std;
 
-int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
-{
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 	int argc = 0;
 	wchar_t ** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	/*
@@ -31,12 +30,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			break;
 	}
 	*/
-	if(argc < 5)
-	{
+	if(argc < 5) {
 		//MessageBox(NULL, L"Nombre d'arguments invalide", L"Win7Elevate", MB_OK | MB_ICONERROR);
-	}
-	else
-	{
+	} else {
 		// 1er argument : nom du programme
 		// 2eme argument : nom du processus a injecter
 		wchar_t * szProc = argv[1];
@@ -52,8 +48,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		szDir = szDir.substr(0, last);
 		// les arguments suivants sont les arguments du programme a lancer
 		wstring szArgs;
-		for(int index = 4; index < argc; index++)
-		{
+		for(int index = 4; index < argc; index++) {
 			szArgs += argv[index];
 		}
 

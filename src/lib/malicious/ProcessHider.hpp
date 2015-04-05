@@ -6,34 +6,32 @@
 #include <common/WindowsWrapper.hpp>
 #include <winioctl.h>
 
-namespace Malicious
-{
+namespace Malicious {
 	typedef Common::Exception DriverError;
 
-    class ProcessHider
-    {
-        public:
+	class ProcessHider {
+		public:
 
-            ProcessHider();
-            ~ProcessHider();
-            void hide(const std::string& processName);
-            void hide(unsigned long processPid);
-            void remove();
+			ProcessHider();
+			~ProcessHider();
+			void hide(const std::string& processName);
+			void hide(unsigned long processPid);
+			void remove();
 
-        private:
-            
-            void installService();
-            void removeService();
-            void openServiceManager();
-            void closeServiceManager();
-            void openService();
-            void closeService();
-            void startService();
-            void stopService();
+		private:
 
-            std::string driverPath;
-            SC_HANDLE manager;
-            SC_HANDLE service;
-    };
-    
+			void installService();
+			void removeService();
+			void openServiceManager();
+			void closeServiceManager();
+			void openService();
+			void closeService();
+			void startService();
+			void stopService();
+
+			std::string driverPath;
+			SC_HANDLE manager;
+			SC_HANDLE service;
+	};
+
 } // Malicious

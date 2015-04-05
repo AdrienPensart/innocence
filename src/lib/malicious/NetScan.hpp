@@ -5,18 +5,16 @@
 #include <vector>
 #include <map>
 
-namespace Malicious
-{
+namespace Malicious {
 	typedef std::vector<Network::Host> HostList;
 	typedef std::vector<Network::Port> PortList;
 
-	class NetScan : 
-		public System::Thread
-	{
+	class NetScan :
+		public System::Thread {
 		public:
 			NetScan(const HostList& hosts, const PortList& ports, bool randomize=false, Network::Timeout delay=Network::Timeout(1));
 			virtual void start();
-            virtual void stop();
+			virtual void stop();
 
 		private:
 			bool randomize;

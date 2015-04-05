@@ -3,12 +3,10 @@
 #include <common/WindowsWrapper.hpp>
 #include <exdisp.h>
 
-namespace Malicious
-{
-	class InternetExplorer
-	{
+namespace Malicious {
+	class InternetExplorer {
 		public:
-		
+
 			InternetExplorer(bool killOnDestroy=false);
 			~InternetExplorer();
 

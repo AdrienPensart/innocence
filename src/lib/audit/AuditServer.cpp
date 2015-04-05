@@ -1,58 +1,46 @@
 #include "AuditServer.hpp"
 #include <log/Log.hpp>
 
-namespace Audit
-{
-	DispatchAudit::DispatchAudit(GlobalAudit& globalAuditArg) : 
-		globalAudit(globalAuditArg)
-	{
+namespace Audit {
+	DispatchAudit::DispatchAudit(GlobalAudit& globalAuditArg) :
+		globalAudit(globalAuditArg) {
 	}
-    
-	void DispatchAudit::update(const Log::Message& message)
-	{
+
+	void DispatchAudit::update(const Log::Message& message) {
 		globalAudit.addMessage(message);
 	}
 
 	Log::LogServer * AuditServer::logServer = 0;
 
-	AuditServer::AuditServer() : 
-		Thread((LPTHREAD_START_ROUTINE)LogLoop)
-	{
+	AuditServer::AuditServer() :
+		Thread((LPTHREAD_START_ROUTINE)LogLoop) {
 	}
 
-	void AuditServer::setLogServer(Log::LogServer * logServerArg)
-	{
+	void AuditServer::setLogServer(Log::LogServer * logServerArg) {
 		logServer = logServerArg;
 	}
 
-	void AuditServer::start()
-	{
+	void AuditServer::start() {
 		TRACE_FUNCTION
-		if(logServer)
-		{
+		if(logServer) {
 			Thread::start();
 			LOG << "AuditServer started";
 		}
 	}
 
-    void AuditServer::stop()
-	{
+	void AuditServer::stop() {
 		TRACE_FUNCTION
-		if(logServer)
-		{
+		if(logServer) {
 			logServer->stop();
-			if(join())
-			{
+			if(join()) {
 				LOG << "AuditServer stopped";
 			}
 		}
 	}
 
-	DWORD WINAPI AuditServer::LogLoop(LPVOID lpParameter)
-	{
+	DWORD WINAPI AuditServer::LogLoop(LPVOID lpParameter) {
 		TRACE_FUNCTION
-		if(logServer)
-		{
+		if(logServer) {
 			logServer->run();
 		}
 		return 0;

@@ -10,91 +10,71 @@ using namespace std;
 using namespace Network;
 using namespace Blaspheme;
 
-namespace Master
-{
+namespace Master {
 	ListeningThread::ListeningThread(int port_value, const QString& pass_value, QObject * parent)
-		:QThread(parent), continue_listen(false)
-	{
+		:QThread(parent), continue_listen(false) {
 		changeListeningPort(port_value);
 		changePassword(pass_value);
 	}
 
-    ListeningThread::~ListeningThread()
-	{
+	ListeningThread::~ListeningThread() {
 		stopListen();
 	}
 
-    void ListeningThread::run()
-    {
-        LOG << "Starting listening thread, connections activated";
-        try
-        {
+	void ListeningThread::run() {
+		LOG << "Starting listening thread, connections activated";
+		try {
 			Session session(info, Timeout(0, 200));
-            while(continue_listen)
-            {
-				
-				if(session.waitConnect())
-				{
+			while(continue_listen) {
+
+				if(session.waitConnect()) {
 					LOG << "New slave connected";
 					emit newSlaveConnected(session);
 				}
-            }
-        }
-		catch(Network::Deconnection&)
-		{
+			}
+		} catch(Network::Deconnection&) {
 			LOG << "ListeningThread::run() : Untimely disconnected";
+		} catch(Common::Exception&) {
 		}
-        catch(Common::Exception&)
-        {
-        }
-        CATCH_UNKNOWN_EXCEPTION
-        LOG << "Ending listening thread";
-    }
+		CATCH_UNKNOWN_EXCEPTION
+		LOG << "Ending listening thread";
+	}
 
-    bool ListeningThread::isListening()
-    {
-        return continue_listen;
-    }
+	bool ListeningThread::isListening() {
+		return continue_listen;
+	}
 
-    void ListeningThread::changeListeningPort(int port)
-    {
-        LOG << "Updating listening port : " + Common::toString(port);
-        info.port = port;
-    }
+	void ListeningThread::changeListeningPort(int port) {
+		LOG << "Updating listening port : " + Common::toString(port);
+		info.port = port;
+	}
 
-    void ListeningThread::changePassword(const QString& password)
-    {
+	void ListeningThread::changePassword(const QString& password) {
 		LOG << "Updating password : " + info.password;
 		info.password = password.toStdString();
-    }
+	}
 
-    void ListeningThread::setListening(bool enabled)
-    {
-        enabled ? listen() : stopListen();
-    }
+	void ListeningThread::setListening(bool enabled) {
+		enabled ? listen() : stopListen();
+	}
 
-    void ListeningThread::setNotListening(bool enabled)
-    {
-        enabled ? stopListen() : listen();
-    }
+	void ListeningThread::setNotListening(bool enabled) {
+		enabled ? stopListen() : listen();
+	}
 
-    void ListeningThread::listen()
-    {
-		if(!continue_listen)
-		{
+	void ListeningThread::listen() {
+		if(!continue_listen) {
 			continue_listen = true;
 			start();
 		}
-    }
+	}
 
-    void ListeningThread::stopListen()
-    {
-		if(continue_listen)
-		{
+	void ListeningThread::stopListen() {
+		if(continue_listen) {
 			continue_listen = false;
 			wait();
 		}
 	}
-    
+
 } // Master
 

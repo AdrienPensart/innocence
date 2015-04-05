@@ -2,10 +2,8 @@
 
 #include <string>
 
-namespace Inhibiter
-{
-	class InhibiterCore
-	{
+namespace Inhibiter {
+	class InhibiterCore {
 		public:
 
 			InhibiterCore(const std::string& executable);
@@ -18,8 +16,12 @@ namespace Inhibiter
 			bool installed();
 			// innocence a-t-il déja été installé ?
 			bool isEverInstalled();
-			std::string getExecutablePath(){return current_executable_path;}
-			std::string getInjectedProcess(){return processToInject;}
+			std::string getExecutablePath() {
+				return current_executable_path;
+			}
+			std::string getInjectedProcess() {
+				return processToInject;
+			}
 
 		private:
 

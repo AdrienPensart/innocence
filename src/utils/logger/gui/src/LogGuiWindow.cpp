@@ -4,11 +4,9 @@
 #include "LogGuiWindow.hpp"
 #include "LogThread.hpp"
 
-namespace LogGui
-{
-	LogGuiWindow::LogGuiWindow(QWidget * parent) : 
-		QDialog(parent)
-	{
+namespace LogGui {
+	LogGuiWindow::LogGuiWindow(QWidget * parent) :
+		QDialog(parent) {
 		setupUi(this);
 		connect(saveLogButton, SIGNAL(clicked()), this, SLOT(saveLog()));
 		qRegisterMetaType<Message>("Message");
@@ -16,8 +14,7 @@ namespace LogGui
 		logThread.start();
 	}
 
-	void LogGuiWindow::addMessage(Log::Message message)
-	{
+	void LogGuiWindow::addMessage(Log::Message message) {
 		std::string bufferMsg = message.getIdentity().getModule() + " -> (" + message.getLine() + " in " + message.getFile() + ") (" + message.getCallStack() + ") : " + message.getContent();
 		debugOutputEdit->append(QString::fromStdString(bufferMsg));
 
@@ -37,13 +34,10 @@ namespace LogGui
 		messagesTableWidget->setItem(currentRow, 11, new QTableWidgetItem(QString::fromStdString(message.getContent())));
 	}
 
-	void LogGuiWindow::saveLog()
-	{
-		if(debugOutputEdit->toPlainText().toStdString().size())
-		{
+	void LogGuiWindow::saveLog() {
+		if(debugOutputEdit->toPlainText().toStdString().size()) {
 			QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),"C:\\",tr("Text (*.txt)"));
-			if(fileName.size())
-			{   
+			if(fileName.size()) {
 				std::fstream file;
 				file.open(fileName.toStdString().c_str(), std::ios::out | std::ios::app);
 				file.write(debugOutputEdit->toPlainText().toStdString().c_str(), debugOutputEdit->toPlainText().toStdString().size());

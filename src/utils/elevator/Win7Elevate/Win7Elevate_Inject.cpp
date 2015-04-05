@@ -24,8 +24,7 @@
 #endif
 
 
-struct InjectArgs
-{
+struct InjectArgs {
 	BOOL    (WINAPI *fpFreeLibrary)(HMODULE hLibModule);
 	HMODULE (WINAPI *fpLoadLibrary)(LPCWSTR lpLibFileName);
 	FARPROC (WINAPI *fpGetProcAddress)(HMODULE hModule, LPCSTR lpProcName);
@@ -36,7 +35,7 @@ struct InjectArgs
 	const wchar_t *szElevDll;
 	const wchar_t *szElevDllFull;
 	const wchar_t *szElevExeFull;
-	      wchar_t *szElevArgs; // Not const because of CreateProcess's in-place buffer modification. It's really not const so this is fine. (We don't use CreateProcess anymore but it doesn't hurt to keep this non-const just in case.)
+	wchar_t *szElevArgs; // Not const because of CreateProcess's in-place buffer modification. It's really not const so this is fine. (We don't use CreateProcess anymore but it doesn't hurt to keep this non-const just in case.)
 	const wchar_t *szEIFOMoniker; // szElevatedIFileOperationMoniker
 	const IID     *pIID_EIFOClass;
 	const IID     *pIID_EIFO;
@@ -52,8 +51,7 @@ struct InjectArgs
 	const char    *szShellExecuteExW;
 };
 
-static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter)
-{
+static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter) {
 	// This is the injected code of "part 1."
 
 	// As this code is copied into another process it cannot refer to any static data (i.e. no string, GUID, etc. constants)
@@ -89,7 +87,7 @@ static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter)
 	// the newer install.
 
 	InjectArgs * pArgs = reinterpret_cast< InjectArgs * >(lpThreadParameter);
-	
+
 	// Use an elevated FileOperation object to copy a file to a protected folder.
 	// If we're in a process that can do silent COM elevation then we can do this without any prompts.
 
@@ -97,39 +95,38 @@ static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter)
 	HMODULE hModuleShell32  = pArgs->fpLoadLibrary(pArgs->szShell32);
 
 	if (hModuleOle32
-	&&	hModuleShell32)
-	{
+	        &&	hModuleShell32) {
 		// Load the non-Kernel32.dll functions that we need.
 
 		W7EUtils::GetProcAddr< HRESULT (STDAPICALLTYPE *)(LPVOID pvReserved) >
-			tfpCoInitialize( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoInitialize );
+		tfpCoInitialize( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoInitialize );
 
 		W7EUtils::GetProcAddr< void (STDAPICALLTYPE *)(void) >
-			tfpCoUninitialize( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoUninitialize );
+		tfpCoUninitialize( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoUninitialize );
 
 		W7EUtils::GetProcAddr< HRESULT (STDAPICALLTYPE *)(LPCWSTR pszName, BIND_OPTS *pBindOptions, REFIID riid, void **ppv) >
-			tfpCoGetObject( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoGetObject );
+		tfpCoGetObject( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoGetObject );
 
 		W7EUtils::GetProcAddr< HRESULT (STDAPICALLTYPE *)(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid, void ** ppv) >
-			tfpCoCreateInstance( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoCreateInstance );
+		tfpCoCreateInstance( pArgs->fpGetProcAddress, hModuleOle32, pArgs->szCoCreateInstance );
 
 		W7EUtils::GetProcAddr< HRESULT (STDAPICALLTYPE *)(PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv) >
-			tfpSHCreateItemFromParsingName( pArgs->fpGetProcAddress, hModuleShell32, pArgs->szSHCreateItemFPN );
+		tfpSHCreateItemFromParsingName( pArgs->fpGetProcAddress, hModuleShell32, pArgs->szSHCreateItemFPN );
 
 		W7EUtils::GetProcAddr< BOOL (STDAPICALLTYPE *)(LPSHELLEXECUTEINFOW lpExecInfo) >
-			tfpShellExecuteEx( pArgs->fpGetProcAddress, hModuleShell32, pArgs->szShellExecuteExW );
+		tfpShellExecuteEx( pArgs->fpGetProcAddress, hModuleShell32, pArgs->szShellExecuteExW );
 
 		if (0 != tfpCoInitialize.f
-		&&	0 != tfpCoUninitialize.f
-		&&	0 != tfpCoGetObject.f
-		&&	0 != tfpCoCreateInstance.f
-		&&	0 != tfpSHCreateItemFromParsingName.f
-		&&	0 != tfpShellExecuteEx.f)
-		{
-			if (S_OK == tfpCoInitialize.f(NULL))
-			{
+		        &&	0 != tfpCoUninitialize.f
+		        &&	0 != tfpCoGetObject.f
+		        &&	0 != tfpCoCreateInstance.f
+		        &&	0 != tfpSHCreateItemFromParsingName.f
+		        &&	0 != tfpShellExecuteEx.f) {
+			if (S_OK == tfpCoInitialize.f(NULL)) {
 				BIND_OPTS3 bo;
-				for(int i = 0; i < sizeof(bo); ++i) { reinterpret_cast< BYTE * >(&bo)[i] = 0; } // This loop is easier than pushing ZeroMemory or memset through pArgs.
+				for(int i = 0; i < sizeof(bo); ++i) {
+					reinterpret_cast< BYTE * >(&bo)[i] = 0;    // This loop is easier than pushing ZeroMemory or memset through pArgs.
+				}
 				bo.cbStruct = sizeof(bo);
 				bo.dwClassContext = CLSCTX_LOCAL_SERVER;
 
@@ -142,50 +139,57 @@ static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter)
 
 					// This is a completely standard call to IFileOperation, if you ignore all the pArgs/func-pointer indirection.
 					if (
-						(pArgs->szEIFOMoniker  && S_OK == tfpCoGetObject.f( pArgs->szEIFOMoniker, &bo, *pArgs->pIID_EIFO, reinterpret_cast< void ** >(&pFileOp)))
-					||	(pArgs->pIID_EIFOClass && S_OK == tfpCoCreateInstance.f( *pArgs->pIID_EIFOClass, NULL, CLSCTX_LOCAL_SERVER|CLSCTX_INPROC_SERVER|CLSCTX_INPROC_HANDLER, *pArgs->pIID_EIFO, reinterpret_cast< void ** >(&pFileOp)))
-						)
-					if (0    != pFileOp)
-					if (S_OK == pFileOp->SetOperationFlags(FOF_NOCONFIRMATION|FOF_SILENT|FOFX_SHOWELEVATIONPROMPT|FOFX_NOCOPYHOOKS|FOFX_REQUIREELEVATION))
-					if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szSourceDll, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHISource)))
-					if (0    != pSHISource)
-					if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szElevDir, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHIDestination)))
-					if (0    != pSHIDestination)
-					if (S_OK == pFileOp->CopyItem(pSHISource, pSHIDestination, pArgs->szElevDll, NULL))
-					if (S_OK == pFileOp->PerformOperations())
-					{
-						// Use ShellExecuteEx to launch the "part 2" target process. Again, a completely standard API call.
-						// (Note: Don't use CreateProcess as it seems not to do the auto-elevation stuff.)
-						SHELLEXECUTEINFO shinfo;
-						for(int i = 0; i < sizeof(shinfo); ++i) { reinterpret_cast< BYTE * >(&shinfo)[i] = 0; } // This loop is easier than pushing ZeroMemory or memset through pArgs.
-						shinfo.cbSize = sizeof(shinfo);
-						shinfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-						shinfo.lpFile = pArgs->szElevExeFull;
-						shinfo.lpParameters = pArgs->szElevArgs;
-						shinfo.lpDirectory = pArgs->szElevDir;
-						shinfo.nShow = SW_SHOW;
+					    (pArgs->szEIFOMoniker  && S_OK == tfpCoGetObject.f( pArgs->szEIFOMoniker, &bo, *pArgs->pIID_EIFO, reinterpret_cast< void ** >(&pFileOp)))
+					    ||	(pArgs->pIID_EIFOClass && S_OK == tfpCoCreateInstance.f( *pArgs->pIID_EIFOClass, NULL, CLSCTX_LOCAL_SERVER|CLSCTX_INPROC_SERVER|CLSCTX_INPROC_HANDLER, *pArgs->pIID_EIFO, reinterpret_cast< void ** >(&pFileOp)))
+					)
+						if (0    != pFileOp)
+							if (S_OK == pFileOp->SetOperationFlags(FOF_NOCONFIRMATION|FOF_SILENT|FOFX_SHOWELEVATIONPROMPT|FOFX_NOCOPYHOOKS|FOFX_REQUIREELEVATION))
+								if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szSourceDll, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHISource)))
+									if (0    != pSHISource)
+										if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szElevDir, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHIDestination)))
+											if (0    != pSHIDestination)
+												if (S_OK == pFileOp->CopyItem(pSHISource, pSHIDestination, pArgs->szElevDll, NULL))
+													if (S_OK == pFileOp->PerformOperations()) {
+														// Use ShellExecuteEx to launch the "part 2" target process. Again, a completely standard API call.
+														// (Note: Don't use CreateProcess as it seems not to do the auto-elevation stuff.)
+														SHELLEXECUTEINFO shinfo;
+														for(int i = 0; i < sizeof(shinfo); ++i) {
+															reinterpret_cast< BYTE * >(&shinfo)[i] = 0;    // This loop is easier than pushing ZeroMemory or memset through pArgs.
+														}
+														shinfo.cbSize = sizeof(shinfo);
+														shinfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+														shinfo.lpFile = pArgs->szElevExeFull;
+														shinfo.lpParameters = pArgs->szElevArgs;
+														shinfo.lpDirectory = pArgs->szElevDir;
+														shinfo.nShow = SW_SHOW;
 
-						if (tfpShellExecuteEx.f(&shinfo) && shinfo.hProcess != NULL)
-						{
-							// Wait for the "part 2" target process to finish.
-							pArgs->fpWaitForSingleObject(shinfo.hProcess, INFINITE);
+														if (tfpShellExecuteEx.f(&shinfo) && shinfo.hProcess != NULL) {
+															// Wait for the "part 2" target process to finish.
+															pArgs->fpWaitForSingleObject(shinfo.hProcess, INFINITE);
 
-							pArgs->fpCloseHandle(shinfo.hProcess);
-						}
+															pArgs->fpCloseHandle(shinfo.hProcess);
+														}
 
-						// Another standard call to IFileOperation, this time to delete our dummy DLL. We clean up our mess.
-						if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szElevDllFull, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHIDelete)))
-						if (0    != pSHIDelete)
-						if (S_OK == pFileOp->DeleteItem(pSHIDelete, NULL))
-						{
-							pFileOp->PerformOperations();
-						}
+														// Another standard call to IFileOperation, this time to delete our dummy DLL. We clean up our mess.
+														if (S_OK == tfpSHCreateItemFromParsingName.f( pArgs->szElevDllFull, NULL, *pArgs->pIID_ShellItem2, reinterpret_cast< void ** >(&pSHIDelete)))
+															if (0    != pSHIDelete)
+																if (S_OK == pFileOp->DeleteItem(pSHIDelete, NULL)) {
+																	pFileOp->PerformOperations();
+																}
+													}
+
+					if (pSHIDelete)      {
+						pSHIDelete->Release();
 					}
-
-					if (pSHIDelete)      { pSHIDelete->Release();      }
-					if (pSHIDestination) { pSHIDestination->Release(); }
-					if (pSHISource)      { pSHISource->Release();      }
-					if (pFileOp)         { pFileOp->Release();         }
+					if (pSHIDestination) {
+						pSHIDestination->Release();
+					}
+					if (pSHISource)      {
+						pSHISource->Release();
+					}
+					if (pFileOp)         {
+						pFileOp->Release();
+					}
 				}
 
 				tfpCoUninitialize.f();
@@ -193,21 +197,23 @@ static DWORD WINAPI RemoteCodeFunc(LPVOID lpThreadParameter)
 		}
 	}
 
-	if (hModuleShell32)  { pArgs->fpFreeLibrary(hModuleShell32);  }
-	if (hModuleOle32)    { pArgs->fpFreeLibrary(hModuleOle32);    }
+	if (hModuleShell32)  {
+		pArgs->fpFreeLibrary(hModuleShell32);
+	}
+	if (hModuleOle32)    {
+		pArgs->fpFreeLibrary(hModuleOle32);
+	}
 
 	return 0;
 }
 
 // Marks the end of the function so we know how much data to copy.
-static void DummyRemoteCodeFuncEnd()
-{
+static void DummyRemoteCodeFuncEnd() {
 }
 
 void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD dwPid, const wchar_t *szProcName,
-								 const wchar_t *szCmd, const wchar_t *szArgs, const wchar_t *szDir,
-								 const wchar_t *szPathToOurDll)
-{
+                                 const wchar_t *szCmd, const wchar_t *szArgs, const wchar_t *szDir,
+                                 const wchar_t *szPathToOurDll) {
 	bool bThreadWaitSuccess = false;
 	bool bThreadWaitFailure = false;
 	HANDLE hTargetProc = NULL;
@@ -215,8 +221,7 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 	const BYTE * codeStartAdr = reinterpret_cast< const BYTE * >( &RemoteCodeFunc );
 	const BYTE * codeEndAdr   = reinterpret_cast< const BYTE * >( &DummyRemoteCodeFuncEnd );
 
-	if (codeStartAdr >= codeEndAdr)
-	{
+	if (codeStartAdr >= codeEndAdr) {
 		MessageBox(hWnd, L"Unexpected function layout", L"Win7Elevate", MB_OK | MB_ICONWARNING);
 		return;
 	}
@@ -225,8 +230,7 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 
 	DWORD dwGMFNRes = GetModuleFileName(NULL, szPathToSelf, _countof(szPathToSelf));
 
-	if (dwGMFNRes == 0 || dwGMFNRes >= _countof(szPathToSelf))
-	{
+	if (dwGMFNRes == 0 || dwGMFNRes >= _countof(szPathToSelf)) {
 		MessageBox(hWnd, L"Couldn't get path to self", L"Win7Elevate", MB_OK | MB_ICONWARNING);
 		return;
 	}
@@ -235,19 +239,17 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 
 	HRESULT hr = SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, SHGFP_TYPE_CURRENT, szProgramFiles);
 
-	if (S_OK != hr)
-	{
+	if (S_OK != hr) {
 		MessageBox(hWnd, L"SHGetFolderPath failed", L"Win7Elevate", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
 	HMODULE hModKernel32 = LoadLibrary(L"kernel32.dll");
 
-	if (hModKernel32 == 0)
-	{
+	if (hModKernel32 == 0) {
 		MessageBox(hWnd, L"Couldn't load kernel32.dll", L"Win7Elevate", MB_OK | MB_ICONWARNING);
 		return;
-	}	
+	}
 
 	W7EUtils::GetProcAddr< BOOL    (WINAPI *)(HMODULE)         > tfpFreeLibrary(         &GetProcAddress, hModKernel32, "FreeLibrary");
 	W7EUtils::GetProcAddr< HMODULE (WINAPI *)(LPCWSTR)         > tfpLoadLibrary(         &GetProcAddress, hModKernel32, "LoadLibraryW");
@@ -256,15 +258,12 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 	W7EUtils::GetProcAddr< DWORD   (WINAPI *)(HANDLE,DWORD)    > tfpWaitForSingleObject( &GetProcAddress, hModKernel32, "WaitForSingleObject");
 
 	if (0 == tfpFreeLibrary.f
-	||	0 == tfpLoadLibrary.f
-	||	0 == tfpGetProcAddress.f
-	||	0 == tfpCloseHandle.f
-	||	0 == tfpWaitForSingleObject.f)
-	{
+	        ||	0 == tfpLoadLibrary.f
+	        ||	0 == tfpGetProcAddress.f
+	        ||	0 == tfpCloseHandle.f
+	        ||	0 == tfpWaitForSingleObject.f) {
 		MessageBox(hWnd, L"Couldn't find API", L"Win7Elevate", MB_OK | MB_ICONWARNING);
-	}
-	else
-	{
+	} else {
 		// Here we define the target process and DLL for "part 2." This is an auto/silent-elevating process which isn't
 		// directly below System32 and which loads a DLL which is directly below System32 but isn't on the OS's "Known DLLs" list.
 		// If we copy our own DLL with the same name to the exe's folder then the exe will load our DLL instead of the real one.
@@ -279,21 +278,16 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 		strElevArgs += L"\" \"";
 		strElevArgs += szDir;
 		strElevArgs += L"\" \"";
-		for (const wchar_t *pCmdArgChar = szArgs; *szArgs; ++szArgs)
-		{
-			if (*szArgs != L'\"')
-			{
+		for (const wchar_t *pCmdArgChar = szArgs; *szArgs; ++szArgs) {
+			if (*szArgs != L'\"') {
 				strElevArgs += *szArgs;
-			}
-			else
-			{
+			} else {
 				strElevArgs += L"\"\"\""; // Turn each quote into three to preserve them in the arguments.
 			}
 		}
 		strElevArgs += L"\"";
 
-		if (!bInject)
-		{
+		if (!bInject) {
 			// Test code without remoting.
 			// This should result in a UAC prompt, if UAC is on at all and we haven't been launched as admin.
 
@@ -330,9 +324,7 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 			RemoteCodeFunc(&ia);
 
 			delete[] szElevArgsNonConst;
-		}
-		else if (W7EUtils::OpenProcessToInject(hWnd, &hTargetProc, dwPid, szProcName))
-		{
+		} else if (W7EUtils::OpenProcessToInject(hWnd, &hTargetProc, dwPid, szProcName)) {
 			// Test code with remoting.
 			// At least as of RC1 build 7100, with the default OS settings, this will run the specified command
 			// with elevation but without triggering a UAC prompt.
@@ -359,7 +351,7 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 				ia.szElevDllFull         = reme.AllocAndCopyMemory(szElevDllFull);
 				ia.szElevExeFull         = reme.AllocAndCopyMemory(szElevExeFull);
 				ia.szElevArgs            = reme.AllocAndCopyMemory(strElevArgs.c_str(), false); // Leave this page writeable for CreateProcess.
-									 
+
 				ia.szShell32             = reme.AllocAndCopyMemory(L"shell32.dll");
 				ia.szOle32               = reme.AllocAndCopyMemory(L"ole32.dll");
 				ia.szCoInitialize        = reme.AllocAndCopyMemory("CoInitialize");
@@ -378,48 +370,34 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 
 				void *pRemoteFunc = reme.AllocAndCopyMemory( RemoteCodeFunc, codeEndAdr - codeStartAdr, true);
 
-				if (reme.AnyFailures())
-				{
+				if (reme.AnyFailures()) {
 					MessageBox(hWnd, L"Remote allocation failed", L"Win7Elevate", MB_OK | MB_ICONWARNING);
-				}
-				else
-				{
+				} else {
 					HANDLE hRemoteThread = CreateRemoteThread(hTargetProc, NULL, 0, reinterpret_cast< LPTHREAD_START_ROUTINE >( pRemoteFunc ), pRemoteArgs, 0, NULL);
 
-					if (hRemoteThread == 0)
-					{
+					if (hRemoteThread == 0) {
 						MessageBox(hWnd, L"Couldn't create remote thread", L"Win7Elevate", MB_OK | MB_ICONWARNING);
-					}
-					else
-					{
-						while(true)
-						{
+					} else {
+						while(true) {
 							DWORD dwWaitRes = WaitForSingleObject(hRemoteThread, 10000);
 
-							if (dwWaitRes == WAIT_OBJECT_0)
-							{
+							if (dwWaitRes == WAIT_OBJECT_0) {
 								bThreadWaitSuccess = true;
 								break;
-							}
-							else if (dwWaitRes != WAIT_TIMEOUT)
-							{
+							} else if (dwWaitRes != WAIT_TIMEOUT) {
 								bThreadWaitFailure = true;
 								break;
-							}
-							else if (IDCANCEL == MessageBox(hWnd, L"Continue waiting for remote thread to complete?", L"Win7Elevate", MB_OKCANCEL | MB_ICONQUESTION))
-							{
+							} else if (IDCANCEL == MessageBox(hWnd, L"Continue waiting for remote thread to complete?", L"Win7Elevate", MB_OKCANCEL | MB_ICONQUESTION)) {
 								// See if it completed before the user asked to stop waiting.
 								// Code that wasn't just a proof-of-concept would use a worker thread that could cancel the wait UI.
-								if (WAIT_OBJECT_0 == WaitForSingleObject(hRemoteThread, 0))
-								{
+								if (WAIT_OBJECT_0 == WaitForSingleObject(hRemoteThread, 0)) {
 									bThreadWaitSuccess = true;
 								}
 								break;
 							}
 						}
 
-						if (!bThreadWaitSuccess)
-						{
+						if (!bThreadWaitSuccess) {
 							// The memory in the other process could still be in use.
 							// Freeing it now will almost certainly crash the other process.
 							// Letting it leak is the lesser of two evils...
@@ -434,12 +412,9 @@ void W7EInject::AttemptOperation(HWND hWnd, bool bInject, bool bElevate, DWORD d
 
 	FreeLibrary(hModKernel32);
 
-	if (bThreadWaitFailure)
-	{
+	if (bThreadWaitFailure) {
 		MessageBox(hWnd, L"Error waiting on the remote thread to complete", L"Win7Elevate", MB_OK | MB_ICONWARNING);
-	}
-	else if (bThreadWaitSuccess)
-	{
+	} else if (bThreadWaitSuccess) {
 //		MessageBox(hWnd, L"Remote thread completed", L"Win7Elevate", MB_OK | MB_ICONINFORMATION);
 	}
 }

