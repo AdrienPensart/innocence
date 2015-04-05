@@ -20,11 +20,11 @@
 * GraphViz
 * Doxygen
 * Vmware vSphere
-* bin2array : transforme un fichier en tableau C
-* buildnum : incrémente le numéro de build a chaque compilation de la solution
-* bnhide.sys : driver pour cacher des objets Windows (uniquement les processus pour le moment, ne fonctionne que pour Windows 32bit)
-* NetCat : lancé par thesleeper pour le shell à distance
-* UPX : pack les exécutables finaux pour réduire leur taille et mitiger la signature
+* bin2array : create a C array from a file
+* buildnum : increment build version
+* bnhide.sys
+* netcat
+* UPX
 
 ## Workflow
 
